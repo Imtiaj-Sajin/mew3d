@@ -1,6 +1,7 @@
-.venv/
-models/
-results/
+# anchored to repo root: third_party/TripoSR/tsr/models must stay tracked
+/.venv/
+/models/
+/results/
 __pycache__/
 *.pyc
 .env
