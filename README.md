@@ -3,6 +3,19 @@
 Turn **text**, an **image**, or **both** into a 3D model (OBJ + GLB), fully local on an
 RTX 3060 Ti (8GB), coordinated by a crew of AI agents with live progress and full run logs.
 
+## Setup on a new PC
+
+```powershell
+git clone https://github.com/Imtiaj-Sajin/mew3d.git
+cd mew3d
+powershell -ExecutionPolicy Bypass -File setup.ps1   # venv + deps + models (~7GB total)
+# then put your OPENAI_API_KEY into .env (copied from .env.example automatically)
+```
+
+Requirements: Python 3.11+, NVIDIA GPU with 6GB+ VRAM (tested on RTX 3060 Ti 8GB).
+Models cache into `models/` inside the repo folder; `.env`, `models/`, and `results/`
+stay local and are never pushed.
+
 ## Quick start
 
 ```powershell
