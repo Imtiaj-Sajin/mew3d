@@ -1,0 +1,16 @@
+{
+  "mode": "text23d",
+  "pipeline": [
+    "PromptSmith",
+    "ImageGen",
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "iphone 12 pro",
+  "category": "vehicle",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure to capture the details of the iPhone 12 Pro for accurate reconstruction."
+}

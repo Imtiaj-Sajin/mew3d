@@ -1,0 +1,40 @@
+[23:00:15] Orchestrator log       run 20260826_230014_sntp7ftarj22lsvekn47eepqrxyn033p starting (mode: image23d, LLM: on)
+[23:00:15] Analyst      status    started
+[23:00:15] Analyst      log       input mode: image23d | image: sntp7ftaRJ22lsVEkn47eePQRXYn033Pyg2W7lkA.jpeg
+[23:00:20] Analyst      log       vision LLM responded
+[23:00:20] Analyst      decision  subject 'house' (architecture, complexity medium) - Ensure to capture the details of the roof and windows for accurate reconstruction.
+[23:00:20] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[23:00:20] Analyst      status    done
+[23:00:20] Preprocessor status    started
+[23:00:20] Preprocessor log       loading background-removal model (u2net)
+[23:00:22] Preprocessor artifact  user image copied to run folder
+[23:00:22] Preprocessor progress  removing background 1/1
+[23:00:23] Preprocessor log       candidate 1 scored 0.90 (coverage 0.28, blob 1.00, edge-cut 0.00)
+[23:00:24] Preprocessor log       vision LLM responded
+[23:00:24] Preprocessor log       vision critic: none (vlm 9/10 -> blended 0.90)
+[23:00:24] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[23:00:24] Preprocessor status    done
+[23:00:24] MeshGen      status    started
+[23:00:24] MeshGen      log       backend: triposr
+[23:00:26] vram         log       loading model: triposr
+[23:00:35] vram         metric    VRAM 1.7/8.6 GB (after loading triposr)
+[23:00:35] MeshGen      progress  triposr: encoding image into scene codes
+[23:00:36] MeshGen      progress  triposr: rendering 4 preview views
+[23:00:40] MeshGen      artifact  triposr turntable gif saved
+[23:00:40] MeshGen      progress  triposr: extracting mesh (marching cubes @ 256^3)
+[23:00:42] MeshGen      log       triposr: 58,270 vertices, 116,496 faces
+[23:00:42] MeshGen      status    done
+[23:00:42] Judge        status    started
+[23:00:42] Judge        log       [triposr] 116,496 faces, 12 components, watertight=True, extent ratio 1.85
+[23:00:44] Judge        log       LLM responded
+[23:00:44] Judge        log       [triposr] LLM second opinion: The mesh quality is high with a watertight structure, but the presence of multiple components and a few degenerate faces may need attention.
+[23:00:45] Judge        log       vision LLM responded
+[23:00:45] Judge        log       [triposr] vision check: looks like 'house', 7/10 (some details are lacking)
+[23:00:45] Judge        decision  score 0.88 - PASS
+[23:00:45] Judge        status    done
+[23:00:45] Exporter     status    started
+[23:00:45] Exporter     artifact  [triposr] OBJ + GLB exported
+[23:00:45] Exporter     artifact  run report written
+[23:00:45] Exporter     status    done
+[23:00:45] vram         log       released models: triposr
+[23:00:45] Orchestrator log       run complete - score 0.88 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260826_230014_sntp7ftarj22lsvekn47eepqrxyn033p\output

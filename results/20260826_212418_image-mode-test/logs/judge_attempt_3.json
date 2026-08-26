@@ -1,0 +1,28 @@
+{
+  "attempt": 3,
+  "score": 0.35,
+  "passed": false,
+  "metrics": {
+    "vertices": 197842,
+    "faces": 395152,
+    "watertight": true,
+    "components": 237,
+    "largest_component_fraction": 0.985,
+    "extents": [
+      0.82,
+      0.751,
+      0.948
+    ],
+    "extent_ratio": 1.26,
+    "degenerate_faces": 194
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is acceptable with a high heuristic score, but there are concerns regarding the presence of degenerate faces and multiple components.",
+  "vision_opinion": {
+    "looks_like_subject": false,
+    "is_flat_or_blob": true,
+    "score": 2,
+    "issue": "The model appears flat and lacks depth, not resembling the requested subject."
+  },
+  "adjustments": {}
+}

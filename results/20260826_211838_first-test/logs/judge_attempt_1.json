@@ -1,0 +1,22 @@
+{
+  "attempt": 1,
+  "score": 1.0,
+  "passed": true,
+  "metrics": {
+    "vertices": 81350,
+    "faces": 161788,
+    "watertight": true,
+    "components": 279,
+    "largest_component_fraction": 0.905,
+    "extents": [
+      0.805,
+      0.994,
+      1.008
+    ],
+    "extent_ratio": 1.25,
+    "degenerate_faces": 60
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is high with a good heuristic score, but the presence of degenerate faces and multiple components is a concern.",
+  "adjustments": {}
+}

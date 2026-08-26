@@ -13,12 +13,12 @@ from rich.text import Text
 
 AGENT_ORDER = [
     "Orchestrator", "Analyst", "PromptSmith", "ImageGen",
-    "Preprocessor", "MeshGen", "Judge", "Exporter",
+    "Preprocessor", "MeshGen", "Judge", "TextureSmith", "Exporter",
 ]
 AGENT_ICONS = {
     "Orchestrator": "🧠", "Analyst": "🔎", "PromptSmith": "✍️", "ImageGen": "🎨",
-    "Preprocessor": "🪄", "MeshGen": "🧊", "Judge": "⚖️", "Exporter": "📦",
-    "vram": "💾", "llm": "🔌",
+    "Preprocessor": "🪄", "MeshGen": "🧊", "Judge": "⚖️", "TextureSmith": "🖌️",
+    "Exporter": "📦", "vram": "💾", "llm": "🔌",
 }
 STATE_STYLE = {
     "pending": ("○", "dim"),

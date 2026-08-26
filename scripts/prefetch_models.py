@@ -27,6 +27,11 @@ fetch(
     ],
 )
 fetch("stabilityai/TripoSR", allow_patterns=["config.yaml", "model.ckpt"])
+# Hunyuan3D-Paint texture stage (delight + multiview diffusion, used by --texture)
+fetch(
+    "tencent/Hunyuan3D-2",
+    allow_patterns=["hunyuan3d-delight-v2-0/*", "hunyuan3d-paint-v2-0/*"],
+)
 # Hunyuan3D-2mini: turbo shape DiT + turbo VAE (used by --mesh-model hunyuan/both)
 fetch(
     "tencent/Hunyuan3D-2mini",

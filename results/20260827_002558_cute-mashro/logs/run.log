@@ -1,0 +1,57 @@
+[00:25:59] Orchestrator log       run 20260827_002558_cute-mashro starting (mode: image23d, LLM: on)
+[00:25:59] Analyst      status    started
+[00:25:59] Analyst      log       input mode: image23d | image: cute mashro.jpg
+[00:26:01] Analyst      log       vision LLM responded
+[00:26:01] Analyst      decision  subject 'mushroom' (character, complexity medium) - Ensure to capture the rounded shapes and facial features for a cute appearance.
+[00:26:01] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[00:26:01] Analyst      status    done
+[00:26:01] Orchestrator log       compare mode: retries disabled (one clean pass per backend)
+[00:26:01] Preprocessor status    started
+[00:26:01] Preprocessor log       loading background-removal model (u2net)
+[00:26:03] Preprocessor artifact  user image copied to run folder
+[00:26:03] Preprocessor progress  removing background 1/1
+[00:26:03] Preprocessor log       candidate 1 scored 0.89 (coverage 0.34, blob 1.00, edge-cut 0.00)
+[00:26:04] Preprocessor log       vision LLM responded
+[00:26:04] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.95)
+[00:26:04] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[00:26:04] Preprocessor status    done
+[00:26:04] MeshGen      status    started
+[00:26:04] MeshGen      log       backend: triposr
+[00:26:06] vram         log       loading model: triposr
+[00:26:17] vram         metric    VRAM 1.7/8.6 GB (after loading triposr)
+[00:26:17] MeshGen      progress  triposr: encoding image into scene codes
+[00:26:17] MeshGen      progress  triposr: rendering 4 preview views
+[00:26:21] MeshGen      artifact  triposr turntable gif saved
+[00:26:21] MeshGen      progress  triposr: extracting mesh (marching cubes @ 256^3)
+[00:26:23] MeshGen      log       triposr: 88,361 vertices, 176,724 faces
+[00:26:23] MeshGen      log       backend: hunyuan
+[00:26:23] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[00:26:23] vram         log       released models: triposr
+[00:26:23] vram         log       loading model: hunyuan3d
+[00:26:46] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[00:26:46] MeshGen      progress  hunyuan: flow-matching diffusion (this takes a minute)
+[00:26:51] MeshGen      progress  hunyuan: rendering clay preview views
+[00:27:14] MeshGen      artifact  hunyuan clay previews saved
+[00:27:14] MeshGen      log       hunyuan: 588,468 vertices, 1,176,936 faces
+[00:27:14] MeshGen      status    done
+[00:27:14] Judge        status    started
+[00:27:14] Judge        log       [triposr] 176,724 faces, 7 components, watertight=False, extent ratio 1.06
+[00:27:15] Judge        log       LLM responded
+[00:27:15] Judge        log       [triposr] LLM second opinion: The mesh quality is high but lacks watertightness and has multiple components.
+[00:27:17] Judge        log       vision LLM responded
+[00:27:17] Judge        log       [triposr] vision check: looks like 'mushroom', 8/10 (Slight inconsistencies in the shape of the cap)
+[00:27:19] Judge        log       [hunyuan] 1,176,936 faces, 5 components, watertight=False, extent ratio 1.07
+[00:27:20] Judge        log       LLM responded
+[00:27:20] Judge        log       [hunyuan] LLM second opinion: The mesh quality is high but requires improvement in watertightness and reduction of degenerate faces.
+[00:27:22] Judge        log       vision LLM responded
+[00:27:22] Judge        log       [hunyuan] vision check: looks like 'mushroom', 9/10 (none)
+[00:27:22] Judge        decision  backend comparison: hunyuan 0.93 | triposr 0.89 -> winner: hunyuan
+[00:27:22] Judge        decision  score 0.93 - PASS
+[00:27:22] Judge        status    done
+[00:27:22] Exporter     status    started
+[00:27:22] Exporter     artifact  [triposr] OBJ + GLB exported
+[00:27:24] Exporter     artifact  [hunyuan] OBJ + GLB exported <- WINNER
+[00:27:24] Exporter     artifact  run report written
+[00:27:24] Exporter     status    done
+[00:27:24] vram         log       released models: hunyuan3d
+[00:27:24] Orchestrator log       run complete - score 0.93 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260827_002558_cute-mashro\output

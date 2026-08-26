@@ -1,0 +1,40 @@
+[00:20:10] Orchestrator log       run 20260827_002009_face-man starting (mode: image23d, LLM: on)
+[00:20:10] Analyst      status    started
+[00:20:10] Analyst      log       input mode: image23d | image: face man.jpg
+[00:20:13] Analyst      log       vision LLM responded
+[00:20:13] Analyst      decision  subject 'male character' (character, complexity medium) - Ensure to capture the facial features and hair details accurately for a realistic reconstruction.
+[00:20:13] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[00:20:13] Analyst      status    done
+[00:20:13] Preprocessor status    started
+[00:20:13] Preprocessor log       loading background-removal model (u2net)
+[00:20:16] Preprocessor artifact  user image copied to run folder
+[00:20:16] Preprocessor progress  removing background 1/1
+[00:20:16] Preprocessor log       candidate 1 scored 0.39 (coverage 0.55, blob 1.00, edge-cut 0.26)
+[00:20:18] Preprocessor log       vision LLM responded
+[00:20:18] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.69)
+[00:20:18] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[00:20:18] Preprocessor status    done
+[00:20:18] MeshGen      status    started
+[00:20:18] MeshGen      log       backend: triposr
+[00:20:20] vram         log       loading model: triposr
+[00:20:31] vram         metric    VRAM 1.7/8.6 GB (after loading triposr)
+[00:20:31] MeshGen      progress  triposr: encoding image into scene codes
+[00:20:31] MeshGen      progress  triposr: rendering 4 preview views
+[00:20:35] MeshGen      artifact  triposr turntable gif saved
+[00:20:35] MeshGen      progress  triposr: extracting mesh (marching cubes @ 256^3)
+[00:20:37] MeshGen      log       triposr: 58,216 vertices, 116,428 faces
+[00:20:37] MeshGen      status    done
+[00:20:37] Judge        status    started
+[00:20:37] Judge        log       [triposr] 116,428 faces, 1 components, watertight=True, extent ratio 1.61
+[00:20:39] Judge        log       LLM responded
+[00:20:39] Judge        log       [triposr] LLM second opinion: The mesh of the male character is well-constructed and meets quality standards.
+[00:20:40] Judge        log       vision LLM responded
+[00:20:40] Judge        log       [triposr] vision check: looks like 'male character', 8/10 (Minor inaccuracies in hair volume)
+[00:20:40] Judge        decision  score 0.92 - PASS
+[00:20:40] Judge        status    done
+[00:20:40] Exporter     status    started
+[00:20:41] Exporter     artifact  [triposr] OBJ + GLB exported
+[00:20:41] Exporter     artifact  run report written
+[00:20:41] Exporter     status    done
+[00:20:41] vram         log       released models: triposr
+[00:20:41] Orchestrator log       run complete - score 0.92 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260827_002009_face-man\output

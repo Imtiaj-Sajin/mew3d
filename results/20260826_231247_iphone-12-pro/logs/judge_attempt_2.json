@@ -1,0 +1,56 @@
+{
+  "attempt": 2,
+  "backend": "triposr",
+  "score": 0.332,
+  "passed": false,
+  "metrics": {
+    "vertices": 56617,
+    "faces": 113232,
+    "watertight": false,
+    "components": 2,
+    "largest_component_fraction": 1.0,
+    "extents": [
+      0.251,
+      0.916,
+      1.084
+    ],
+    "extent_ratio": 4.32,
+    "degenerate_faces": 43
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is high but the lack of watertightness and presence of degenerate faces are concerning.",
+  "vision_opinion": {
+    "looks_like_subject": false,
+    "is_flat_or_blob": true,
+    "score": 3,
+    "issue": "The shape does not resemble an iPhone 12 Pro and appears flat."
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "triposr",
+      "score": 0.332,
+      "issues": [],
+      "metrics": {
+        "vertices": 56617,
+        "faces": 113232,
+        "watertight": false,
+        "components": 2,
+        "largest_component_fraction": 1.0,
+        "extents": [
+          0.251,
+          0.916,
+          1.084
+        ],
+        "extent_ratio": 4.32,
+        "degenerate_faces": 43
+      },
+      "vision_opinion": {
+        "looks_like_subject": false,
+        "is_flat_or_blob": true,
+        "score": 3,
+        "issue": "The shape does not resemble an iPhone 12 Pro and appears flat."
+      }
+    }
+  ]
+}

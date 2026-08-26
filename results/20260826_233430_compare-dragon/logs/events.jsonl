@@ -1,0 +1,57 @@
+{"ts": 1787765670.918863, "time": "23:34:30", "agent": "Orchestrator", "type": "log", "message": "run 20260826_233430_compare-dragon starting (mode: image23d, LLM: on)", "data": {}}
+{"ts": 1787765670.924991, "time": "23:34:30", "agent": "Analyst", "type": "status", "message": "started", "data": {"state": "running", "icon": "🔎"}}
+{"ts": 1787765670.924991, "time": "23:34:30", "agent": "Analyst", "type": "log", "message": "input mode: image23d | image: candidate_02_seed272048446.png", "data": {}}
+{"ts": 1787765674.011742, "time": "23:34:34", "agent": "Analyst", "type": "log", "message": "vision LLM responded", "data": {"model": "gpt-4o-mini"}}
+{"ts": 1787765674.012747, "time": "23:34:34", "agent": "Analyst", "type": "decision", "message": "subject 'dragon' (creature, complexity high) - Ensure to capture the intricate details of the scales and facial features for a realistic reconstruction.", "data": {}}
+{"ts": 1787765674.012747, "time": "23:34:34", "agent": "Analyst", "type": "decision", "message": "pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter", "data": {"pipeline": ["Preprocessor", "MeshGen", "Judge", "Exporter"]}}
+{"ts": 1787765674.0142453, "time": "23:34:34", "agent": "Analyst", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 3.1}}
+{"ts": 1787765674.015247, "time": "23:34:34", "agent": "Orchestrator", "type": "log", "message": "compare mode: retries disabled (one clean pass per backend)", "data": {}}
+{"ts": 1787765674.015247, "time": "23:34:34", "agent": "Preprocessor", "type": "status", "message": "started", "data": {"state": "running", "icon": "🪄"}}
+{"ts": 1787765674.0162532, "time": "23:34:34", "agent": "Preprocessor", "type": "log", "message": "loading background-removal model (u2net)", "data": {}}
+{"ts": 1787765675.5187702, "time": "23:34:35", "agent": "Preprocessor", "type": "artifact", "message": "user image copied to run folder", "data": {"path": "G:\\codes\\mew3d\\results\\20260826_233430_compare-dragon\\input\\user_image.png"}}
+{"ts": 1787765675.5187702, "time": "23:34:35", "agent": "Preprocessor", "type": "progress", "message": "removing background 1/1", "data": {"current": 1, "total": 1}}
+{"ts": 1787765675.8833203, "time": "23:34:35", "agent": "Preprocessor", "type": "log", "message": "candidate 1 scored 0.96 (coverage 0.34, blob 1.00, edge-cut 0.00)", "data": {"source": "G:\\codes\\mew3d\\results\\20260826_233430_compare-dragon\\input\\user_image.png", "coverage": 0.336, "coverage_score": 0.96, "sharpness_score": 0.749, "blob_score": 1.0, "border_contact": 0.0, "border_score": 1.0, "total": 0.963}}
+{"ts": 1787765677.899801, "time": "23:34:37", "agent": "Preprocessor", "type": "log", "message": "vision LLM responded", "data": {"model": "gpt-4o-mini"}}
+{"ts": 1787765677.9008029, "time": "23:34:37", "agent": "Preprocessor", "type": "log", "message": "vision critic: none (vlm 9/10 -> blended 0.93)", "data": {"source": "G:\\codes\\mew3d\\results\\20260826_233430_compare-dragon\\input\\user_image.png", "complete_object": true, "single_object": true, "matches_subject": true, "clean_background": true, "score": 9}}
+{"ts": 1787765677.9404685, "time": "23:34:37", "agent": "Preprocessor", "type": "artifact", "message": "processed input ready (foreground ratio 0.85)", "data": {"path": "G:\\codes\\mew3d\\results\\20260826_233430_compare-dragon\\intermediate\\processed_input.png"}}
+{"ts": 1787765677.9414701, "time": "23:34:37", "agent": "Preprocessor", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 3.9}}
+{"ts": 1787765677.9414701, "time": "23:34:37", "agent": "MeshGen", "type": "status", "message": "started", "data": {"state": "running", "icon": "🧊"}}
+{"ts": 1787765677.9414701, "time": "23:34:37", "agent": "MeshGen", "type": "log", "message": "backend: triposr", "data": {}}
+{"ts": 1787765679.6588242, "time": "23:34:39", "agent": "vram", "type": "log", "message": "loading model: triposr", "data": {}}
+{"ts": 1787765686.1764123, "time": "23:34:46", "agent": "vram", "type": "metric", "message": "VRAM 1.7/8.6 GB (after loading triposr)", "data": {"used_gb": 1.68, "total_gb": 8.59}}
+{"ts": 1787765686.1764123, "time": "23:34:46", "agent": "MeshGen", "type": "progress", "message": "triposr: encoding image into scene codes", "data": {}}
+{"ts": 1787765686.8764467, "time": "23:34:46", "agent": "MeshGen", "type": "progress", "message": "triposr: rendering 4 preview views", "data": {}}
+{"ts": 1787765690.1839397, "time": "23:34:50", "agent": "MeshGen", "type": "artifact", "message": "triposr turntable gif saved", "data": {"path": "G:\\codes\\mew3d\\results\\20260826_233430_compare-dragon\\output\\triposr_turntable.gif"}}
+{"ts": 1787765690.1839397, "time": "23:34:50", "agent": "MeshGen", "type": "progress", "message": "triposr: extracting mesh (marching cubes @ 256^3)", "data": {}}
+{"ts": 1787765692.3506382, "time": "23:34:52", "agent": "MeshGen", "type": "log", "message": "triposr: 84,689 vertices, 169,342 faces", "data": {}}
+{"ts": 1787765692.3506382, "time": "23:34:52", "agent": "MeshGen", "type": "log", "message": "backend: hunyuan", "data": {}}
+{"ts": 1787765692.3506382, "time": "23:34:52", "agent": "MeshGen", "type": "log", "message": "loading Hunyuan3D-2mini (first run downloads the model)", "data": {}}
+{"ts": 1787765692.4758542, "time": "23:34:52", "agent": "vram", "type": "log", "message": "released models: triposr", "data": {}}
+{"ts": 1787765692.4758542, "time": "23:34:52", "agent": "vram", "type": "log", "message": "loading model: hunyuan3d", "data": {}}
+{"ts": 1787765720.9171922, "time": "23:35:20", "agent": "vram", "type": "metric", "message": "VRAM 3.8/8.6 GB (after loading hunyuan3d)", "data": {"used_gb": 3.81, "total_gb": 8.59}}
+{"ts": 1787765720.9181888, "time": "23:35:20", "agent": "MeshGen", "type": "progress", "message": "hunyuan: flow-matching diffusion (this takes a minute)", "data": {}}
+{"ts": 1787765726.2883003, "time": "23:35:26", "agent": "MeshGen", "type": "progress", "message": "hunyuan: rendering clay preview views", "data": {}}
+{"ts": 1787765741.3937817, "time": "23:35:41", "agent": "MeshGen", "type": "artifact", "message": "hunyuan clay previews saved", "data": {"path": "G:\\codes\\mew3d\\results\\20260826_233430_compare-dragon\\output\\hunyuan_preview_00.png"}}
+{"ts": 1787765741.3947976, "time": "23:35:41", "agent": "MeshGen", "type": "log", "message": "hunyuan: 411,976 vertices, 823,956 faces", "data": {}}
+{"ts": 1787765741.3952994, "time": "23:35:41", "agent": "MeshGen", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 63.5}}
+{"ts": 1787765741.3952994, "time": "23:35:41", "agent": "Judge", "type": "status", "message": "started", "data": {"state": "running", "icon": "⚖️"}}
+{"ts": 1787765742.0563254, "time": "23:35:42", "agent": "Judge", "type": "log", "message": "[triposr] 169,342 faces, 53 components, watertight=False, extent ratio 1.26", "data": {}}
+{"ts": 1787765743.295478, "time": "23:35:43", "agent": "Judge", "type": "log", "message": "LLM responded", "data": {"model": "gpt-4o-mini"}}
+{"ts": 1787765743.2964847, "time": "23:35:43", "agent": "Judge", "type": "log", "message": "[triposr] LLM second opinion: The mesh quality is high but lacks watertightness and has multiple components.", "data": {}}
+{"ts": 1787765744.5791001, "time": "23:35:44", "agent": "Judge", "type": "log", "message": "vision LLM responded", "data": {"model": "gpt-4o-mini"}}
+{"ts": 1787765744.580104, "time": "23:35:44", "agent": "Judge", "type": "log", "message": "[triposr] vision check: looks like 'dragon', 7/10 (proportions could be improved)", "data": {}}
+{"ts": 1787765745.7749615, "time": "23:35:45", "agent": "Judge", "type": "log", "message": "[hunyuan] 823,956 faces, 13 components, watertight=False, extent ratio 1.54", "data": {}}
+{"ts": 1787765747.2071152, "time": "23:35:47", "agent": "Judge", "type": "log", "message": "LLM responded", "data": {"model": "gpt-4o-mini"}}
+{"ts": 1787765747.2071152, "time": "23:35:47", "agent": "Judge", "type": "log", "message": "[hunyuan] LLM second opinion: The mesh has a high heuristic score but is not watertight and contains degenerate faces.", "data": {}}
+{"ts": 1787765748.9153373, "time": "23:35:48", "agent": "Judge", "type": "log", "message": "vision LLM responded", "data": {"model": "gpt-4o-mini"}}
+{"ts": 1787765748.9164557, "time": "23:35:48", "agent": "Judge", "type": "log", "message": "[hunyuan] vision check FAILED: The shape does not resemble a dragon; it appears more like a creature with elephant-like features. - score slashed to 0.332", "data": {}}
+{"ts": 1787765748.9164557, "time": "23:35:48", "agent": "Judge", "type": "decision", "message": "backend comparison: triposr 0.85 | hunyuan 0.33 -> winner: triposr", "data": {}}
+{"ts": 1787765748.9164557, "time": "23:35:48", "agent": "Judge", "type": "decision", "message": "score 0.85 - PASS", "data": {"score": 0.85}}
+{"ts": 1787765748.9175036, "time": "23:35:48", "agent": "Judge", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 7.5}}
+{"ts": 1787765748.9175036, "time": "23:35:48", "agent": "Exporter", "type": "status", "message": "started", "data": {"state": "running", "icon": "📦"}}
+{"ts": 1787765749.2140787, "time": "23:35:49", "agent": "Exporter", "type": "artifact", "message": "[triposr] OBJ + GLB exported <- WINNER", "data": {"path": "G:\\codes\\mew3d\\results\\20260826_233430_compare-dragon\\output\\triposr_mesh.glb"}}
+{"ts": 1787765750.3132362, "time": "23:35:50", "agent": "Exporter", "type": "artifact", "message": "[hunyuan] OBJ + GLB exported", "data": {"path": "G:\\codes\\mew3d\\results\\20260826_233430_compare-dragon\\output\\hunyuan_mesh.glb"}}
+{"ts": 1787765750.314236, "time": "23:35:50", "agent": "Exporter", "type": "artifact", "message": "run report written", "data": {"path": "G:\\codes\\mew3d\\results\\20260826_233430_compare-dragon\\report.md"}}
+{"ts": 1787765750.314236, "time": "23:35:50", "agent": "Exporter", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 1.4}}
+{"ts": 1787765750.716838, "time": "23:35:50", "agent": "vram", "type": "log", "message": "released models: hunyuan3d", "data": {}}
+{"ts": 1787765750.716838, "time": "23:35:50", "agent": "Orchestrator", "type": "log", "message": "run complete - score 0.85 after 1 attempt(s); outputs in G:\\codes\\mew3d\\results\\20260826_233430_compare-dragon\\output", "data": {}}

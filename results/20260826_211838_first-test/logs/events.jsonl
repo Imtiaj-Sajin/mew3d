@@ -1,0 +1,54 @@
+{"ts": 1787757520.0313845, "time": "21:18:40", "agent": "Orchestrator", "type": "log", "message": "run 20260826_211838_first-test starting (mode: text23d, LLM: on)", "data": {}}
+{"ts": 1787757520.0365057, "time": "21:18:40", "agent": "Analyst", "type": "status", "message": "started", "data": {"state": "running", "icon": "🔎"}}
+{"ts": 1787757520.0375454, "time": "21:18:40", "agent": "Analyst", "type": "log", "message": "input mode: text23d | text: 'a red apple'", "data": {}}
+{"ts": 1787757523.8882775, "time": "21:18:43", "agent": "Analyst", "type": "log", "message": "LLM responded", "data": {"model": "gpt-4o-mini"}}
+{"ts": 1787757523.8892791, "time": "21:18:43", "agent": "Analyst", "type": "decision", "message": "subject 'apple' (food, complexity low) - This is a straightforward request for a single object, proceed with generating the apple.", "data": {}}
+{"ts": 1787757523.8892791, "time": "21:18:43", "agent": "Analyst", "type": "decision", "message": "pipeline plan: PromptSmith -> ImageGen -> Preprocessor -> MeshGen -> Judge -> Exporter", "data": {"pipeline": ["PromptSmith", "ImageGen", "Preprocessor", "MeshGen", "Judge", "Exporter"]}}
+{"ts": 1787757523.8902802, "time": "21:18:43", "agent": "Analyst", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 3.9}}
+{"ts": 1787757523.8902802, "time": "21:18:43", "agent": "PromptSmith", "type": "status", "message": "started", "data": {"state": "running", "icon": "✍️"}}
+{"ts": 1787757526.0571315, "time": "21:18:46", "agent": "PromptSmith", "type": "log", "message": "LLM responded", "data": {"model": "gpt-4o-mini"}}
+{"ts": 1787757526.0571315, "time": "21:18:46", "agent": "PromptSmith", "type": "decision", "message": "LLM-enhanced prompt: 'A ripe red apple, centered in the frame, displayed in a 3/4 view against a plain white background with even studio lighting, showcasing its glossy surface and natural curves.'", "data": {"reasoning": "The prompt focuses on a single red apple with specific visual requirements to ensure clarity and suitability for 3D reconstruction."}}
+{"ts": 1787757526.0581427, "time": "21:18:46", "agent": "PromptSmith", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 2.2}}
+{"ts": 1787757526.0591686, "time": "21:18:46", "agent": "ImageGen", "type": "status", "message": "started", "data": {"state": "running", "icon": "🎨"}}
+{"ts": 1787757527.6555173, "time": "21:18:47", "agent": "ImageGen", "type": "log", "message": "loading sd-turbo (first run downloads the model)", "data": {}}
+{"ts": 1787757531.065689, "time": "21:18:51", "agent": "vram", "type": "log", "message": "loading model: t2i:stabilityai/sd-turbo", "data": {}}
+{"ts": 1787757536.2988565, "time": "21:18:56", "agent": "vram", "type": "metric", "message": "VRAM 2.6/8.6 GB (after loading t2i:stabilityai/sd-turbo)", "data": {"used_gb": 2.6, "total_gb": 8.59}}
+{"ts": 1787757536.2988565, "time": "21:18:56", "agent": "ImageGen", "type": "progress", "message": "generating candidate 1/2 (seed 1476763903)", "data": {"current": 1, "total": 2}}
+{"ts": 1787757537.068966, "time": "21:18:57", "agent": "ImageGen", "type": "artifact", "message": "candidate 1 saved", "data": {"path": "G:\\codes\\mew3d\\results\\20260826_211838_first-test\\intermediate\\candidate_00_seed1476763903.png"}}
+{"ts": 1787757537.068966, "time": "21:18:57", "agent": "ImageGen", "type": "progress", "message": "generating candidate 2/2 (seed 1476763904)", "data": {"current": 2, "total": 2}}
+{"ts": 1787757537.4472017, "time": "21:18:57", "agent": "ImageGen", "type": "artifact", "message": "candidate 2 saved", "data": {"path": "G:\\codes\\mew3d\\results\\20260826_211838_first-test\\intermediate\\candidate_01_seed1476763904.png"}}
+{"ts": 1787757537.4481986, "time": "21:18:57", "agent": "ImageGen", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 11.4}}
+{"ts": 1787757537.4486997, "time": "21:18:57", "agent": "Preprocessor", "type": "status", "message": "started", "data": {"state": "running", "icon": "🪄"}}
+{"ts": 1787757537.4486997, "time": "21:18:57", "agent": "Preprocessor", "type": "log", "message": "loading background-removal model (u2net)", "data": {}}
+{"ts": 1787757538.79918, "time": "21:18:58", "agent": "Preprocessor", "type": "progress", "message": "removing background 1/2", "data": {"current": 1, "total": 2}}
+{"ts": 1787757539.1862702, "time": "21:18:59", "agent": "Preprocessor", "type": "log", "message": "candidate 1 scored 0.78 (coverage 0.45, blob 0.99)", "data": {"source": "G:\\codes\\mew3d\\results\\20260826_211838_first-test\\intermediate\\candidate_00_seed1476763903.png", "coverage": 0.451, "coverage_score": 0.713, "sharpness_score": 0.555, "blob_score": 0.986, "total": 0.777}}
+{"ts": 1787757539.1862702, "time": "21:18:59", "agent": "Preprocessor", "type": "progress", "message": "removing background 2/2", "data": {"current": 2, "total": 2}}
+{"ts": 1787757539.5077984, "time": "21:18:59", "agent": "Preprocessor", "type": "log", "message": "candidate 2 scored 0.63 (coverage 0.57, blob 1.00)", "data": {"source": "G:\\codes\\mew3d\\results\\20260826_211838_first-test\\intermediate\\candidate_01_seed1476763904.png", "coverage": 0.57, "coverage_score": 0.37, "sharpness_score": 0.547, "blob_score": 1.0, "total": 0.626}}
+{"ts": 1787757539.5077984, "time": "21:18:59", "agent": "Preprocessor", "type": "decision", "message": "selected best candidate (score 0.78): G:\\codes\\mew3d\\results\\20260826_211838_first-test\\intermediate\\candidate_00_seed1476763903.png", "data": {"scores": [{"source": "G:\\codes\\mew3d\\results\\20260826_211838_first-test\\intermediate\\candidate_00_seed1476763903.png", "coverage": 0.451, "coverage_score": 0.713, "sharpness_score": 0.555, "blob_score": 0.986, "total": 0.777}, {"source": "G:\\codes\\mew3d\\results\\20260826_211838_first-test\\intermediate\\candidate_01_seed1476763904.png", "coverage": 0.57, "coverage_score": 0.37, "sharpness_score": 0.547, "blob_score": 1.0, "total": 0.626}]}}
+{"ts": 1787757539.5847032, "time": "21:18:59", "agent": "Preprocessor", "type": "artifact", "message": "processed input ready (foreground ratio 0.85)", "data": {"path": "G:\\codes\\mew3d\\results\\20260826_211838_first-test\\intermediate\\processed_input.png"}}
+{"ts": 1787757539.5847032, "time": "21:18:59", "agent": "Preprocessor", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 2.1}}
+{"ts": 1787757539.585722, "time": "21:18:59", "agent": "MeshGen", "type": "status", "message": "started", "data": {"state": "running", "icon": "🧊"}}
+{"ts": 1787757539.585722, "time": "21:18:59", "agent": "MeshGen", "type": "log", "message": "loading TripoSR (first run downloads ~1.6GB)", "data": {}}
+{"ts": 1787757539.7129898, "time": "21:18:59", "agent": "vram", "type": "log", "message": "released models: t2i:stabilityai/sd-turbo", "data": {}}
+{"ts": 1787757539.7129898, "time": "21:18:59", "agent": "vram", "type": "log", "message": "loading model: triposr", "data": {}}
+{"ts": 1787757545.8889728, "time": "21:19:05", "agent": "vram", "type": "metric", "message": "VRAM 1.7/8.6 GB (after loading triposr)", "data": {"used_gb": 1.69, "total_gb": 8.59}}
+{"ts": 1787757545.8889728, "time": "21:19:05", "agent": "MeshGen", "type": "progress", "message": "encoding image into scene codes", "data": {}}
+{"ts": 1787757546.6163852, "time": "21:19:06", "agent": "MeshGen", "type": "progress", "message": "rendering 4 preview views", "data": {}}
+{"ts": 1787757550.1524756, "time": "21:19:10", "agent": "MeshGen", "type": "artifact", "message": "4 preview renders saved", "data": {"path": "G:\\codes\\mew3d\\results\\20260826_211838_first-test\\output\\preview_00.png"}}
+{"ts": 1787757550.3842335, "time": "21:19:10", "agent": "MeshGen", "type": "artifact", "message": "turntable gif saved", "data": {"path": "G:\\codes\\mew3d\\results\\20260826_211838_first-test\\output\\turntable.gif"}}
+{"ts": 1787757550.3842335, "time": "21:19:10", "agent": "MeshGen", "type": "progress", "message": "extracting mesh (marching cubes @ 256^3)", "data": {}}
+{"ts": 1787757552.4667485, "time": "21:19:12", "agent": "MeshGen", "type": "log", "message": "mesh extracted: 81,350 vertices, 161,788 faces", "data": {}}
+{"ts": 1787757552.4667485, "time": "21:19:12", "agent": "MeshGen", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 12.9}}
+{"ts": 1787757552.4677458, "time": "21:19:12", "agent": "Judge", "type": "status", "message": "started", "data": {"state": "running", "icon": "⚖️"}}
+{"ts": 1787757554.6997566, "time": "21:19:14", "agent": "Judge", "type": "log", "message": "mesh metrics: 161,788 faces, 279 components, watertight=True, extent ratio 1.25", "data": {}}
+{"ts": 1787757555.8631337, "time": "21:19:15", "agent": "Judge", "type": "log", "message": "LLM responded", "data": {"model": "gpt-4o-mini"}}
+{"ts": 1787757555.8631337, "time": "21:19:15", "agent": "Judge", "type": "log", "message": "LLM second opinion: The mesh quality is high with a good heuristic score, but the presence of degenerate faces and multiple components is a concern.", "data": {}}
+{"ts": 1787757555.864446, "time": "21:19:15", "agent": "Judge", "type": "decision", "message": "score 1.00 - PASS", "data": {"score": 1.0}}
+{"ts": 1787757555.865465, "time": "21:19:15", "agent": "Judge", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 3.4}}
+{"ts": 1787757555.865465, "time": "21:19:15", "agent": "Exporter", "type": "status", "message": "started", "data": {"state": "running", "icon": "📦"}}
+{"ts": 1787757556.139983, "time": "21:19:16", "agent": "Exporter", "type": "artifact", "message": "OBJ exported", "data": {"path": "G:\\codes\\mew3d\\results\\20260826_211838_first-test\\output\\mesh.obj"}}
+{"ts": 1787757556.1542907, "time": "21:19:16", "agent": "Exporter", "type": "artifact", "message": "GLB exported (vertex colors included)", "data": {"path": "G:\\codes\\mew3d\\results\\20260826_211838_first-test\\output\\mesh.glb"}}
+{"ts": 1787757556.1542907, "time": "21:19:16", "agent": "Exporter", "type": "artifact", "message": "run report written", "data": {"path": "G:\\codes\\mew3d\\results\\20260826_211838_first-test\\report.md"}}
+{"ts": 1787757556.1552927, "time": "21:19:16", "agent": "Exporter", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 0.3}}
+{"ts": 1787757556.3131304, "time": "21:19:16", "agent": "vram", "type": "log", "message": "released models: triposr", "data": {}}
+{"ts": 1787757556.3141387, "time": "21:19:16", "agent": "Orchestrator", "type": "log", "message": "run complete - score 1.00 after 1 attempt(s); outputs in G:\\codes\\mew3d\\results\\20260826_211838_first-test\\output", "data": {}}

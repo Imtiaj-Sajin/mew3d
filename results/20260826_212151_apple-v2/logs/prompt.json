@@ -1,0 +1,5 @@
+{
+  "original": "a red apple",
+  "prompt": "full view of a whole red apple, centered, with clear empty margin around it, set against a plain uncluttered background and even studio lighting",
+  "negative_prompt": "close-up, macro, cropped"
+}

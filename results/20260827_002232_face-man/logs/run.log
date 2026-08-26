@@ -1,0 +1,57 @@
+[00:22:33] Orchestrator log       run 20260827_002232_face-man starting (mode: image23d, LLM: on)
+[00:22:33] Analyst      status    started
+[00:22:33] Analyst      log       input mode: image23d | image: face man.jpg
+[00:22:35] Analyst      log       vision LLM responded
+[00:22:35] Analyst      decision  subject 'male character' (character, complexity medium) - Ensure to capture the facial features and hairstyle details for accurate reconstruction.
+[00:22:35] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[00:22:35] Analyst      status    done
+[00:22:35] Orchestrator log       compare mode: retries disabled (one clean pass per backend)
+[00:22:35] Preprocessor status    started
+[00:22:35] Preprocessor log       loading background-removal model (u2net)
+[00:22:37] Preprocessor artifact  user image copied to run folder
+[00:22:37] Preprocessor progress  removing background 1/1
+[00:22:38] Preprocessor log       candidate 1 scored 0.39 (coverage 0.55, blob 1.00, edge-cut 0.26)
+[00:22:39] Preprocessor log       vision LLM responded
+[00:22:39] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.69)
+[00:22:39] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[00:22:39] Preprocessor status    done
+[00:22:39] MeshGen      status    started
+[00:22:39] MeshGen      log       backend: triposr
+[00:22:41] vram         log       loading model: triposr
+[00:22:47] vram         metric    VRAM 1.7/8.6 GB (after loading triposr)
+[00:22:47] MeshGen      progress  triposr: encoding image into scene codes
+[00:22:48] MeshGen      progress  triposr: rendering 4 preview views
+[00:22:52] MeshGen      artifact  triposr turntable gif saved
+[00:22:52] MeshGen      progress  triposr: extracting mesh (marching cubes @ 256^3)
+[00:22:54] MeshGen      log       triposr: 58,216 vertices, 116,428 faces
+[00:22:54] MeshGen      log       backend: hunyuan
+[00:22:54] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[00:22:54] vram         log       released models: triposr
+[00:22:54] vram         log       loading model: hunyuan3d
+[00:23:20] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[00:23:20] MeshGen      progress  hunyuan: flow-matching diffusion (this takes a minute)
+[00:23:30] MeshGen      progress  hunyuan: rendering clay preview views
+[00:23:47] MeshGen      artifact  hunyuan clay previews saved
+[00:23:47] MeshGen      log       hunyuan: 450,048 vertices, 899,332 faces
+[00:23:47] MeshGen      status    done
+[00:23:47] Judge        status    started
+[00:23:48] Judge        log       [triposr] 116,428 faces, 1 components, watertight=True, extent ratio 1.61
+[00:23:50] Judge        log       LLM responded
+[00:23:50] Judge        log       [triposr] LLM second opinion: The mesh quality is high with a solid structure and good geometric metrics.
+[00:23:51] Judge        log       vision LLM responded
+[00:23:51] Judge        log       [triposr] vision check: looks like 'male character', 8/10 (Minor inaccuracies in hair volume)
+[00:23:52] Judge        log       [hunyuan] 899,332 faces, 41 components, watertight=False, extent ratio 1.18
+[00:23:54] Judge        log       LLM responded
+[00:23:54] Judge        log       [hunyuan] LLM second opinion: The mesh demonstrates high detail but suffers from significant issues with watertightness and a high number of components.
+[00:23:57] Judge        log       vision LLM responded
+[00:23:57] Judge        log       [hunyuan] vision check: looks like 'male character', 8/10 (Minor inaccuracies in hair detail)
+[00:23:57] Judge        decision  backend comparison: triposr 0.92 | hunyuan 0.89 -> winner: triposr
+[00:23:57] Judge        decision  score 0.92 - PASS
+[00:23:57] Judge        status    done
+[00:23:57] Exporter     status    started
+[00:23:57] Exporter     artifact  [triposr] OBJ + GLB exported <- WINNER
+[00:23:58] Exporter     artifact  [hunyuan] OBJ + GLB exported
+[00:23:58] Exporter     artifact  run report written
+[00:23:58] Exporter     status    done
+[00:23:59] vram         log       released models: hunyuan3d
+[00:23:59] Orchestrator log       run complete - score 0.92 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260827_002232_face-man\output

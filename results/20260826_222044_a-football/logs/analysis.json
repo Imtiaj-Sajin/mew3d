@@ -1,0 +1,16 @@
+{
+  "mode": "text23d",
+  "pipeline": [
+    "PromptSmith",
+    "ImageGen",
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "football",
+  "category": "prop",
+  "single_object": true,
+  "complexity": "low",
+  "advice": "Ensure the football is well-defined with clear textures for optimal 3D reconstruction."
+}

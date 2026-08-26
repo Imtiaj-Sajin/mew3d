@@ -1,0 +1,16 @@
+{
+  "mode": "text23d",
+  "pipeline": [
+    "PromptSmith",
+    "ImageGen",
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "apple",
+  "category": "food",
+  "single_object": true,
+  "complexity": "low",
+  "advice": "Focus on the apple's shape and color for accurate 3D reconstruction."
+}

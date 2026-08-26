@@ -1,0 +1,28 @@
+{
+  "attempt": 1,
+  "score": 0.89,
+  "passed": true,
+  "metrics": {
+    "vertices": 84689,
+    "faces": 169342,
+    "watertight": false,
+    "components": 53,
+    "largest_component_fraction": 0.992,
+    "extents": [
+      0.843,
+      0.79,
+      0.992
+    ],
+    "extent_ratio": 1.26,
+    "degenerate_faces": 66
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is high, but it is not watertight and contains some degenerate faces.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "none"
+  },
+  "adjustments": {}
+}

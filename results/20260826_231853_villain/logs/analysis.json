@@ -1,0 +1,16 @@
+{
+  "mode": "text23d",
+  "pipeline": [
+    "PromptSmith",
+    "ImageGen",
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "villain",
+  "category": "character",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Consider defining specific traits or features to enhance the character's uniqueness."
+}

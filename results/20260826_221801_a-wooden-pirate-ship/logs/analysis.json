@@ -1,0 +1,16 @@
+{
+  "mode": "text23d",
+  "pipeline": [
+    "PromptSmith",
+    "ImageGen",
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "pirate ship",
+  "category": "vehicle",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure to capture the intricate details of the ship's wood texture and sails."
+}

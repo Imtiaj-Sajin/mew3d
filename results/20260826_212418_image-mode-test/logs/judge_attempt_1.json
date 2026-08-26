@@ -1,0 +1,31 @@
+{
+  "attempt": 1,
+  "score": 0.35,
+  "passed": false,
+  "metrics": {
+    "vertices": 124728,
+    "faces": 249328,
+    "watertight": true,
+    "components": 40,
+    "largest_component_fraction": 0.989,
+    "extents": [
+      0.869,
+      0.793,
+      1.007
+    ],
+    "extent_ratio": 1.27,
+    "degenerate_faces": 79
+  },
+  "issues": [],
+  "llm_opinion": "The mesh is well-structured and meets quality standards, but the presence of degenerate faces is a concern.",
+  "vision_opinion": {
+    "looks_like_subject": false,
+    "is_flat_or_blob": true,
+    "score": 2,
+    "issue": "The model appears flat and lacks depth, not resembling a 3D apple."
+  },
+  "adjustments": {
+    "foreground_ratio": 0.75,
+    "mc_resolution": 320
+  }
+}

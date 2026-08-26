@@ -1,0 +1,40 @@
+[01:14:09] Orchestrator log       run 20260827_011408_regress-torch251 starting (mode: image23d, LLM: on)
+[01:14:09] Analyst      status    started
+[01:14:09] Analyst      log       input mode: image23d | image: candidate_02_seed272048446.png
+[01:14:12] Analyst      log       vision LLM responded
+[01:14:12] Analyst      decision  subject 'dragon' (creature, complexity high) - Ensure to capture the intricate details of the scales and the unique features of the wings.
+[01:14:12] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[01:14:12] Analyst      status    done
+[01:14:12] Preprocessor status    started
+[01:14:12] Preprocessor log       loading background-removal model (u2net)
+[01:14:15] Preprocessor artifact  user image copied to run folder
+[01:14:15] Preprocessor progress  removing background 1/1
+[01:14:15] Preprocessor log       candidate 1 scored 0.96 (coverage 0.34, blob 1.00, edge-cut 0.00)
+[01:14:18] Preprocessor log       vision LLM responded
+[01:14:18] Preprocessor log       vision critic: none (vlm 9/10 -> blended 0.93)
+[01:14:18] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[01:14:18] Preprocessor status    done
+[01:14:18] MeshGen      status    started
+[01:14:18] MeshGen      log       backend: hunyuan
+[01:14:20] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[01:14:20] vram         log       loading model: hunyuan3d
+[01:15:07] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[01:15:07] MeshGen      progress  hunyuan: flow-matching diffusion (this takes a minute)
+[01:15:13] MeshGen      progress  hunyuan: rendering clay preview views
+[01:15:30] MeshGen      artifact  hunyuan clay previews saved
+[01:15:30] MeshGen      log       hunyuan: 411,976 vertices, 823,956 faces
+[01:15:30] MeshGen      status    done
+[01:15:30] Judge        status    started
+[01:15:32] Judge        log       [hunyuan] 823,956 faces, 13 components, watertight=False, extent ratio 1.54
+[01:15:33] Judge        log       LLM responded
+[01:15:33] Judge        log       [hunyuan] LLM second opinion: The mesh displays high quality but is not watertight, which is a significant issue for certain applications.
+[01:15:35] Judge        log       vision LLM responded
+[01:15:35] Judge        log       [hunyuan] vision check: looks like 'dragon', 8/10 (The head shape is slightly off compared to the source.)
+[01:15:35] Judge        decision  score 0.89 - PASS
+[01:15:35] Judge        status    done
+[01:15:35] Exporter     status    started
+[01:15:36] Exporter     artifact  [hunyuan] OBJ + GLB exported
+[01:15:36] Exporter     artifact  run report written
+[01:15:36] Exporter     status    done
+[01:15:37] vram         log       released models: hunyuan3d
+[01:15:37] Orchestrator log       run complete - score 0.89 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260827_011408_regress-torch251\output

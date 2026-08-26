@@ -1,0 +1,31 @@
+{
+  "attempt": 2,
+  "score": 0.332,
+  "passed": false,
+  "metrics": {
+    "vertices": 209303,
+    "faces": 417320,
+    "watertight": false,
+    "components": 449,
+    "largest_component_fraction": 0.973,
+    "extents": [
+      0.673,
+      0.773,
+      0.993
+    ],
+    "extent_ratio": 1.47,
+    "degenerate_faces": 253
+  },
+  "issues": [],
+  "llm_opinion": "The mesh has a high heuristic score but significant issues with watertightness and component fragmentation.",
+  "vision_opinion": {
+    "looks_like_subject": false,
+    "is_flat_or_blob": true,
+    "score": 2,
+    "issue": "The model appears flat and lacks depth, resembling a 2D image rather than a 3D object."
+  },
+  "adjustments": {
+    "foreground_ratio": 0.65,
+    "mc_resolution": 320
+  }
+}

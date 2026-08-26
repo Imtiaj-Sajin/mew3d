@@ -1,0 +1,16 @@
+{
+  "mode": "text23d",
+  "pipeline": [
+    "PromptSmith",
+    "ImageGen",
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "apple",
+  "category": "food",
+  "single_object": true,
+  "complexity": "low",
+  "advice": "This is a straightforward request for a single object, proceed with generating the apple."
+}

@@ -1,5 +1,7 @@
-# torch/torchvision are installed separately with the cu124 index:
-#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
+# torch/torchvision are installed separately with the cu124 index (PINNED - the
+# vendored custom_rasterizer wheel for the texture stage is built against 2.5.1):
+#   pip install torch==2.5.1 torchvision==0.20.1 --index-url https://download.pytorch.org/whl/cu124
+# then: pip install third_party/wheels/custom_rasterizer-*.whl
 # pinned: TripoSR's checkpoint uses pre-5.x ViT parameter names, and this
 # transformers line requires huggingface-hub<1.0, which caps diffusers at 0.33
 diffusers==0.33.1

@@ -1,0 +1,66 @@
+[22:18:02] Orchestrator log       run 20260826_221801_a-wooden-pirate-ship starting (mode: text23d, LLM: on)
+[22:18:02] Analyst      status    started
+[22:18:02] Analyst      log       input mode: text23d | text: 'a wooden pirate ship'
+[22:18:05] Analyst      log       LLM responded
+[22:18:05] Analyst      decision  subject 'pirate ship' (vehicle, complexity medium) - Ensure to capture the intricate details of the ship's wood texture and sails.
+[22:18:05] Analyst      decision  pipeline plan: PromptSmith -> ImageGen -> Preprocessor -> MeshGen -> Judge -> Exporter
+[22:18:05] Analyst      status    done
+[22:18:05] PromptSmith  status    started
+[22:18:07] PromptSmith  log       LLM responded
+[22:18:07] PromptSmith  decision  LLM-enhanced prompt: 'full view of a whole wooden pirate ship, centered in 3/4 view against a plain uncluttered background with even studio lighting'
+[22:18:07] PromptSmith  status    done
+[22:18:07] ImageGen     status    started
+[22:18:14] ImageGen     log       loading sd-turbo (first run downloads the model)
+[22:18:32] vram         log       loading model: t2i:stabilityai/sd-turbo
+[22:18:41] vram         metric    VRAM 2.6/8.6 GB (after loading t2i:stabilityai/sd-turbo)
+[22:18:41] ImageGen     progress  generating candidate 1/3 (seed 689039458)
+[22:18:43] ImageGen     artifact  candidate 1 saved
+[22:18:43] ImageGen     progress  generating candidate 2/3 (seed 689039459)
+[22:18:43] ImageGen     artifact  candidate 2 saved
+[22:18:43] ImageGen     progress  generating candidate 3/3 (seed 689039460)
+[22:18:43] ImageGen     artifact  candidate 3 saved
+[22:18:43] ImageGen     status    done
+[22:18:43] Preprocessor status    started
+[22:18:43] Preprocessor log       loading background-removal model (u2net)
+[22:18:47] Preprocessor progress  removing background 1/3
+[22:18:47] Preprocessor log       candidate 1 scored 0.65 (coverage 0.47, blob 1.00, edge-cut 0.06)
+[22:18:47] Preprocessor progress  removing background 2/3
+[22:18:48] Preprocessor log       candidate 2 scored 0.91 (coverage 0.40, blob 1.00, edge-cut 0.01)
+[22:18:48] Preprocessor progress  removing background 3/3
+[22:18:48] Preprocessor log       candidate 3 scored 0.79 (coverage 0.56, blob 1.00, edge-cut 0.01)
+[22:18:51] Preprocessor log       vision LLM responded
+[22:18:51] Preprocessor log       vision critic: none (vlm 9/10 -> blended 0.78)
+[22:18:52] Preprocessor log       vision LLM responded
+[22:18:52] Preprocessor log       vision critic: Background is not plain and uncluttered. (vlm 7/10 -> blended 0.81)
+[22:18:54] Preprocessor log       vision LLM responded
+[22:18:54] Preprocessor log       vision critic: none (vlm 9/10 -> blended 0.84)
+[22:18:54] Preprocessor decision  selected best candidate (score 0.84): G:\codes\mew3d\results\20260826_221801_a-wooden-pirate-ship\intermediate\candidate_02_seed689039460.png
+[22:18:54] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[22:18:54] Preprocessor status    done
+[22:18:54] MeshGen      status    started
+[22:18:54] MeshGen      log       loading TripoSR (first run downloads ~1.6GB)
+[22:18:54] vram         log       released models: t2i:stabilityai/sd-turbo
+[22:18:54] vram         log       loading model: triposr
+[22:19:02] vram         metric    VRAM 1.7/8.6 GB (after loading triposr)
+[22:19:02] MeshGen      progress  encoding image into scene codes
+[22:19:03] MeshGen      progress  rendering 4 preview views
+[22:19:06] MeshGen      artifact  4 preview renders saved
+[22:19:06] MeshGen      artifact  turntable gif saved
+[22:19:06] MeshGen      progress  extracting mesh (marching cubes @ 256^3)
+[22:19:08] MeshGen      log       mesh extracted: 55,733 vertices, 111,438 faces
+[22:19:08] MeshGen      status    done
+[22:19:08] Judge        status    started
+[22:19:09] Judge        log       mesh metrics: 111,438 faces, 17 components, watertight=True, extent ratio 1.55
+[22:19:10] Judge        log       LLM responded
+[22:19:10] Judge        log       LLM second opinion: The mesh quality is acceptable but requires attention due to the presence of degenerate faces and multiple components.
+[22:19:11] Judge        log       vision LLM responded
+[22:19:11] Judge        log       vision check: looks like 'pirate ship', 6/10 (Lack of detail in textures and sails)
+[22:19:11] Judge        decision  score 0.84 - PASS
+[22:19:11] Judge        status    done
+[22:19:11] Exporter     status    started
+[22:19:12] Exporter     artifact  OBJ exported
+[22:19:12] Exporter     artifact  GLB exported (vertex colors included)
+[22:19:12] Exporter     artifact  run report written
+[22:19:12] Exporter     status    done
+[22:19:12] vram         log       released models: triposr
+[22:19:12] Orchestrator log       run complete - score 0.84 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260826_221801_a-wooden-pirate-ship\output

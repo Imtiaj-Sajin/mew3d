@@ -1,0 +1,16 @@
+{
+  "mode": "text23d",
+  "pipeline": [
+    "PromptSmith",
+    "ImageGen",
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "computer mouse",
+  "category": "prop",
+  "single_object": true,
+  "complexity": "low",
+  "advice": "Ensure to highlight the specific features of the computer mouse for better accuracy in the 3D model."
+}

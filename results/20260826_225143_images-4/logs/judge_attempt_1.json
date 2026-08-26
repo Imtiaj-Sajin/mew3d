@@ -1,0 +1,28 @@
+{
+  "attempt": 1,
+  "score": 0.92,
+  "passed": true,
+  "metrics": {
+    "vertices": 45485,
+    "faces": 90974,
+    "watertight": true,
+    "components": 1,
+    "largest_component_fraction": 1.0,
+    "extents": [
+      0.427,
+      1.015,
+      0.862
+    ],
+    "extent_ratio": 2.38,
+    "degenerate_faces": 33
+  },
+  "issues": [],
+  "llm_opinion": "The mesh is of high quality and well-constructed with minimal issues.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "none"
+  },
+  "adjustments": {}
+}

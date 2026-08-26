@@ -7,6 +7,7 @@ from ..agents.judge import JudgeAgent
 from ..agents.mesh_gen import MeshGenAgent
 from ..agents.preprocessor import PreprocessorAgent
 from ..agents.prompt_smith import PromptSmithAgent
+from ..agents.texture_smith import TextureSmithAgent
 from ..llm.client import LLMClient
 from .model_manager import ModelManager
 
@@ -28,6 +29,7 @@ class Orchestrator:
         self.preprocessor = PreprocessorAgent(*deps)
         self.mesh_gen = MeshGenAgent(*deps)
         self.judge = JudgeAgent(*deps)
+        self.texture_smith = TextureSmithAgent(*deps)
         self.exporter = ExporterAgent(*deps)
 
     def emit(self, message: str, **data) -> None:
@@ -71,7 +73,17 @@ class Orchestrator:
             if attempt < max_attempts:
                 cfg.adjustments.update(verdict["adjustments"])
 
+        if self.cfg.texture_enabled:
+            try:
+                self.texture_smith.run()
+            except Exception as e:
+                # a failed paint must never cost us the mesh - ship clay and say so
+                self.emit(f"texture stage failed ({type(e).__name__}: {e}) - "
+                          "exporting untextured mesh")
+
         outputs = self.exporter.run()
+        if self.ctx.state.get("textured_glb"):
+            outputs["textured_glb"] = self.ctx.state["textured_glb"]
         self.models.release_all()
         self.emit(
             f"run complete - score {verdict['score']:.2f} after "

@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "backend": "triposr",
+  "score": 0.88,
+  "passed": true,
+  "metrics": {
+    "vertices": 58270,
+    "faces": 116496,
+    "watertight": true,
+    "components": 12,
+    "largest_component_fraction": 0.997,
+    "extents": [
+      0.71,
+      1.113,
+      0.6
+    ],
+    "extent_ratio": 1.85,
+    "degenerate_faces": 44
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is high with a watertight structure, but the presence of multiple components and a few degenerate faces may need attention.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 7,
+    "issue": "some details are lacking"
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "triposr",
+      "score": 0.88,
+      "issues": [],
+      "metrics": {
+        "vertices": 58270,
+        "faces": 116496,
+        "watertight": true,
+        "components": 12,
+        "largest_component_fraction": 0.997,
+        "extents": [
+          0.71,
+          1.113,
+          0.6
+        ],
+        "extent_ratio": 1.85,
+        "degenerate_faces": 44
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 7,
+        "issue": "some details are lacking"
+      }
+    }
+  ]
+}

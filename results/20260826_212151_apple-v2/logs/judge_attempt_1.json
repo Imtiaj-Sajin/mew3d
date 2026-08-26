@@ -1,0 +1,28 @@
+{
+  "attempt": 1,
+  "score": 0.92,
+  "passed": true,
+  "metrics": {
+    "vertices": 96090,
+    "faces": 191248,
+    "watertight": true,
+    "components": 259,
+    "largest_component_fraction": 0.905,
+    "extents": [
+      0.872,
+      0.868,
+      0.885
+    ],
+    "extent_ratio": 1.02,
+    "degenerate_faces": 77
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is generally good, but the presence of degenerate faces raises concerns.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "none"
+  },
+  "adjustments": {}
+}

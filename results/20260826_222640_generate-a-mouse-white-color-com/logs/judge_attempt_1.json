@@ -1,0 +1,28 @@
+{
+  "attempt": 1,
+  "score": 0.92,
+  "passed": true,
+  "metrics": {
+    "vertices": 43556,
+    "faces": 87108,
+    "watertight": true,
+    "components": 1,
+    "largest_component_fraction": 1.0,
+    "extents": [
+      0.369,
+      0.609,
+      1.013
+    ],
+    "extent_ratio": 2.75,
+    "degenerate_faces": 34
+  },
+  "issues": [],
+  "llm_opinion": "The mesh is generally well-constructed with a high heuristic score, but there are concerns about the presence of degenerate faces.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "none"
+  },
+  "adjustments": {}
+}

@@ -1,0 +1,42 @@
+[22:45:10] Orchestrator log       run 20260826_224509_1-14112q35544 starting (mode: image23d, LLM: on)
+[22:45:10] Analyst      status    started
+[22:45:10] Analyst      log       input mode: image23d | image: 1-14112Q35544.jpg
+[22:45:12] Analyst      log       vision LLM responded
+[22:45:12] Analyst      decision  subject 'minion' (character, complexity medium) - Ensure to capture the character's distinctive features and avoid cutting off any limbs.
+[22:45:12] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[22:45:12] Analyst      status    done
+[22:45:12] Preprocessor status    started
+[22:45:12] Preprocessor log       loading background-removal model (u2net)
+[22:45:14] Preprocessor artifact  user image copied to run folder
+[22:45:14] Preprocessor progress  removing background 1/1
+[22:45:15] Preprocessor log       candidate 1 scored 0.76 (coverage 0.17, blob 1.00, edge-cut 0.00)
+[22:45:17] Preprocessor log       vision LLM responded
+[22:45:17] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.88)
+[22:45:17] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[22:45:17] Preprocessor status    done
+[22:45:17] MeshGen      status    started
+[22:45:19] MeshGen      log       loading TripoSR (first run downloads ~1.6GB)
+[22:45:19] vram         log       loading model: triposr
+[22:45:29] vram         metric    VRAM 1.7/8.6 GB (after loading triposr)
+[22:45:29] MeshGen      progress  encoding image into scene codes
+[22:45:30] MeshGen      progress  rendering 4 preview views
+[22:45:33] MeshGen      artifact  4 preview renders saved
+[22:45:33] MeshGen      artifact  turntable gif saved
+[22:45:33] MeshGen      progress  extracting mesh (marching cubes @ 256^3)
+[22:45:36] MeshGen      log       mesh extracted: 30,690 vertices, 61,376 faces
+[22:45:36] MeshGen      status    done
+[22:45:36] Judge        status    started
+[22:45:36] Judge        log       mesh metrics: 61,376 faces, 1 components, watertight=True, extent ratio 1.42
+[22:45:37] Judge        log       LLM responded
+[22:45:37] Judge        log       LLM second opinion: The mesh quality is high with a solid structure, but the presence of degenerate faces is a minor concern.
+[22:45:39] Judge        log       vision LLM responded
+[22:45:39] Judge        log       vision check: looks like 'minion', 8/10 (none)
+[22:45:39] Judge        decision  score 0.92 - PASS
+[22:45:39] Judge        status    done
+[22:45:39] Exporter     status    started
+[22:45:39] Exporter     artifact  OBJ exported
+[22:45:39] Exporter     artifact  GLB exported (vertex colors included)
+[22:45:39] Exporter     artifact  run report written
+[22:45:39] Exporter     status    done
+[22:45:39] vram         log       released models: triposr
+[22:45:39] Orchestrator log       run complete - score 0.92 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260826_224509_1-14112q35544\output

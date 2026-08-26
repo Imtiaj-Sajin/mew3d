@@ -1,0 +1,81 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.93,
+  "passed": true,
+  "metrics": {
+    "vertices": 588468,
+    "faces": 1176936,
+    "watertight": false,
+    "components": 5,
+    "largest_component_fraction": 1.0,
+    "extents": [
+      1.859,
+      1.995,
+      1.876
+    ],
+    "extent_ratio": 1.07,
+    "degenerate_faces": 539
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is high but requires improvement in watertightness and reduction of degenerate faces.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 9,
+    "issue": "none"
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "triposr",
+      "score": 0.89,
+      "issues": [],
+      "metrics": {
+        "vertices": 88361,
+        "faces": 176724,
+        "watertight": false,
+        "components": 7,
+        "largest_component_fraction": 1.0,
+        "extents": [
+          0.953,
+          0.94,
+          0.995
+        ],
+        "extent_ratio": 1.06,
+        "degenerate_faces": 58
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Slight inconsistencies in the shape of the cap"
+      }
+    },
+    {
+      "backend": "hunyuan",
+      "score": 0.93,
+      "issues": [],
+      "metrics": {
+        "vertices": 588468,
+        "faces": 1176936,
+        "watertight": false,
+        "components": 5,
+        "largest_component_fraction": 1.0,
+        "extents": [
+          1.859,
+          1.995,
+          1.876
+        ],
+        "extent_ratio": 1.07,
+        "degenerate_faces": 539
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 9,
+        "issue": "none"
+      }
+    }
+  ]
+}

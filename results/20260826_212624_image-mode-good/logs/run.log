@@ -1,0 +1,42 @@
+[21:26:25] Orchestrator log       run 20260826_212624_image-mode-good starting (mode: image23d, LLM: on)
+[21:26:25] Analyst      status    started
+[21:26:25] Analyst      log       input mode: image23d | image: candidate_02_seed272048446.png
+[21:26:27] Analyst      log       vision LLM responded
+[21:26:27] Analyst      decision  subject 'dragon' (creature, complexity high) - Ensure to capture the intricate details of the scales and facial features for a more realistic reconstruction.
+[21:26:27] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[21:26:27] Analyst      status    done
+[21:26:27] Preprocessor status    started
+[21:26:27] Preprocessor log       loading background-removal model (u2net)
+[21:26:29] Preprocessor artifact  user image copied to run folder
+[21:26:29] Preprocessor progress  removing background 1/1
+[21:26:29] Preprocessor log       candidate 1 scored 0.96 (coverage 0.34, blob 1.00, edge-cut 0.00)
+[21:26:32] Preprocessor log       vision LLM responded
+[21:26:32] Preprocessor log       vision critic: none (vlm 9/10 -> blended 0.93)
+[21:26:32] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[21:26:32] Preprocessor status    done
+[21:26:32] MeshGen      status    started
+[21:26:34] MeshGen      log       loading TripoSR (first run downloads ~1.6GB)
+[21:26:34] vram         log       loading model: triposr
+[21:26:41] vram         metric    VRAM 1.7/8.6 GB (after loading triposr)
+[21:26:41] MeshGen      progress  encoding image into scene codes
+[21:26:41] MeshGen      progress  rendering 4 preview views
+[21:26:45] MeshGen      artifact  4 preview renders saved
+[21:26:45] MeshGen      artifact  turntable gif saved
+[21:26:45] MeshGen      progress  extracting mesh (marching cubes @ 256^3)
+[21:26:47] MeshGen      log       mesh extracted: 84,689 vertices, 169,342 faces
+[21:26:47] MeshGen      status    done
+[21:26:47] Judge        status    started
+[21:26:48] Judge        log       mesh metrics: 169,342 faces, 53 components, watertight=False, extent ratio 1.26
+[21:26:49] Judge        log       LLM responded
+[21:26:49] Judge        log       LLM second opinion: The mesh quality is high, but it is not watertight and contains some degenerate faces.
+[21:26:51] Judge        log       vision LLM responded
+[21:26:51] Judge        log       vision check: looks like 'dragon', 8/10 (none)
+[21:26:51] Judge        decision  score 0.89 - PASS
+[21:26:51] Judge        status    done
+[21:26:51] Exporter     status    started
+[21:26:51] Exporter     artifact  OBJ exported
+[21:26:51] Exporter     artifact  GLB exported (vertex colors included)
+[21:26:51] Exporter     artifact  run report written
+[21:26:51] Exporter     status    done
+[21:26:51] vram         log       released models: triposr
+[21:26:51] Orchestrator log       run complete - score 0.89 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260826_212624_image-mode-good\output

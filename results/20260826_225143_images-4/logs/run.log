@@ -1,0 +1,41 @@
+[22:51:44] Orchestrator log       run 20260826_225143_images-4 starting (mode: image23d, LLM: on)
+[22:51:44] Analyst      status    started
+[22:51:44] Analyst      log       input mode: image23d | image: images (4).jpg
+[22:51:47] Analyst      log       vision LLM responded
+[22:51:47] Analyst      decision  subject 'donut character' (character, complexity medium) - Ensure to capture the playful features and vibrant colors for an appealing 3D model.
+[22:51:47] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[22:51:47] Analyst      status    done
+[22:51:47] Preprocessor status    started
+[22:51:47] Preprocessor log       loading background-removal model (u2net)
+[22:51:49] Preprocessor artifact  user image copied to run folder
+[22:51:49] Preprocessor progress  removing background 1/1
+[22:51:49] Preprocessor log       candidate 1 scored 0.87 (coverage 0.29, blob 1.00, edge-cut 0.00)
+[22:51:50] Preprocessor log       vision LLM responded
+[22:51:50] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.93)
+[22:51:50] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[22:51:50] Preprocessor status    done
+[22:51:50] MeshGen      status    started
+[22:51:50] MeshGen      log       backend: triposr
+[22:51:52] vram         log       loading model: triposr
+[22:52:01] vram         metric    VRAM 1.7/8.6 GB (after loading triposr)
+[22:52:01] MeshGen      progress  triposr: encoding image into scene codes
+[22:52:02] MeshGen      progress  triposr: rendering 4 preview views
+[22:52:06] MeshGen      artifact  triposr turntable gif saved
+[22:52:06] MeshGen      progress  triposr: extracting mesh (marching cubes @ 256^3)
+[22:52:08] MeshGen      log       triposr: 45,485 vertices, 90,974 faces
+[22:52:08] MeshGen      status    done
+[22:52:08] Judge        status    started
+[22:52:08] Judge        log       mesh metrics: 90,974 faces, 1 components, watertight=True, extent ratio 2.38
+[22:52:10] Judge        log       LLM responded
+[22:52:10] Judge        log       LLM second opinion: The mesh is of high quality and well-constructed with minimal issues.
+[22:52:11] Judge        log       vision LLM responded
+[22:52:11] Judge        log       vision check: looks like 'donut character', 8/10 (none)
+[22:52:11] Judge        decision  score 0.92 - PASS
+[22:52:11] Judge        status    done
+[22:52:11] Exporter     status    started
+[22:52:11] Exporter     artifact  OBJ exported
+[22:52:11] Exporter     artifact  GLB exported (vertex colors included)
+[22:52:11] Exporter     artifact  run report written
+[22:52:11] Exporter     status    done
+[22:52:11] vram         log       released models: triposr
+[22:52:11] Orchestrator log       run complete - score 0.92 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260826_225143_images-4\output

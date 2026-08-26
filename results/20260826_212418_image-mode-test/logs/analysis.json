@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "candidate 00",
+  "category": "other",
+  "single_object": false,
+  "complexity": "medium",
+  "advice": "Focus on identifying and isolating the main subject for a better 3D reconstruction."
+}

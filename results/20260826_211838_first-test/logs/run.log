@@ -1,0 +1,54 @@
+[21:18:40] Orchestrator log       run 20260826_211838_first-test starting (mode: text23d, LLM: on)
+[21:18:40] Analyst      status    started
+[21:18:40] Analyst      log       input mode: text23d | text: 'a red apple'
+[21:18:43] Analyst      log       LLM responded
+[21:18:43] Analyst      decision  subject 'apple' (food, complexity low) - This is a straightforward request for a single object, proceed with generating the apple.
+[21:18:43] Analyst      decision  pipeline plan: PromptSmith -> ImageGen -> Preprocessor -> MeshGen -> Judge -> Exporter
+[21:18:43] Analyst      status    done
+[21:18:43] PromptSmith  status    started
+[21:18:46] PromptSmith  log       LLM responded
+[21:18:46] PromptSmith  decision  LLM-enhanced prompt: 'A ripe red apple, centered in the frame, displayed in a 3/4 view against a plain white background with even studio lighting, showcasing its glossy surface and natural curves.'
+[21:18:46] PromptSmith  status    done
+[21:18:46] ImageGen     status    started
+[21:18:47] ImageGen     log       loading sd-turbo (first run downloads the model)
+[21:18:51] vram         log       loading model: t2i:stabilityai/sd-turbo
+[21:18:56] vram         metric    VRAM 2.6/8.6 GB (after loading t2i:stabilityai/sd-turbo)
+[21:18:56] ImageGen     progress  generating candidate 1/2 (seed 1476763903)
+[21:18:57] ImageGen     artifact  candidate 1 saved
+[21:18:57] ImageGen     progress  generating candidate 2/2 (seed 1476763904)
+[21:18:57] ImageGen     artifact  candidate 2 saved
+[21:18:57] ImageGen     status    done
+[21:18:57] Preprocessor status    started
+[21:18:57] Preprocessor log       loading background-removal model (u2net)
+[21:18:58] Preprocessor progress  removing background 1/2
+[21:18:59] Preprocessor log       candidate 1 scored 0.78 (coverage 0.45, blob 0.99)
+[21:18:59] Preprocessor progress  removing background 2/2
+[21:18:59] Preprocessor log       candidate 2 scored 0.63 (coverage 0.57, blob 1.00)
+[21:18:59] Preprocessor decision  selected best candidate (score 0.78): G:\codes\mew3d\results\20260826_211838_first-test\intermediate\candidate_00_seed1476763903.png
+[21:18:59] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[21:18:59] Preprocessor status    done
+[21:18:59] MeshGen      status    started
+[21:18:59] MeshGen      log       loading TripoSR (first run downloads ~1.6GB)
+[21:18:59] vram         log       released models: t2i:stabilityai/sd-turbo
+[21:18:59] vram         log       loading model: triposr
+[21:19:05] vram         metric    VRAM 1.7/8.6 GB (after loading triposr)
+[21:19:05] MeshGen      progress  encoding image into scene codes
+[21:19:06] MeshGen      progress  rendering 4 preview views
+[21:19:10] MeshGen      artifact  4 preview renders saved
+[21:19:10] MeshGen      artifact  turntable gif saved
+[21:19:10] MeshGen      progress  extracting mesh (marching cubes @ 256^3)
+[21:19:12] MeshGen      log       mesh extracted: 81,350 vertices, 161,788 faces
+[21:19:12] MeshGen      status    done
+[21:19:12] Judge        status    started
+[21:19:14] Judge        log       mesh metrics: 161,788 faces, 279 components, watertight=True, extent ratio 1.25
+[21:19:15] Judge        log       LLM responded
+[21:19:15] Judge        log       LLM second opinion: The mesh quality is high with a good heuristic score, but the presence of degenerate faces and multiple components is a concern.
+[21:19:15] Judge        decision  score 1.00 - PASS
+[21:19:15] Judge        status    done
+[21:19:15] Exporter     status    started
+[21:19:16] Exporter     artifact  OBJ exported
+[21:19:16] Exporter     artifact  GLB exported (vertex colors included)
+[21:19:16] Exporter     artifact  run report written
+[21:19:16] Exporter     status    done
+[21:19:16] vram         log       released models: triposr
+[21:19:16] Orchestrator log       run complete - score 1.00 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260826_211838_first-test\output

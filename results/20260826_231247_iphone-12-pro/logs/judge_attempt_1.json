@@ -1,0 +1,59 @@
+{
+  "attempt": 1,
+  "backend": "triposr",
+  "score": 0.35,
+  "passed": false,
+  "metrics": {
+    "vertices": 53350,
+    "faces": 106696,
+    "watertight": true,
+    "components": 1,
+    "largest_component_fraction": 1.0,
+    "extents": [
+      0.441,
+      0.555,
+      1.013
+    ],
+    "extent_ratio": 2.3,
+    "degenerate_faces": 14
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is high with a good heuristic score, but the presence of degenerate faces is a concern.",
+  "vision_opinion": {
+    "looks_like_subject": false,
+    "is_flat_or_blob": true,
+    "score": 3,
+    "issue": "The shape does not resemble an iPhone 12 Pro and appears more like a flat or abstract form."
+  },
+  "adjustments": {
+    "regenerate_images": false,
+    "mc_resolution": 320
+  },
+  "comparison": [
+    {
+      "backend": "triposr",
+      "score": 0.35,
+      "issues": [],
+      "metrics": {
+        "vertices": 53350,
+        "faces": 106696,
+        "watertight": true,
+        "components": 1,
+        "largest_component_fraction": 1.0,
+        "extents": [
+          0.441,
+          0.555,
+          1.013
+        ],
+        "extent_ratio": 2.3,
+        "degenerate_faces": 14
+      },
+      "vision_opinion": {
+        "looks_like_subject": false,
+        "is_flat_or_blob": true,
+        "score": 3,
+        "issue": "The shape does not resemble an iPhone 12 Pro and appears more like a flat or abstract form."
+      }
+    }
+  ]
+}

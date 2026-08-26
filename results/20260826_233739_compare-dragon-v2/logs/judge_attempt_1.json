@@ -1,0 +1,81 @@
+{
+  "attempt": 1,
+  "backend": "triposr",
+  "score": 0.89,
+  "passed": true,
+  "metrics": {
+    "vertices": 84689,
+    "faces": 169342,
+    "watertight": false,
+    "components": 53,
+    "largest_component_fraction": 0.992,
+    "extents": [
+      0.843,
+      0.79,
+      0.992
+    ],
+    "extent_ratio": 1.26,
+    "degenerate_faces": 66
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is high, but it lacks watertightness and contains multiple components.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "Minor inconsistencies in the head shape and wing positioning"
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "triposr",
+      "score": 0.89,
+      "issues": [],
+      "metrics": {
+        "vertices": 84689,
+        "faces": 169342,
+        "watertight": false,
+        "components": 53,
+        "largest_component_fraction": 0.992,
+        "extents": [
+          0.843,
+          0.79,
+          0.992
+        ],
+        "extent_ratio": 1.26,
+        "degenerate_faces": 66
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Minor inconsistencies in the head shape and wing positioning"
+      }
+    },
+    {
+      "backend": "hunyuan",
+      "score": 0.85,
+      "issues": [],
+      "metrics": {
+        "vertices": 411976,
+        "faces": 823956,
+        "watertight": false,
+        "components": 13,
+        "largest_component_fraction": 0.999,
+        "extents": [
+          1.293,
+          1.695,
+          1.99
+        ],
+        "extent_ratio": 1.54,
+        "degenerate_faces": 423
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 7,
+        "issue": "The head shape is slightly off compared to the source."
+      }
+    }
+  ]
+}

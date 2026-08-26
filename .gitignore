@@ -1,7 +1,9 @@
 # anchored to repo root: third_party/TripoSR/tsr/models must stay tracked
 /.venv/
 /models/
-/results/
+# results ARE tracked (meshes, previews, reports) - except bulky OBJs,
+# which duplicate the compact GLBs
+/results/**/*.obj
 __pycache__/
 *.pyc
 .env

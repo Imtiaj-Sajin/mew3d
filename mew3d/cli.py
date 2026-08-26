@@ -28,6 +28,11 @@ def build_parser() -> argparse.ArgumentParser:
                      default="triposr",
                      help="3D backend; 'both' runs the two models side by side to compare")
     gen.add_argument("--mc-res", type=int, default=256, help="marching cubes resolution")
+    tex = gen.add_mutually_exclusive_group()
+    tex.add_argument("--texture", dest="texture", action="store_true", default=None,
+                     help="paint the mesh with diffusion textures (default: on for hunyuan)")
+    tex.add_argument("--no-texture", dest="texture", action="store_false",
+                     help="skip the texture stage")
     gen.add_argument("--foreground-ratio", type=float, default=0.85)
     gen.add_argument("--previews", type=int, default=4, help="preview views to render (0=off)")
     gen.add_argument("--retries", type=int, default=1, help="max retry attempts if judge fails")
@@ -59,6 +64,7 @@ def cmd_generate(args) -> int:
         image_steps=args.steps,
         mesh_model=args.mesh_model,
         mc_resolution=args.mc_res,
+        texture=args.texture,
         foreground_ratio=args.foreground_ratio,
         n_preview_views=args.previews,
         max_retries=args.retries,
@@ -91,6 +97,8 @@ def cmd_generate(args) -> int:
     print(f"  quality score : {verdict['score']:.2f} "
           f"({'PASS' if verdict['passed'] else 'best effort'})")
     print(f"  mesh          : {result['outputs']['glb']}")
+    if result["outputs"].get("textured_glb"):
+        print(f"  textured mesh : {result['outputs']['textured_glb']}")
     print(f"  report        : {result['outputs']['report']}")
     return 0
 

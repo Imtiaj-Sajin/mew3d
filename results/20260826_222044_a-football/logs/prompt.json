@@ -1,0 +1,5 @@
+{
+  "original": "a football ",
+  "prompt": "full view of a whole football, centered with a plain uncluttered background, even studio lighting, showing all details and textures clearly",
+  "negative_prompt": "close-up, macro, cropped, text, watermarks"
+}

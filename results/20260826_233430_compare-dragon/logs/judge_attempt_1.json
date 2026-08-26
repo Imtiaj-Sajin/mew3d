@@ -1,0 +1,81 @@
+{
+  "attempt": 1,
+  "backend": "triposr",
+  "score": 0.85,
+  "passed": true,
+  "metrics": {
+    "vertices": 84689,
+    "faces": 169342,
+    "watertight": false,
+    "components": 53,
+    "largest_component_fraction": 0.992,
+    "extents": [
+      0.843,
+      0.79,
+      0.992
+    ],
+    "extent_ratio": 1.26,
+    "degenerate_faces": 66
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is high but lacks watertightness and has multiple components.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 7,
+    "issue": "proportions could be improved"
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "triposr",
+      "score": 0.85,
+      "issues": [],
+      "metrics": {
+        "vertices": 84689,
+        "faces": 169342,
+        "watertight": false,
+        "components": 53,
+        "largest_component_fraction": 0.992,
+        "extents": [
+          0.843,
+          0.79,
+          0.992
+        ],
+        "extent_ratio": 1.26,
+        "degenerate_faces": 66
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 7,
+        "issue": "proportions could be improved"
+      }
+    },
+    {
+      "backend": "hunyuan",
+      "score": 0.332,
+      "issues": [],
+      "metrics": {
+        "vertices": 411976,
+        "faces": 823956,
+        "watertight": false,
+        "components": 13,
+        "largest_component_fraction": 0.999,
+        "extents": [
+          1.293,
+          1.695,
+          1.99
+        ],
+        "extent_ratio": 1.54,
+        "degenerate_faces": 423
+      },
+      "vision_opinion": {
+        "looks_like_subject": false,
+        "is_flat_or_blob": false,
+        "score": 3,
+        "issue": "The shape does not resemble a dragon; it appears more like a creature with elephant-like features."
+      }
+    }
+  ]
+}

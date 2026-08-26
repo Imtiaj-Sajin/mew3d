@@ -1,0 +1,40 @@
+{"ts": 1787768410.7114487, "time": "00:20:10", "agent": "Orchestrator", "type": "log", "message": "run 20260827_002009_face-man starting (mode: image23d, LLM: on)", "data": {}}
+{"ts": 1787768410.7114487, "time": "00:20:10", "agent": "Analyst", "type": "status", "message": "started", "data": {"state": "running", "icon": "🔎"}}
+{"ts": 1787768410.7114487, "time": "00:20:10", "agent": "Analyst", "type": "log", "message": "input mode: image23d | image: face man.jpg", "data": {}}
+{"ts": 1787768413.9163685, "time": "00:20:13", "agent": "Analyst", "type": "log", "message": "vision LLM responded", "data": {"model": "gpt-4o-mini"}}
+{"ts": 1787768413.9163685, "time": "00:20:13", "agent": "Analyst", "type": "decision", "message": "subject 'male character' (character, complexity medium) - Ensure to capture the facial features and hair details accurately for a realistic reconstruction.", "data": {}}
+{"ts": 1787768413.9173698, "time": "00:20:13", "agent": "Analyst", "type": "decision", "message": "pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter", "data": {"pipeline": ["Preprocessor", "MeshGen", "Judge", "Exporter"]}}
+{"ts": 1787768413.9173698, "time": "00:20:13", "agent": "Analyst", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 3.2}}
+{"ts": 1787768413.9173698, "time": "00:20:13", "agent": "Preprocessor", "type": "status", "message": "started", "data": {"state": "running", "icon": "🪄"}}
+{"ts": 1787768413.9173698, "time": "00:20:13", "agent": "Preprocessor", "type": "log", "message": "loading background-removal model (u2net)", "data": {}}
+{"ts": 1787768416.1097994, "time": "00:20:16", "agent": "Preprocessor", "type": "artifact", "message": "user image copied to run folder", "data": {"path": "G:\\codes\\mew3d\\results\\20260827_002009_face-man\\input\\user_image.png"}}
+{"ts": 1787768416.1097994, "time": "00:20:16", "agent": "Preprocessor", "type": "progress", "message": "removing background 1/1", "data": {"current": 1, "total": 1}}
+{"ts": 1787768416.6210768, "time": "00:20:16", "agent": "Preprocessor", "type": "log", "message": "candidate 1 scored 0.39 (coverage 0.55, blob 1.00, edge-cut 0.26)", "data": {"source": "G:\\codes\\mew3d\\results\\20260827_002009_face-man\\input\\user_image.png", "coverage": 0.553, "coverage_score": 0.421, "sharpness_score": 0.129, "blob_score": 1.0, "border_contact": 0.264, "border_score": 0.0, "total": 0.389}}
+{"ts": 1787768418.2906268, "time": "00:20:18", "agent": "Preprocessor", "type": "log", "message": "vision LLM responded", "data": {"model": "gpt-4o-mini"}}
+{"ts": 1787768418.2916288, "time": "00:20:18", "agent": "Preprocessor", "type": "log", "message": "vision critic: none (vlm 10/10 -> blended 0.69)", "data": {"source": "G:\\codes\\mew3d\\results\\20260827_002009_face-man\\input\\user_image.png", "complete_object": true, "single_object": true, "matches_subject": true, "clean_background": true, "score": 10}}
+{"ts": 1787768418.4844465, "time": "00:20:18", "agent": "Preprocessor", "type": "artifact", "message": "processed input ready (foreground ratio 0.85)", "data": {"path": "G:\\codes\\mew3d\\results\\20260827_002009_face-man\\intermediate\\processed_input.png"}}
+{"ts": 1787768418.4844465, "time": "00:20:18", "agent": "Preprocessor", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 4.6}}
+{"ts": 1787768418.4844465, "time": "00:20:18", "agent": "MeshGen", "type": "status", "message": "started", "data": {"state": "running", "icon": "🧊"}}
+{"ts": 1787768418.4844465, "time": "00:20:18", "agent": "MeshGen", "type": "log", "message": "backend: triposr", "data": {}}
+{"ts": 1787768420.4480042, "time": "00:20:20", "agent": "vram", "type": "log", "message": "loading model: triposr", "data": {}}
+{"ts": 1787768431.1800556, "time": "00:20:31", "agent": "vram", "type": "metric", "message": "VRAM 1.7/8.6 GB (after loading triposr)", "data": {"used_gb": 1.68, "total_gb": 8.59}}
+{"ts": 1787768431.1800556, "time": "00:20:31", "agent": "MeshGen", "type": "progress", "message": "triposr: encoding image into scene codes", "data": {}}
+{"ts": 1787768431.9298728, "time": "00:20:31", "agent": "MeshGen", "type": "progress", "message": "triposr: rendering 4 preview views", "data": {}}
+{"ts": 1787768435.460843, "time": "00:20:35", "agent": "MeshGen", "type": "artifact", "message": "triposr turntable gif saved", "data": {"path": "G:\\codes\\mew3d\\results\\20260827_002009_face-man\\output\\triposr_turntable.gif"}}
+{"ts": 1787768435.460843, "time": "00:20:35", "agent": "MeshGen", "type": "progress", "message": "triposr: extracting mesh (marching cubes @ 256^3)", "data": {}}
+{"ts": 1787768437.6494818, "time": "00:20:37", "agent": "MeshGen", "type": "log", "message": "triposr: 58,216 vertices, 116,428 faces", "data": {}}
+{"ts": 1787768437.6494818, "time": "00:20:37", "agent": "MeshGen", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 19.2}}
+{"ts": 1787768437.6494818, "time": "00:20:37", "agent": "Judge", "type": "status", "message": "started", "data": {"state": "running", "icon": "⚖️"}}
+{"ts": 1787768437.8448088, "time": "00:20:37", "agent": "Judge", "type": "log", "message": "[triposr] 116,428 faces, 1 components, watertight=True, extent ratio 1.61", "data": {}}
+{"ts": 1787768439.0374796, "time": "00:20:39", "agent": "Judge", "type": "log", "message": "LLM responded", "data": {"model": "gpt-4o-mini"}}
+{"ts": 1787768439.0374796, "time": "00:20:39", "agent": "Judge", "type": "log", "message": "[triposr] LLM second opinion: The mesh of the male character is well-constructed and meets quality standards.", "data": {}}
+{"ts": 1787768440.792942, "time": "00:20:40", "agent": "Judge", "type": "log", "message": "vision LLM responded", "data": {"model": "gpt-4o-mini"}}
+{"ts": 1787768440.792942, "time": "00:20:40", "agent": "Judge", "type": "log", "message": "[triposr] vision check: looks like 'male character', 8/10 (Minor inaccuracies in hair volume)", "data": {}}
+{"ts": 1787768440.792942, "time": "00:20:40", "agent": "Judge", "type": "decision", "message": "score 0.92 - PASS", "data": {"score": 0.92}}
+{"ts": 1787768440.792942, "time": "00:20:40", "agent": "Judge", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 3.1}}
+{"ts": 1787768440.7939978, "time": "00:20:40", "agent": "Exporter", "type": "status", "message": "started", "data": {"state": "running", "icon": "📦"}}
+{"ts": 1787768441.0054684, "time": "00:20:41", "agent": "Exporter", "type": "artifact", "message": "[triposr] OBJ + GLB exported", "data": {"path": "G:\\codes\\mew3d\\results\\20260827_002009_face-man\\output\\mesh.glb"}}
+{"ts": 1787768441.0054684, "time": "00:20:41", "agent": "Exporter", "type": "artifact", "message": "run report written", "data": {"path": "G:\\codes\\mew3d\\results\\20260827_002009_face-man\\report.md"}}
+{"ts": 1787768441.0054684, "time": "00:20:41", "agent": "Exporter", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 0.2}}
+{"ts": 1787768441.144619, "time": "00:20:41", "agent": "vram", "type": "log", "message": "released models: triposr", "data": {}}
+{"ts": 1787768441.1456206, "time": "00:20:41", "agent": "Orchestrator", "type": "log", "message": "run complete - score 0.92 after 1 attempt(s); outputs in G:\\codes\\mew3d\\results\\20260827_002009_face-man\\output", "data": {}}

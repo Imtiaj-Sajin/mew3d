@@ -1,0 +1,81 @@
+{
+  "attempt": 1,
+  "backend": "triposr",
+  "score": 0.92,
+  "passed": true,
+  "metrics": {
+    "vertices": 58216,
+    "faces": 116428,
+    "watertight": true,
+    "components": 1,
+    "largest_component_fraction": 1.0,
+    "extents": [
+      0.63,
+      0.708,
+      1.013
+    ],
+    "extent_ratio": 1.61,
+    "degenerate_faces": 36
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is high with a solid structure and good geometric metrics.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "Minor inaccuracies in hair volume"
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "triposr",
+      "score": 0.92,
+      "issues": [],
+      "metrics": {
+        "vertices": 58216,
+        "faces": 116428,
+        "watertight": true,
+        "components": 1,
+        "largest_component_fraction": 1.0,
+        "extents": [
+          0.63,
+          0.708,
+          1.013
+        ],
+        "extent_ratio": 1.61,
+        "degenerate_faces": 36
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Minor inaccuracies in hair volume"
+      }
+    },
+    {
+      "backend": "hunyuan",
+      "score": 0.89,
+      "issues": [],
+      "metrics": {
+        "vertices": 450048,
+        "faces": 899332,
+        "watertight": false,
+        "components": 41,
+        "largest_component_fraction": 0.902,
+        "extents": [
+          2.015,
+          2.007,
+          1.711
+        ],
+        "extent_ratio": 1.18,
+        "degenerate_faces": 407
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Minor inaccuracies in hair detail"
+      }
+    }
+  ]
+}

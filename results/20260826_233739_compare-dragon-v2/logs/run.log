@@ -1,0 +1,57 @@
+[23:37:40] Orchestrator log       run 20260826_233739_compare-dragon-v2 starting (mode: image23d, LLM: on)
+[23:37:40] Analyst      status    started
+[23:37:40] Analyst      log       input mode: image23d | image: candidate_02_seed272048446.png
+[23:37:43] Analyst      log       vision LLM responded
+[23:37:43] Analyst      decision  subject 'dragon' (creature, complexity high) - Ensure to capture the intricate details of the scales and facial features for a realistic reconstruction.
+[23:37:43] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[23:37:43] Analyst      status    done
+[23:37:43] Orchestrator log       compare mode: retries disabled (one clean pass per backend)
+[23:37:43] Preprocessor status    started
+[23:37:43] Preprocessor log       loading background-removal model (u2net)
+[23:37:45] Preprocessor artifact  user image copied to run folder
+[23:37:45] Preprocessor progress  removing background 1/1
+[23:37:45] Preprocessor log       candidate 1 scored 0.96 (coverage 0.34, blob 1.00, edge-cut 0.00)
+[23:37:47] Preprocessor log       vision LLM responded
+[23:37:47] Preprocessor log       vision critic: none (vlm 9/10 -> blended 0.93)
+[23:37:47] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[23:37:47] Preprocessor status    done
+[23:37:47] MeshGen      status    started
+[23:37:47] MeshGen      log       backend: triposr
+[23:37:49] vram         log       loading model: triposr
+[23:37:59] vram         metric    VRAM 1.7/8.6 GB (after loading triposr)
+[23:37:59] MeshGen      progress  triposr: encoding image into scene codes
+[23:38:00] MeshGen      progress  triposr: rendering 4 preview views
+[23:38:03] MeshGen      artifact  triposr turntable gif saved
+[23:38:03] MeshGen      progress  triposr: extracting mesh (marching cubes @ 256^3)
+[23:38:05] MeshGen      log       triposr: 84,689 vertices, 169,342 faces
+[23:38:05] MeshGen      log       backend: hunyuan
+[23:38:05] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[23:38:05] vram         log       released models: triposr
+[23:38:05] vram         log       loading model: hunyuan3d
+[23:38:28] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[23:38:28] MeshGen      progress  hunyuan: flow-matching diffusion (this takes a minute)
+[23:38:33] MeshGen      progress  hunyuan: rendering clay preview views
+[23:38:49] MeshGen      artifact  hunyuan clay previews saved
+[23:38:49] MeshGen      log       hunyuan: 411,976 vertices, 823,956 faces
+[23:38:49] MeshGen      status    done
+[23:38:49] Judge        status    started
+[23:38:49] Judge        log       [triposr] 169,342 faces, 53 components, watertight=False, extent ratio 1.26
+[23:38:51] Judge        log       LLM responded
+[23:38:51] Judge        log       [triposr] LLM second opinion: The mesh quality is high, but it lacks watertightness and contains multiple components.
+[23:38:54] Judge        log       vision LLM responded
+[23:38:54] Judge        log       [triposr] vision check: looks like 'dragon', 8/10 (Minor inconsistencies in the head shape and wing positioning)
+[23:38:55] Judge        log       [hunyuan] 823,956 faces, 13 components, watertight=False, extent ratio 1.54
+[23:38:56] Judge        log       LLM responded
+[23:38:56] Judge        log       [hunyuan] LLM second opinion: The mesh quality is high but could be improved by addressing non-watertightness and degeneracies.
+[23:38:59] Judge        log       vision LLM responded
+[23:38:59] Judge        log       [hunyuan] vision check: looks like 'dragon', 7/10 (The head shape is slightly off compared to the source.)
+[23:38:59] Judge        decision  backend comparison: triposr 0.89 | hunyuan 0.85 -> winner: triposr
+[23:38:59] Judge        decision  score 0.89 - PASS
+[23:38:59] Judge        status    done
+[23:38:59] Exporter     status    started
+[23:38:59] Exporter     artifact  [triposr] OBJ + GLB exported <- WINNER
+[23:39:00] Exporter     artifact  [hunyuan] OBJ + GLB exported
+[23:39:00] Exporter     artifact  run report written
+[23:39:00] Exporter     status    done
+[23:39:01] vram         log       released models: hunyuan3d
+[23:39:01] Orchestrator log       run complete - score 0.89 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260826_233739_compare-dragon-v2\output

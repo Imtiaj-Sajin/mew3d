@@ -56,6 +56,14 @@ class GenerationConfig:
     n_preview_views: int = 4
     hunyuan_steps: int = 5  # turbo model is distilled for ~5 steps
     hunyuan_octree: int = 380
+    # None = auto (texture when a hunyuan mesh is produced); CLI --texture/--no-texture
+    texture: bool | None = None
+
+    @property
+    def texture_enabled(self) -> bool:
+        if self.texture is not None:
+            return self.texture
+        return self.mesh_model in ("hunyuan", "both")
 
     # orchestration
     max_retries: int = 1

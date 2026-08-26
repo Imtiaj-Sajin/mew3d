@@ -1,0 +1,28 @@
+{
+  "attempt": 1,
+  "score": 0.84,
+  "passed": true,
+  "metrics": {
+    "vertices": 55733,
+    "faces": 111438,
+    "watertight": true,
+    "components": 17,
+    "largest_component_fraction": 0.997,
+    "extents": [
+      0.586,
+      0.908,
+      0.815
+    ],
+    "extent_ratio": 1.55,
+    "degenerate_faces": 36
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is acceptable but requires attention due to the presence of degenerate faces and multiple components.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 6,
+    "issue": "Lack of detail in textures and sails"
+  },
+  "adjustments": {}
+}

@@ -99,6 +99,14 @@ class ExporterAgent(Agent):
                 if v.get("llm_opinion"):
                     lines.append(f"- Attempt {v['attempt']} LLM opinion: {v['llm_opinion']}")
 
+        if state.get("textured_glb"):
+            lines += [
+                "",
+                "## Texture",
+                f"- **Textured mesh:** `output/mesh_textured.glb` "
+                f"(painted {state.get('textured_backend')} mesh via Hunyuan3D-Paint)",
+            ]
+
         lines += [
             "",
             "## Outputs",
