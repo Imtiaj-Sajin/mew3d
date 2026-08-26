@@ -24,6 +24,9 @@ def build_parser() -> argparse.ArgumentParser:
     gen.add_argument("--image-model", choices=["sd-turbo", "sdxl-turbo"], default="sd-turbo")
     gen.add_argument("--candidates", type=int, default=3, help="candidate images to generate")
     gen.add_argument("--steps", type=int, default=4, help="diffusion steps (turbo: 1-4)")
+    gen.add_argument("--mesh-model", choices=["triposr", "hunyuan", "both"],
+                     default="triposr",
+                     help="3D backend; 'both' runs the two models side by side to compare")
     gen.add_argument("--mc-res", type=int, default=256, help="marching cubes resolution")
     gen.add_argument("--foreground-ratio", type=float, default=0.85)
     gen.add_argument("--previews", type=int, default=4, help="preview views to render (0=off)")
@@ -54,6 +57,7 @@ def cmd_generate(args) -> int:
         image_model=args.image_model,
         num_candidates=args.candidates,
         image_steps=args.steps,
+        mesh_model=args.mesh_model,
         mc_resolution=args.mc_res,
         foreground_ratio=args.foreground_ratio,
         n_preview_views=args.previews,

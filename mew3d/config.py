@@ -50,9 +50,12 @@ class GenerationConfig:
     foreground_ratio: float = 0.85
 
     # 3D stage
+    mesh_model: str = "triposr"  # triposr | hunyuan | both
     mc_resolution: int = 256
     chunk_size: int = 8192
     n_preview_views: int = 4
+    hunyuan_steps: int = 5  # turbo model is distilled for ~5 steps
+    hunyuan_octree: int = 380
 
     # orchestration
     max_retries: int = 1

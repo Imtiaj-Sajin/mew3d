@@ -27,6 +27,15 @@ fetch(
     ],
 )
 fetch("stabilityai/TripoSR", allow_patterns=["config.yaml", "model.ckpt"])
+# Hunyuan3D-2mini: turbo shape DiT + turbo VAE (used by --mesh-model hunyuan/both)
+fetch(
+    "tencent/Hunyuan3D-2mini",
+    allow_patterns=[
+        "hunyuan3d-dit-v2-mini-turbo/*",
+        "hunyuan3d-vae-v2-mini-turbo/*",
+        "*.json", "*.yaml",
+    ],
+)
 # DINO image tokenizer used inside TripoSR
 fetch("facebook/dino-vitb16")
 

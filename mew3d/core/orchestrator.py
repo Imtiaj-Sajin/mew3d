@@ -44,6 +44,10 @@ class Orchestrator:
         if text_mode:
             self.prompt_smith.run()
 
+        if cfg.mesh_model == "both" and cfg.max_retries:
+            self.emit("compare mode: retries disabled (one clean pass per backend)")
+            cfg.max_retries = 0
+
         max_attempts = 1 + max(0, cfg.max_retries)
         images_generated = False
         verdict = None

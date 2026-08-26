@@ -64,31 +64,26 @@ class LLMClient:
             return None
 
     def chat_vision(self, agent: str, system: str, user: str, image_path) -> str | None:
-        """Chat about an image (base64-inlined, low detail); None on any failure."""
+        """Chat about one or more images (base64-inlined, low detail); None on failure."""
         if not self.usable:
             return None
         import base64
         from pathlib import Path
 
+        paths = image_path if isinstance(image_path, (list, tuple)) else [image_path]
         try:
-            b64 = base64.b64encode(Path(image_path).read_bytes()).decode()
+            content = [{"type": "text", "text": user}]
+            for p in paths:
+                b64 = base64.b64encode(Path(p).read_bytes()).decode()
+                content.append({
+                    "type": "image_url",
+                    "image_url": {"url": f"data:image/png;base64,{b64}", "detail": "low"},
+                })
             resp = self._client.chat.completions.create(
                 model=self.model,
                 messages=[
                     {"role": "system", "content": system},
-                    {
-                        "role": "user",
-                        "content": [
-                            {"type": "text", "text": user},
-                            {
-                                "type": "image_url",
-                                "image_url": {
-                                    "url": f"data:image/png;base64,{b64}",
-                                    "detail": "low",
-                                },
-                            },
-                        ],
-                    },
+                    {"role": "user", "content": content},
                 ],
                 temperature=0.2,
                 max_tokens=400,
@@ -139,9 +134,12 @@ you receive will be fed to a single-image 3D reconstruction model. Judge it stri
  "score": <0-10 overall suitability for 3D reconstruction>,
  "issue": "<the single biggest problem, or 'none'>"}"""
 
-VISION_MESH_SYSTEM = """You are the quality judge of a 3D-generation studio. The image is a
-rendered view of a reconstructed 3D model. Judge whether the reconstruction succeeded:
-{"looks_like_subject": <true if the render clearly shows the requested subject in 3D>,
+VISION_MESH_SYSTEM = """You are the quality judge of a 3D-generation studio. The FIRST image
+is the source photo. The remaining images are rendered views (possibly untextured gray
+'clay' renders - judge SHAPE, never colors or materials) of a 3D model reconstructed from
+that photo. Wings/limbs may be folded and viewpoints vary; consider ALL views together.
+Judge whether the reconstruction is faithful:
+{"looks_like_subject": <true if the 3D shape plausibly matches the source photo's subject>,
  "is_flat_or_blob": <true if it looks like a flat slab, billboard, or shapeless blob>,
  "score": <0-10 quality of the 3D shape>,
  "issue": "<the single biggest problem, or 'none'>"}"""

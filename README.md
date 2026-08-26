@@ -64,6 +64,18 @@ results/<timestamp>_<name>/
    ├─ analysis.json, prompt.json, judge_attempt_*.json
 ```
 
+## 3D backends
+
+| backend | quality | speed | output |
+|---|---|---|---|
+| `--mesh-model triposr` (default) | okay, bumpy | ~15s | vertex-colored |
+| `--mesh-model hunyuan` | much better geometry | ~45s | untextured (clay) |
+| `--mesh-model both` | runs BOTH on the same input | ~60s | side-by-side, judge picks winner |
+
+Hunyuan3D-2mini needs ~5GB VRAM (fits 8GB cards); its texture stage needs 16GB so we
+run shape-only. In compare mode both meshes land in `output/` as `triposr_mesh.glb` /
+`hunyuan_mesh.glb` with a comparison table in `report.md`.
+
 ## Useful flags
 
 `--candidates 4` more images to choose from · `--image-model sdxl-turbo` higher quality, slower ·

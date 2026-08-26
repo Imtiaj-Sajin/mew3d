@@ -63,29 +63,26 @@ class JudgeAgent(Agent):
         return max(0.0, round(score, 3)), issues
 
     def execute(self, attempt: int, attempts_left: int):
-        mesh = self.ctx.state["mesh"]
-        metrics = self._metrics(mesh)
-        score, issues = self._score(metrics, self.ctx.state.get("candidate_scores"))
-        passed = score >= self.cfg.judge_threshold
+        results = self.ctx.state.get("mesh_results") or [
+            {"backend": self.cfg.mesh_model, "mesh": self.ctx.state["mesh"],
+             "previews": self.ctx.state.get("preview_paths", [])}
+        ]
+        judged = [self._judge_one(r) for r in results]
 
-        self.log(
-            f"mesh metrics: {metrics['faces']:,} faces, {metrics['components']} components, "
-            f"watertight={metrics['watertight']}, extent ratio {metrics['extent_ratio']}"
-        )
-        for issue in issues:
-            self.log(f"concern: {issue}")
+        if len(judged) > 1:
+            ranking = sorted(judged, key=lambda j: j["score"], reverse=True)
+            self.decision(
+                "backend comparison: "
+                + " | ".join(f"{j['backend']} {j['score']:.2f}" for j in ranking)
+                + f" -> winner: {ranking[0]['backend']}",
+            )
+            best = ranking[0]
+        else:
+            best = judged[0]
 
-        llm_view = self.llm.chat_json(
-            self.name, JUDGE_SYSTEM,
-            f"Metrics: {metrics}. Heuristic score {score} (threshold "
-            f"{self.cfg.judge_threshold}). Subject: "
-            f"{self.ctx.state.get('analysis', {}).get('subject', 'unknown')!r}.",
-        )
-        if llm_view and llm_view.get("verdict"):
-            self.log(f"LLM second opinion: {llm_view['verdict']}")
-
-        # geometric metrics can't see semantics - a vision check on the render can
-        vision_view, score = self._vision_check(score)
+        score, issues = best["score"], best["issues"]
+        metrics, llm_view, vision_view = best["metrics"], best["llm_view"], best["vision_view"]
+        self.ctx.state["winning_backend"] = best["backend"]
         passed = score >= self.cfg.judge_threshold
 
         adjustments = {}
@@ -103,6 +100,7 @@ class JudgeAgent(Agent):
 
         verdict = {
             "attempt": attempt,
+            "backend": best["backend"],
             "score": score,
             "passed": passed,
             "metrics": metrics,
@@ -110,34 +108,70 @@ class JudgeAgent(Agent):
             "llm_opinion": (llm_view or {}).get("verdict"),
             "vision_opinion": vision_view,
             "adjustments": adjustments,
+            "comparison": [
+                {"backend": j["backend"], "score": j["score"], "issues": j["issues"],
+                 "metrics": j["metrics"], "vision_opinion": j["vision_view"]}
+                for j in judged
+            ],
         }
         self.ctx.state.setdefault("verdicts", []).append(verdict)
         self.ctx.save_json(f"logs/judge_attempt_{attempt}.json", verdict)
         return verdict
 
-    def _vision_check(self, score: float) -> tuple[dict | None, float]:
+    def _judge_one(self, result: dict) -> dict:
+        """Score one backend's mesh: geometry heuristics + LLM + vision check."""
+        backend, mesh, previews = result["backend"], result["mesh"], result["previews"]
+        metrics = self._metrics(mesh)
+        score, issues = self._score(metrics, self.ctx.state.get("candidate_scores"))
+        self.log(
+            f"[{backend}] {metrics['faces']:,} faces, {metrics['components']} components, "
+            f"watertight={metrics['watertight']}, extent ratio {metrics['extent_ratio']}"
+        )
+        for issue in issues:
+            self.log(f"[{backend}] concern: {issue}")
+
+        llm_view = self.llm.chat_json(
+            self.name, JUDGE_SYSTEM,
+            f"Backend: {backend}. Metrics: {metrics}. Heuristic score {score} (threshold "
+            f"{self.cfg.judge_threshold}). Subject: "
+            f"{self.ctx.state.get('analysis', {}).get('subject', 'unknown')!r}.",
+        )
+        if llm_view and llm_view.get("verdict"):
+            self.log(f"[{backend}] LLM second opinion: {llm_view['verdict']}")
+
+        vision_view, score = self._vision_check(score, previews, backend)
+        return {"backend": backend, "score": score, "issues": issues,
+                "metrics": metrics, "llm_view": llm_view, "vision_view": vision_view}
+
+    def _vision_check(self, score: float, previews: list, backend: str) -> tuple[dict | None, float]:
         """Show a preview render to the vision LLM; semantic failure slashes the score."""
         from ..llm.client import VISION_MESH_SYSTEM
 
-        previews = self.ctx.state.get("preview_paths") or []
         if not self.llm.usable or not previews:
             return None, score
         subject = self.ctx.state.get("analysis", {}).get("subject", "object")
+        images = []
+        src = self.ctx.state.get("processed_image_path")
+        if src:
+            images.append(src)
+        images.extend(previews[:3])
         view = self.llm.chat_json_vision(
             self.name, VISION_MESH_SYSTEM,
-            f"Requested subject: {subject!r}. Judge this render of the reconstruction.",
-            previews[0],
+            f"Subject: {subject!r}. First image is the source photo; the rest are views "
+            "of the reconstruction. Judge shape fidelity only.",
+            images,
         )
         if not view:
             return None, score
         if view.get("looks_like_subject") is False or view.get("is_flat_or_blob") is True:
             score = round(score * 0.35, 3)
-            self.log(f"vision check FAILED: {view.get('issue', 'does not look like subject')} "
+            self.log(f"[{backend}] vision check FAILED: "
+                     f"{view.get('issue', 'does not look like subject')} "
                      f"- score slashed to {score}")
         else:
             vlm = max(0.0, min(1.0, float(view.get("score", 5)) / 10.0))
             score = round(0.6 * score + 0.4 * vlm, 3)
-            self.log(f"vision check: looks like {subject!r}, "
+            self.log(f"[{backend}] vision check: looks like {subject!r}, "
                      f"{view.get('score', '?')}/10 ({view.get('issue', 'none')})")
         return view, score
 

@@ -20,3 +20,5 @@ imageio
 rich
 python-dotenv
 openai
+matplotlib
+hy3dgen==2.0.2

@@ -184,4 +184,6 @@ class PreprocessorAgent(Agent):
         self.ctx.state["candidate_scores"] = best_scores
         self.ctx.state["processed_image"] = processed
         self.ctx.state["processed_image_path"] = str(out_path)
+        self.ctx.state["foreground_rgba"] = framed
+        self.ctx.state["foreground_rgba_path"] = str(rgba_path)
         return processed

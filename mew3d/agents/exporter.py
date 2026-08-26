@@ -11,19 +11,28 @@ class ExporterAgent(Agent):
     description = "exports the mesh and writes the run report"
 
     def execute(self):
-        mesh = self.ctx.state["mesh"]
+        results = self.ctx.state.get("mesh_results") or [
+            {"backend": self.cfg.mesh_model, "mesh": self.ctx.state["mesh"]}
+        ]
+        multi = len(results) > 1
+        winner = self.ctx.state.get("winning_backend")
+        exported = {}
+        for r in results:
+            prefix = f"{r['backend']}_" if multi else ""
+            obj_path = self.ctx.path("output", f"{prefix}mesh.obj")
+            glb_path = self.ctx.path("output", f"{prefix}mesh.glb")
+            r["mesh"].export(obj_path)
+            r["mesh"].export(glb_path)
+            tag = " <- WINNER" if multi and r["backend"] == winner else ""
+            self.artifact(f"[{r['backend']}] OBJ + GLB exported{tag}", glb_path)
+            exported[r["backend"]] = {"obj": str(obj_path), "glb": str(glb_path)}
 
-        obj_path = self.ctx.path("output", "mesh.obj")
-        glb_path = self.ctx.path("output", "mesh.glb")
-        mesh.export(obj_path)
-        self.artifact("OBJ exported", obj_path)
-        mesh.export(glb_path)
-        self.artifact("GLB exported (vertex colors included)", glb_path)
-
+        primary = exported.get(winner) or next(iter(exported.values()))
         report_path = self.ctx.path("report.md")
         report_path.write_text(self._report(), encoding="utf-8")
         self.artifact("run report written", report_path)
-        return {"obj": str(obj_path), "glb": str(glb_path), "report": str(report_path)}
+        return {"obj": primary["obj"], "glb": primary["glb"],
+                "report": str(report_path), "all": exported}
 
     def _report(self) -> str:
         cfg, state = self.cfg, self.ctx.state
@@ -57,6 +66,21 @@ class ExporterAgent(Agent):
             ]
         if state.get("selected_candidate"):
             lines.append(f"- Selected candidate: `{state['selected_candidate']}`")
+
+        comparison = final.get("comparison") or []
+        if len(comparison) > 1:
+            lines += ["", "## Backend comparison", "",
+                      "| backend | score | faces | components | vision issue |",
+                      "|---|---|---|---|---|"]
+            winner = state.get("winning_backend")
+            for j in comparison:
+                m = j.get("metrics", {})
+                mark = " **(winner)**" if j["backend"] == winner else ""
+                vision_issue = (j.get("vision_opinion") or {}).get("issue", "-")
+                lines.append(
+                    f"| {j['backend']}{mark} | {j['score']} | {m.get('faces', 0):,} "
+                    f"| {m.get('components', '-')} | {vision_issue} |"
+                )
 
         if final:
             m = final.get("metrics", {})
