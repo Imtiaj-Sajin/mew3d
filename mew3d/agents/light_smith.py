@@ -14,8 +14,16 @@ a product photographer or a game's key art would light it. Think about the subje
 material and mood: chrome and car paint want bright rim separation and a dark backdrop;
 creatures want warm key light with cool rim; food wants soft warm light on a bright ground.
 
-Angles: azimuth 0 is in front of the model, 90 is its right, 180 behind, -90 its left.
-Elevation 0 is level with the model, 90 straight above, negative from below.
+Angles: azimuth 0 faces the camera, 90 is the model's right, 180 is directly behind it,
+-90 its left. Elevation 0 is level with the model, 90 straight above, negative from below.
+Put the key light off to one side (roughly -60..-20 or 20..60) and above (25..55) so it
+models form instead of flattening it; never put the key at azimuth 0, which is flat frontal
+light. The rim belongs behind the subject (|azimuth| over 130).
+
+The viewer lights the model from this environment alone, so it must carry real light: keep
+the background bright enough to lift the shadow side, and never make both background stops
+black or the model reads as an unlit silhouette. Reach for a dark set only when the subject
+genuinely calls for drama, and then compensate with a stronger key and rim.
 
 Reply with JSON only:
 {"preset_name": "<2-3 word name for this look>",
@@ -150,6 +158,13 @@ def sanitise(rig: dict, category: str | None) -> dict | None:
         })
     if len(lights) != 3:
         return None
+
+    # a key light dead in front of the camera flattens the model - nudge it off axis
+    key = lights[0]
+    if abs(key["azimuth"]) < 15:
+        key["azimuth"] = -35.0
+    if key["elevation"] < 15:
+        key["elevation"] = 35.0
 
     bg = rig.get("background") if isinstance(rig.get("background"), dict) else {}
     commentary = [str(c)[:160] for c in rig.get("commentary", [])

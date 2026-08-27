@@ -373,13 +373,27 @@ def _start_tunnel(port: int) -> None:
         encoding="utf-8", errors="replace",
     )
 
+    log_path = PROJECT_ROOT / "tools" / "cloudflared.log"
+    # quick tunnels are <word>-<word>-<word>-<word>.trycloudflare.com; cloudflared also
+    # logs api.trycloudflare.com, so require the hyphens and skip that host explicitly
+    pattern = re.compile(r"https://(?!api\.)[a-z0-9]+(?:-[a-z0-9]+)+\.trycloudflare\.com")
+
     def watch():
-        for line in proc.stdout:
-            found = re.search(r"https://[\w-]+\.trycloudflare\.com", line)
-            if found:
-                print(f"\n  PUBLIC URL: {found.group(0)}/?k={ACCESS_TOKEN}\n"
-                      f"  anyone with this link can use your GPU - share carefully\n",
-                      flush=True)
+        announced = False
+        with open(log_path, "w", encoding="utf-8") as log:
+            for line in proc.stdout:
+                log.write(line)
+                log.flush()
+                found = pattern.search(line)
+                if found and not announced:
+                    announced = True
+                    print(f"\n  PUBLIC URL: {found.group(0)}/?k={ACCESS_TOKEN}\n"
+                          f"  anyone with this link can use your GPU - share carefully\n",
+                          flush=True)
+                elif "failed to request quick Tunnel" in line:
+                    print(f"\n  TUNNEL FAILED: {line.strip()}\n"
+                          f"  the studio is still running locally on port {port}; "
+                          f"rerun to retry the tunnel\n", flush=True)
 
     threading.Thread(target=watch, daemon=True).start()
 
