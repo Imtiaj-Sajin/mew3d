@@ -1,0 +1,12 @@
+{
+  "original": "i need a cute dragon who can fly.. baby dragon,,",
+  "prompt": "full view of a whole baby dragon with big eyes and tiny wings, in a playful 3/4 pose, against a plain pastel background, showcasing its cute features and flying stance",
+  "variants": [
+    "full view of a whole baby dragon with big eyes and tiny wings, in a playful 3/4 pose, against a plain pastel background, showcasing its cute features and flying stance",
+    "full view of a whole baby dragon with fluffy scales and oversized ears, in a joyful 3/4 pose, hovering with wings outstretched, against a soft white background",
+    "full view of a whole baby dragon with sparkling eyes and small, colorful wings, in a curious 3/4 pose, playfully perched on a cloud, against a light blue background",
+    "full view of a whole baby dragon with a round body and bright, shimmering wings, in a gentle 3/4 pose, gliding through the air, against a smooth gradient background",
+    "full view of a whole baby dragon with a round face and tiny, fluttering wings, in a shy 3/4 pose, sitting on a rock with a soft smile, against a light green background"
+  ],
+  "negative_prompt": "close-up, macro, cropped"
+}

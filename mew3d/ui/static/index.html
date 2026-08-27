@@ -40,11 +40,20 @@
     background: var(--panel2); color: var(--text); border: 1px solid var(--border); font: inherit;
   }
   #drop {
-    border: 1.5px dashed var(--border); border-radius: 10px; padding: 18px 10px;
-    text-align: center; color: var(--dim); cursor: pointer; transition: .15s;
+    position: relative; border: 1.5px dashed var(--border); border-radius: 10px;
+    padding: 18px 10px; text-align: center; color: var(--dim); cursor: pointer;
+    transition: .15s;
   }
   #drop.armed, #drop:hover { border-color: var(--accent); color: var(--text); }
   #drop img { max-width: 100%; max-height: 130px; border-radius: 8px; }
+  #dropClear {
+    position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; padding: 0;
+    border-radius: 50%; border: 1px solid var(--border); background: rgba(13,17,23,.92);
+    color: var(--text); font: 700 14px/1 inherit; cursor: pointer; display: none;
+  }
+  #dropClear:hover { border-color: var(--bad); color: var(--bad); }
+  #drop.has-image #dropClear { display: block; }
+  #dropName { color: var(--dim); font-size: 11px; margin-top: 6px; word-break: break-all; }
   select, .num {
     width: 100%; padding: 8px 10px; border-radius: 8px; background: var(--panel2);
     color: var(--text); border: 1px solid var(--border); font: inherit;
@@ -322,17 +331,42 @@ let currentRun = null, nextIdx = 0, pollTimer = null, imageFile = null;
 const $ = id => document.getElementById(id);
 
 /* ---------- input handling ---------- */
+const DROP_PLACEHOLDER = "click / drop image here";
 $("drop").onclick = () => $("file").click();
 $("file").onchange = e => setImage(e.target.files[0]);
 $("drop").ondragover = e => { e.preventDefault(); $("drop").classList.add("armed"); };
 $("drop").ondragleave = () => $("drop").classList.remove("armed");
 $("drop").ondrop = e => { e.preventDefault(); $("drop").classList.remove("armed"); setImage(e.dataTransfer.files[0]); };
+
 function setImage(f) {
   if (!f) return;
+  if (!f.type || !f.type.startsWith("image/")) {
+    $("guardMsg").textContent = "that file is not an image";
+    return;
+  }
   imageFile = f;
+  $("guardMsg").textContent = "";
   const r = new FileReader();
-  r.onload = e => $("drop").innerHTML = `<img src="${e.target.result}">`;
+  r.onload = e => {
+    const drop = $("drop");
+    drop.classList.add("has-image");
+    drop.innerHTML =
+      `<button id="dropClear" title="remove image">&times;</button>` +
+      `<img src="${e.target.result}">` +
+      `<div id="dropName"></div>`;
+    $("dropName").textContent = f.name || "";
+    // stop the click bubbling to the drop zone, which would reopen the file picker
+    $("dropClear").onclick = ev => { ev.stopPropagation(); clearImage(); };
+  };
   r.readAsDataURL(f);
+}
+
+function clearImage() {
+  imageFile = null;
+  $("file").value = "";          // so re-picking the same file still fires onchange
+  const drop = $("drop");
+  drop.classList.remove("has-image");
+  drop.textContent = DROP_PLACEHOLDER;
 }
 
 /* ---------- generate ---------- */
@@ -351,6 +385,7 @@ $("goBtn").onclick = async () => {
     const res = await fetch("/api/generate", { method: "POST", body: fd });
     const body = await res.json();
     if (!res.ok) { $("guardMsg").textContent = body.detail || "failed to start"; $("goBtn").disabled = false; return; }
+    clearImage();          // consumed by this run - clear so the next one starts fresh
     startWatching(body.run_id);
   } catch (e) {
     $("guardMsg").textContent = "server unreachable: " + e; $("goBtn").disabled = false;

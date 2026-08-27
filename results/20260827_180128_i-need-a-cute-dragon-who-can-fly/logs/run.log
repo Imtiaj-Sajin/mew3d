@@ -1,0 +1,40 @@
+[18:01:28] Orchestrator log       run 20260827_180128_i-need-a-cute-dragon-who-can-fly starting (mode: hybrid, LLM: on)
+[18:01:28] Guardian     status    started
+[18:01:29] Guardian     log       request screened - safe and buildable
+[18:01:29] Guardian     status    done
+[18:01:29] Analyst      status    started
+[18:01:29] Analyst      log       input mode: hybrid | text: 'i need a cute dragon who can fly.. baby dragon,,' | image: upload_1787832088.jpg
+[18:01:30] Analyst      log       vision LLM responded
+[18:01:30] Analyst      decision  subject 'baby dragon' (character, complexity medium) - Ensure to capture the rounded features and playful expression for a cute appearance.
+[18:01:30] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[18:01:30] Analyst      status    done
+[18:01:30] Preprocessor status    started
+[18:01:30] Preprocessor log       loading background-removal model (u2net)
+[18:01:31] Narrator     narration The Guardian ran its quick health‑check, confirming the studio’s systems are ready, and now the Analyst has begun reviewing the new request. A watchdog like the Guardian helps catch issues early so the rest of the pipeline can run smoothly.
+[18:01:31] Preprocessor artifact  user image copied to run folder
+[18:01:31] Preprocessor progress  removing background 1/1
+[18:01:32] Preprocessor log       candidate 1 scored 0.85 (coverage 0.28, blob 1.00, edge-cut 0.00)
+[18:01:33] Preprocessor log       vision LLM responded
+[18:01:33] Preprocessor log       vision critic: none (vlm 9/10 -> blended 0.88)
+[18:01:33] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[18:01:33] Preprocessor status    done
+[18:01:33] Gatekeeper   status    started
+[18:01:34] Narrator     narration The crew has locked in a medium‑complexity “baby dragon” character, specifying its rounded, playful look, and mapped out a streamlined pipeline from preprocessing through to export. The Preprocessor has now copied the reference image into the run folder, getting the data ready for mesh generation. (A quick preprocessing step like this often normalizes image size and format, which helps later stages work more reliably.)
+[18:01:34] Gatekeeper   log       vision LLM responded
+[18:01:34] Gatekeeper   log       prepared image: wrong_subject (confidence 2/10) - The subject is not a dragon; it's a different creature.
+[18:01:34] Gatekeeper   decision  stopping before the GPU: wrong_subject. Retrying preprocessing with {'foreground_ratio': 0.7} instead of reconstructing bad input
+[18:01:34] Gatekeeper   status    done
+[18:01:34] Orchestrator log       --- retry: attempt 2/2 with adjustments {'foreground_ratio': 0.7} ---
+[18:01:34] Preprocessor status    started
+[18:01:34] Preprocessor progress  removing background 1/1
+[18:01:35] Preprocessor log       candidate 1 scored 0.85 (coverage 0.28, blob 1.00, edge-cut 0.00)
+[18:01:36] Preprocessor log       vision LLM responded
+[18:01:36] Preprocessor log       vision critic: none (vlm 9/10 -> blended 0.88)
+[18:01:36] Preprocessor artifact  processed input ready (foreground ratio 0.7)
+[18:01:36] Preprocessor status    done
+[18:01:36] Gatekeeper   status    started
+[18:01:36] Narrator     narration The Preprocessor finished its first pass, then the Gatekeeper halted the job because the image’s subject coverage was too high, prompting an automatic re‑preprocess with a lower foreground‑ratio (0.7) before any GPU‑heavy steps begin. This safeguard keeps the pipeline efficient by ensuring the main object occupies a balanced portion of the frame, which improves both mesh quality and rendering speed.
+[18:01:38] Gatekeeper   log       vision LLM responded
+[18:01:38] Gatekeeper   log       prepared image: wrong_subject (confidence 2/10) - This is not a dragon; consider using a proper dragon image.
+[18:01:38] Gatekeeper   status    failed: EventBus.emit() got multiple values for argument 'agent'
+[18:01:38] Orchestrator error     run failed: TypeError: EventBus.emit() got multiple values for argument 'agent'

@@ -1,0 +1,63 @@
+[17:55:26] Orchestrator log       run 20260827_175526_upload-1787831726 starting (mode: image23d, LLM: on)
+[17:55:26] Analyst      status    started
+[17:55:26] Analyst      log       input mode: image23d | image: upload_1787831726.jpg
+[17:55:28] Analyst      log       vision LLM responded
+[17:55:28] Analyst      decision  subject 'cute dinosaur figure' (character, complexity medium) - Ensure to capture the smooth textures and rounded features for a more accurate representation.
+[17:55:28] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[17:55:28] Analyst      status    done
+[17:55:28] Preprocessor status    started
+[17:55:28] Narrator     narration The Analyst has just kicked off, beginning to examine the input and pull out the essential details. This early analysis helps guide the whole pipeline so every later step knows exactly what to focus on. Did you know a good brief can cut production time by half?
+[17:55:29] Preprocessor log       loading background-removal model (u2net)
+[17:55:30] Preprocessor artifact  user image copied to run folder
+[17:55:30] Preprocessor progress  removing background 1/1
+[17:55:30] Preprocessor log       candidate 1 scored 0.85 (coverage 0.28, blob 1.00, edge-cut 0.00)
+[17:55:31] Narrator     narration The Analyst has locked in the brief, defining the cute dinosaur figure and mapping out the steps from preprocessing to export. Now the Preprocessor is busy turning the description into a clean data format for the mesh builder. Fun fact: a well‑structured pipeline can cut errors by about a third.
+[17:55:32] Preprocessor log       vision LLM responded
+[17:55:32] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.93)
+[17:55:32] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[17:55:32] Preprocessor status    done
+[17:55:32] Gatekeeper   status    started
+[17:55:34] Gatekeeper   log       vision LLM responded
+[17:55:34] Gatekeeper   log       prepared image: none (confidence 9/10) - The image is clear and matches the request for a cute dinosaur figure.
+[17:55:34] Gatekeeper   decision  prepared image looks reconstructable - handing to MeshGen
+[17:55:34] Gatekeeper   status    done
+[17:55:34] MeshGen      status    started
+[17:55:34] MeshGen      log       backend: hunyuan
+[17:55:34] Narrator     narration The Preprocessor has saved the user’s image, stripped away the background and confirmed that 85 % of the picture is foreground, giving the next steps a clear shape to work from. With the data packaged, the Gatekeeper is now reviewing it to ensure everything meets quality standards before the mesh is built. A strong foreground‑to‑background ratio helps keep mesh generation smooth and cuts down on later cleanup.
+[17:55:36] Narrator     narration The Gatekeeper gave the go‑ahead, confirming the cleaned image is ready for reconstruction and handed it off to MeshGen, which has now started building the 3D mesh. Getting that approval early means the mesh can be generated from solid data, cutting down on later fixes. A clean, well‑structured mesh can shave up to 30 % off rendering time.
+[17:55:37] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[17:55:37] vram         log       loading model: hunyuan3d
+[17:56:07] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[17:56:09] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm on)
+[17:56:15] MeshGen      progress  hunyuan: rendering clay preview views
+[17:56:31] MeshGen      artifact  hunyuan clay previews saved
+[17:56:31] MeshGen      log       hunyuan: 415,562 vertices, 831,012 faces
+[17:56:31] MeshGen      status    done
+[17:56:31] Judge        status    started
+[17:56:33] Judge        log       [hunyuan] 831,012 faces, 7 components, watertight=False, extent ratio 1.34
+[17:56:34] Judge        log       LLM responded
+[17:56:34] Judge        log       [hunyuan] LLM second opinion: The mesh exhibits strong geometric fidelity but has concerns regarding watertightness and the presence of degenerate faces.
+[17:56:35] Judge        log       vision LLM responded
+[17:56:35] Judge        log       [hunyuan] vision check: looks like 'cute dinosaur figure', 9/10 (none)
+[17:56:35] Judge        decision  score 0.93 - PASS
+[17:56:35] Judge        status    done
+[17:56:35] TextureSmith status    started
+[17:56:35] TextureSmith progress  simplifying mesh for texturing: 831,012 -> ~40,000 faces
+[17:56:38] Narrator     narration The Judge just gave the newly built mesh a 0.93 pass rating, confirming it meets the studio’s quality standards, and now TextureSmith has moved in to apply surface details. A high‑scoring review means fewer revisions later, and adding textures can boost perceived realism by up to 50 % without changing the geometry.
+[17:56:49] TextureSmith log       simplified to 40,000 faces
+[17:56:49] TextureSmith log       loading Hunyuan3D-Paint (first run downloads ~6GB)
+[17:56:50] vram         log       released models: hunyuan3d
+[17:56:50] vram         log       loading model: hunyuan-paint
+[17:56:52] TextureSmith log       rasterizer: compiled extension unusable on this GPU - using the pure-PyTorch fallback
+[17:57:31] TextureSmith log       cpu offload enabled - weights stream from RAM per step
+[17:57:31] vram         metric    VRAM 0.0/8.6 GB (after loading hunyuan-paint)
+[17:57:31] TextureSmith progress  painting hunyuan mesh (multiview diffusion + baking, takes minutes)
+[17:58:22] TextureSmith artifact  textured GLB exported (hunyuan mesh)
+[17:58:22] TextureSmith artifact  textured previews saved
+[17:58:22] TextureSmith status    done
+[17:58:22] Exporter     status    started
+[17:58:23] Exporter     artifact  [hunyuan] OBJ + GLB exported
+[17:58:23] Exporter     artifact  run report written
+[17:58:23] Exporter     status    done
+[17:58:23] vram         log       released models: hunyuan-paint
+[17:58:23] Orchestrator log       run complete - score 0.93 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260827_175526_upload-1787831726\output

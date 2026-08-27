@@ -1,0 +1,15 @@
+{
+  "proceed": false,
+  "problem": "wrong_subject",
+  "attempt": 1,
+  "vision": {
+    "proceed": false,
+    "matches_request": false,
+    "problem": "wrong_subject",
+    "confidence": 2,
+    "advice": "The subject is not a dragon; it's a different creature."
+  },
+  "recovery": {
+    "foreground_ratio": 0.7
+  }
+}

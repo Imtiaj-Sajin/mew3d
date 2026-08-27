@@ -1,0 +1,14 @@
+{
+  "mode": "hybrid",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "baby dragon",
+  "category": "character",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure to capture the rounded features and playful expression for a cute appearance."
+}
