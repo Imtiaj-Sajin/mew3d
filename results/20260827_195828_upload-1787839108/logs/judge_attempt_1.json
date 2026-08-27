@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.93,
+  "passed": true,
+  "metrics": {
+    "vertices": 487822,
+    "faces": 975636,
+    "watertight": false,
+    "components": 12,
+    "largest_component_fraction": 0.987,
+    "extents": [
+      1.616,
+      1.996,
+      1.456
+    ],
+    "extent_ratio": 1.37,
+    "degenerate_faces": 424
+  },
+  "issues": [],
+  "llm_opinion": "The mesh of the wizard character demonstrates a high level of detail but exhibits significant issues with watertightness and component fragmentation.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 9,
+    "issue": "none"
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.93,
+      "issues": [],
+      "metrics": {
+        "vertices": 487822,
+        "faces": 975636,
+        "watertight": false,
+        "components": 12,
+        "largest_component_fraction": 0.987,
+        "extents": [
+          1.616,
+          1.996,
+          1.456
+        ],
+        "extent_ratio": 1.37,
+        "degenerate_faces": 424
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 9,
+        "issue": "none"
+      }
+    }
+  ]
+}

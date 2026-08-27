@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "bird",
+  "category": "creature",
+  "single_object": true,
+  "complexity": "low",
+  "advice": "Ensure the bird's features are well-defined and avoid any busy backgrounds."
+}

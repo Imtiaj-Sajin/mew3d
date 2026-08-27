@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.89,
+  "passed": true,
+  "metrics": {
+    "vertices": 366861,
+    "faces": 733732,
+    "watertight": false,
+    "components": 4,
+    "largest_component_fraction": 1.0,
+    "extents": [
+      1.996,
+      1.455,
+      1.986
+    ],
+    "extent_ratio": 1.37,
+    "degenerate_faces": 376
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is high but not watertight, indicating potential issues for 3D printing or simulation.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "Minor anatomical inaccuracies in limb positioning"
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.89,
+      "issues": [],
+      "metrics": {
+        "vertices": 366861,
+        "faces": 733732,
+        "watertight": false,
+        "components": 4,
+        "largest_component_fraction": 1.0,
+        "extents": [
+          1.996,
+          1.455,
+          1.986
+        ],
+        "extent_ratio": 1.37,
+        "degenerate_faces": 376
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Minor anatomical inaccuracies in limb positioning"
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "original": "can you create me a cute dragon, small",
+  "prompt": "full view of a whole cute, small dragon with big expressive eyes and rounded features, sitting playfully on its hind legs against a soft pastel background, evenly lit",
+  "variants": [
+    "full view of a whole cute, small dragon with big expressive eyes and rounded features, sitting playfully on its hind legs against a soft pastel background, evenly lit",
+    "full view of a whole small dragon with fluffy scales and oversized wings, curled up in a ball with a cheerful expression, set against a light blue background, evenly lit",
+    "full view of a whole tiny dragon with sparkling scales and a playful pose, standing on a rock with its wings slightly spread, in a bright yellow background, evenly lit",
+    "full view of a whole adorable small dragon with a shiny, colorful body and a cheeky smile, perched on a grassy mound, with a soft pink background, evenly lit",
+    "full view of a whole miniature dragon with cartoonish features and tiny horns, lying on its belly with a curious look, set against a pale green background, evenly lit"
+  ],
+  "negative_prompt": "close-up, macro, cropped"
+}
