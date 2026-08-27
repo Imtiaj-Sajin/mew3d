@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "computer monitor",
+  "category": "prop",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure to capture the details of the monitor's screen and the mouse for accurate reconstruction."
+}

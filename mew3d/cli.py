@@ -40,11 +40,14 @@ def build_parser() -> argparse.ArgumentParser:
     gen.add_argument("--no-llm", action="store_true", help="skip LLM, heuristic agents only")
     gen.add_argument("--plain", action="store_true", help="plain log output (no live UI)")
 
-    sub.add_parser("doctor", help="check environment: GPU, models, LLM connectivity")
-
-    srv = sub.add_parser("serve", help="launch the Mew3D studio web UI")
+    srv = sub.add_parser("serve", help="run the web studio")
     srv.add_argument("--host", default="127.0.0.1")
     srv.add_argument("--port", type=int, default=7860)
+    srv.add_argument("--public", action="store_true",
+                     help="also expose it on the internet through a Cloudflare tunnel "
+                          "(requires MEW3D_ACCESS_TOKEN in .env)")
+
+    sub.add_parser("doctor", help="check environment: GPU, models, LLM connectivity")
     return parser
 
 
@@ -170,6 +173,6 @@ def main(argv=None) -> int:
     if args.command == "serve":
         from .server import main as serve_main
 
-        serve_main(host=args.host, port=args.port)
+        serve_main(host=args.host, port=args.port, public=args.public)
         return 0
     return 2

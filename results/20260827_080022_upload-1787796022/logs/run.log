@@ -1,0 +1,57 @@
+[08:00:22] Orchestrator log       run 20260827_080022_upload-1787796022 starting (mode: image23d, LLM: on)
+[08:00:22] Analyst      status    started
+[08:00:22] Analyst      log       input mode: image23d | image: upload_1787796022.jpg
+[08:00:23] Analyst      log       vision LLM responded
+[08:00:23] Analyst      decision  subject 'computer monitor' (prop, complexity medium) - Ensure to capture the details of the monitor's screen and the mouse for accurate reconstruction.
+[08:00:23] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[08:00:23] Analyst      status    done
+[08:00:23] Preprocessor status    started
+[08:00:23] Preprocessor log       loading background-removal model (u2net)
+[08:00:24] Preprocessor artifact  user image copied to run folder
+[08:00:24] Preprocessor progress  removing background 1/1
+[08:00:24] Preprocessor log       candidate 1 scored 0.89 (coverage 0.36, blob 0.93, edge-cut 0.00)
+[08:00:25] Narrator     narration The Analyst kicked off the job by picking a computer monitor as the target prop, noting that the screen and mouse need careful detail for a faithful 3D copy, and laid out the workflow: Preprocessor, then MeshGen, Judge, and Exporter. Now the Preprocessor is running, turning the raw reference into clean data—did you know that good preprocessing can cut modeling time by up to 50%?
+[08:00:26] Preprocessor log       vision LLM responded
+[08:00:26] Preprocessor log       vision critic: none (vlm 9/10 -> blended 0.89)
+[08:00:26] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[08:00:26] Preprocessor status    done
+[08:00:26] MeshGen      status    started
+[08:00:26] MeshGen      log       backend: hunyuan
+[08:00:26] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[08:00:26] vram         log       loading model: hunyuan3d
+[08:00:28] Narrator     narration The Preprocessor has copied your reference image, cleaned it up and handed the ready‑to‑use data to the next stage. MeshGen has now started building the 3D shape, turning the processed silhouette into a polygonal mesh. Fun fact: many mesh generators rely on the marching cubes algorithm to convert volume data into a watertight surface.
+[08:00:53] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[08:00:56] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm on)
+[08:01:01] MeshGen      progress  hunyuan: rendering clay preview views
+[08:01:21] MeshGen      artifact  hunyuan clay previews saved
+[08:01:21] MeshGen      log       hunyuan: 497,916 vertices, 995,828 faces
+[08:01:21] MeshGen      status    done
+[08:01:21] Judge        status    started
+[08:01:22] Judge        log       [hunyuan] 995,828 faces, 7 components, watertight=False, extent ratio 1.29
+[08:01:24] Narrator     narration MeshGen wrapped up the geometry work, saving a quick clay‑render preview so the team can spot any shape problems before moving on. With the mesh ready, Judge has now started checking its fidelity and ensuring it meets the project standards. A clay preview strips away colors and textures, letting you see the pure form and catch subtle errors that might be hidden otherwise.
+[08:01:24] Judge        log       LLM responded
+[08:01:24] Judge        log       [hunyuan] LLM second opinion: The mesh quality is high but lacks watertightness and has multiple components.
+[08:01:25] Judge        log       vision LLM responded
+[08:01:25] Judge        log       [hunyuan] vision check: looks like 'computer monitor', 8/10 (The monitor's shape is slightly less defined in some angles.)
+[08:01:25] Judge        decision  score 0.89 - PASS
+[08:01:25] Judge        status    done
+[08:01:25] TextureSmith status    started
+[08:01:25] TextureSmith progress  simplifying mesh for texturing: 995,828 -> ~40,000 faces
+[08:01:28] Narrator     narration The Judge gave the mesh a solid 0.89 score, confirming it meets the quality standards, and now the TextureSmith has begun applying surface details. Adding textures not only makes the model look realistic but also defines how light interacts with the surface, a key step for convincing visual results.
+[08:01:40] TextureSmith log       simplified to 40,000 faces
+[08:01:40] TextureSmith log       loading Hunyuan3D-Paint (first run downloads ~6GB)
+[08:01:41] vram         log       released models: hunyuan3d
+[08:01:41] vram         log       loading model: hunyuan-paint
+[08:01:41] TextureSmith log       rasterizer: compiled extension unusable on this GPU - using the pure-PyTorch fallback
+[08:02:17] TextureSmith log       cpu offload enabled - weights stream from RAM per step
+[08:02:17] vram         metric    VRAM 0.0/8.6 GB (after loading hunyuan-paint)
+[08:02:17] TextureSmith progress  painting hunyuan mesh (multiview diffusion + baking, takes minutes)
+[08:03:11] TextureSmith artifact  textured GLB exported (hunyuan mesh)
+[08:03:11] TextureSmith artifact  textured previews saved
+[08:03:11] TextureSmith status    done
+[08:03:11] Exporter     status    started
+[08:03:13] Exporter     artifact  [hunyuan] OBJ + GLB exported
+[08:03:13] Exporter     artifact  run report written
+[08:03:13] Exporter     status    done
+[08:03:13] vram         log       released models: hunyuan-paint
+[08:03:13] Orchestrator log       run complete - score 0.89 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260827_080022_upload-1787796022\output
