@@ -1,0 +1,83 @@
+[16:05:51] Orchestrator log       run 20260827_160550_flux-dragon starting (mode: text23d, LLM: on)
+[16:05:51] Guardian     status    started
+[16:05:52] Guardian     log       request screened - safe and buildable
+[16:05:52] Guardian     status    done
+[16:05:52] Analyst      status    started
+[16:05:52] Analyst      log       input mode: text23d | text: 'a cute baby dragon'
+[16:05:53] Analyst      log       LLM responded
+[16:05:53] Analyst      decision  subject 'baby dragon' (creature, complexity medium) - Ensure the design emphasizes the cute features of the dragon for better appeal.
+[16:05:53] Analyst      decision  pipeline plan: PromptSmith -> ImageGen -> Preprocessor -> MeshGen -> Judge -> Exporter
+[16:05:53] Analyst      status    done
+[16:05:53] PromptSmith  status    started
+[16:05:56] PromptSmith  log       LLM responded
+[16:05:56] PromptSmith  decision  LLM-enhanced prompt: 'full view of a whole cute baby dragon with large sparkling eyes and small wings, centered against a plain light background'
+[16:05:56] PromptSmith  log       5 distinct takes prepared so candidates differ in pose and angle, not just seed
+[16:05:56] PromptSmith  status    done
+[16:05:56] ImageGen     status    started
+[16:05:56] ImageGen     progress  generating candidate 1/3 (seed 1744392266)
+[16:06:02] ImageGen     log       image provider: huggingface
+[16:06:02] ImageGen     artifact  candidate 1 saved
+[16:06:02] ImageGen     progress  generating candidate 2/3 (seed 1744393243)
+[16:06:07] ImageGen     artifact  candidate 2 saved
+[16:06:07] ImageGen     progress  generating candidate 3/3 (seed 1744394220)
+[16:06:11] ImageGen     artifact  candidate 3 saved
+[16:06:11] ImageGen     status    done
+[16:06:11] Preprocessor status    started
+[16:06:13] Preprocessor log       loading background-removal model (u2net)
+[16:06:13] Preprocessor progress  removing background 1/3
+[16:06:14] Preprocessor log       candidate 1 scored 0.83 (coverage 0.25, blob 1.00, edge-cut 0.00)
+[16:06:14] Preprocessor progress  removing background 2/3
+[16:06:14] Preprocessor log       candidate 2 scored 0.85 (coverage 0.28, blob 1.00, edge-cut 0.00)
+[16:06:14] Preprocessor progress  removing background 3/3
+[16:06:14] Preprocessor log       candidate 3 scored 0.92 (coverage 0.35, blob 1.00, edge-cut 0.00)
+[16:06:16] Preprocessor log       vision LLM responded
+[16:06:16] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.92)
+[16:06:18] Preprocessor log       vision LLM responded
+[16:06:18] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.93)
+[16:06:20] Preprocessor log       vision LLM responded
+[16:06:20] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.96)
+[16:06:20] Preprocessor decision  selected best candidate (score 0.96): G:\codes\mew3d\results\20260827_160550_flux-dragon\intermediate\candidate_02_seed1744394220.png
+[16:06:20] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[16:06:20] Preprocessor status    done
+[16:06:20] Gatekeeper   status    started
+[16:06:22] Gatekeeper   log       vision LLM responded
+[16:06:22] Gatekeeper   log       prepared image: none (confidence 9/10) - The image is a clear representation of a cute baby dragon.
+[16:06:22] Gatekeeper   decision  prepared image looks reconstructable - handing to MeshGen
+[16:06:22] Gatekeeper   status    done
+[16:06:22] MeshGen      status    started
+[16:06:22] MeshGen      log       backend: hunyuan
+[16:06:23] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[16:06:23] vram         log       loading model: hunyuan3d
+[16:07:00] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[16:07:06] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm on)
+[16:07:12] MeshGen      progress  hunyuan: rendering clay preview views
+[16:07:29] MeshGen      artifact  hunyuan clay previews saved
+[16:07:29] MeshGen      log       hunyuan: 448,799 vertices, 897,608 faces
+[16:07:29] MeshGen      status    done
+[16:07:29] Judge        status    started
+[16:07:30] Judge        log       [hunyuan] 897,608 faces, 15 components, watertight=False, extent ratio 1.05
+[16:07:32] Judge        log       LLM responded
+[16:07:32] Judge        log       [hunyuan] LLM second opinion: The mesh quality is high, but the lack of watertightness and presence of degenerate faces are concerning.
+[16:07:33] Judge        log       vision LLM responded
+[16:07:33] Judge        log       [hunyuan] vision check: looks like 'baby dragon', 9/10 (none)
+[16:07:33] Judge        decision  score 0.93 - PASS
+[16:07:33] Judge        status    done
+[16:07:33] TextureSmith status    started
+[16:07:33] TextureSmith progress  simplifying mesh for texturing: 897,608 -> ~40,000 faces
+[16:07:46] TextureSmith log       simplified to 40,000 faces
+[16:07:46] TextureSmith log       loading Hunyuan3D-Paint (first run downloads ~6GB)
+[16:07:47] vram         log       released models: hunyuan3d
+[16:07:47] vram         log       loading model: hunyuan-paint
+[16:07:52] TextureSmith log       rasterizer: compiled extension unusable on this GPU - using the pure-PyTorch fallback
+[16:08:26] TextureSmith log       cpu offload enabled - weights stream from RAM per step
+[16:08:26] vram         metric    VRAM 0.0/8.6 GB (after loading hunyuan-paint)
+[16:08:26] TextureSmith progress  painting hunyuan mesh (multiview diffusion + baking, takes minutes)
+[16:09:16] TextureSmith artifact  textured GLB exported (hunyuan mesh)
+[16:09:17] TextureSmith artifact  textured previews saved
+[16:09:17] TextureSmith status    done
+[16:09:17] Exporter     status    started
+[16:09:18] Exporter     artifact  [hunyuan] OBJ + GLB exported
+[16:09:18] Exporter     artifact  run report written
+[16:09:18] Exporter     status    done
+[16:09:18] vram         log       released models: hunyuan-paint
+[16:09:18] Orchestrator log       run complete - score 0.93 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260827_160550_flux-dragon\output
