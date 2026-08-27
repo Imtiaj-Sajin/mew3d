@@ -1,0 +1,52 @@
+{"ts": 1787794964.2611592, "time": "07:42:44", "agent": "Orchestrator", "type": "log", "message": "run 20260827_074243_dragon-textured starting (mode: image23d, LLM: on)", "data": {}}
+{"ts": 1787794964.2662501, "time": "07:42:44", "agent": "Analyst", "type": "status", "message": "started", "data": {"state": "running", "icon": "🔎"}}
+{"ts": 1787794964.2662501, "time": "07:42:44", "agent": "Analyst", "type": "log", "message": "input mode: image23d | image: candidate_02_seed272048446.png", "data": {}}
+{"ts": 1787794967.1427288, "time": "07:42:47", "agent": "Analyst", "type": "log", "message": "vision LLM responded", "data": {"model": "gpt-4o-mini"}}
+{"ts": 1787794967.1427288, "time": "07:42:47", "agent": "Analyst", "type": "decision", "message": "subject 'dragon' (creature, complexity medium) - Ensure to capture the intricate details of the scales and facial features for a realistic reconstruction.", "data": {}}
+{"ts": 1787794967.1427288, "time": "07:42:47", "agent": "Analyst", "type": "decision", "message": "pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter", "data": {"pipeline": ["Preprocessor", "MeshGen", "Judge", "Exporter"]}}
+{"ts": 1787794967.1441808, "time": "07:42:47", "agent": "Analyst", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 2.9}}
+{"ts": 1787794967.1441808, "time": "07:42:47", "agent": "Preprocessor", "type": "status", "message": "started", "data": {"state": "running", "icon": "🪄"}}
+{"ts": 1787794967.1451795, "time": "07:42:47", "agent": "Preprocessor", "type": "log", "message": "loading background-removal model (u2net)", "data": {}}
+{"ts": 1787794969.7765121, "time": "07:42:49", "agent": "Preprocessor", "type": "artifact", "message": "user image copied to run folder", "data": {"path": "G:\\codes\\mew3d\\results\\20260827_074243_dragon-textured\\input\\user_image.png"}}
+{"ts": 1787794969.7765121, "time": "07:42:49", "agent": "Preprocessor", "type": "progress", "message": "removing background 1/1", "data": {"current": 1, "total": 1}}
+{"ts": 1787794970.111951, "time": "07:42:50", "agent": "Preprocessor", "type": "log", "message": "candidate 1 scored 0.96 (coverage 0.34, blob 1.00, edge-cut 0.00)", "data": {"source": "G:\\codes\\mew3d\\results\\20260827_074243_dragon-textured\\input\\user_image.png", "coverage": 0.336, "coverage_score": 0.96, "sharpness_score": 0.749, "blob_score": 1.0, "border_contact": 0.0, "border_score": 1.0, "total": 0.963}}
+{"ts": 1787794971.4410782, "time": "07:42:51", "agent": "Preprocessor", "type": "log", "message": "vision LLM responded", "data": {"model": "gpt-4o-mini"}}
+{"ts": 1787794971.4410782, "time": "07:42:51", "agent": "Preprocessor", "type": "log", "message": "vision critic: none (vlm 9/10 -> blended 0.93)", "data": {"source": "G:\\codes\\mew3d\\results\\20260827_074243_dragon-textured\\input\\user_image.png", "complete_object": true, "single_object": true, "matches_subject": true, "clean_background": true, "score": 9}}
+{"ts": 1787794971.4781082, "time": "07:42:51", "agent": "Preprocessor", "type": "artifact", "message": "processed input ready (foreground ratio 0.85)", "data": {"path": "G:\\codes\\mew3d\\results\\20260827_074243_dragon-textured\\intermediate\\processed_input.png"}}
+{"ts": 1787794971.4781082, "time": "07:42:51", "agent": "Preprocessor", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 4.3}}
+{"ts": 1787794971.4781082, "time": "07:42:51", "agent": "MeshGen", "type": "status", "message": "started", "data": {"state": "running", "icon": "🧊"}}
+{"ts": 1787794971.4781082, "time": "07:42:51", "agent": "MeshGen", "type": "log", "message": "backend: hunyuan", "data": {}}
+{"ts": 1787794973.2444208, "time": "07:42:53", "agent": "MeshGen", "type": "log", "message": "loading Hunyuan3D-2mini (first run downloads the model)", "data": {}}
+{"ts": 1787794973.2444208, "time": "07:42:53", "agent": "vram", "type": "log", "message": "loading model: hunyuan3d", "data": {}}
+{"ts": 1787795002.3789032, "time": "07:43:22", "agent": "vram", "type": "metric", "message": "VRAM 3.8/8.6 GB (after loading hunyuan3d)", "data": {"used_gb": 3.82, "total_gb": 8.59}}
+{"ts": 1787795005.0562613, "time": "07:43:25", "agent": "MeshGen", "type": "progress", "message": "hunyuan: flow-matching diffusion (octree 380, flashvdm on)", "data": {}}
+{"ts": 1787795011.0706103, "time": "07:43:31", "agent": "MeshGen", "type": "progress", "message": "hunyuan: rendering clay preview views", "data": {}}
+{"ts": 1787795027.01966, "time": "07:43:47", "agent": "MeshGen", "type": "artifact", "message": "hunyuan clay previews saved", "data": {"path": "G:\\codes\\mew3d\\results\\20260827_074243_dragon-textured\\output\\hunyuan_preview_00.png"}}
+{"ts": 1787795027.0209186, "time": "07:43:47", "agent": "MeshGen", "type": "log", "message": "hunyuan: 411,976 vertices, 823,956 faces", "data": {}}
+{"ts": 1787795027.0209186, "time": "07:43:47", "agent": "MeshGen", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 55.5}}
+{"ts": 1787795027.0209186, "time": "07:43:47", "agent": "Judge", "type": "status", "message": "started", "data": {"state": "running", "icon": "⚖️"}}
+{"ts": 1787795028.2904744, "time": "07:43:48", "agent": "Judge", "type": "log", "message": "[hunyuan] 823,956 faces, 13 components, watertight=False, extent ratio 1.54", "data": {}}
+{"ts": 1787795029.8085246, "time": "07:43:49", "agent": "Judge", "type": "log", "message": "LLM responded", "data": {"model": "gpt-4o-mini"}}
+{"ts": 1787795029.8095524, "time": "07:43:49", "agent": "Judge", "type": "log", "message": "[hunyuan] LLM second opinion: The mesh of the dragon is generally well-constructed but has some issues with watertightness and degeneracy.", "data": {}}
+{"ts": 1787795032.5077546, "time": "07:43:52", "agent": "Judge", "type": "log", "message": "vision LLM responded", "data": {"model": "gpt-4o-mini"}}
+{"ts": 1787795032.5091932, "time": "07:43:52", "agent": "Judge", "type": "log", "message": "[hunyuan] vision check: looks like 'dragon', 8/10 (Minor inaccuracies in limb proportions)", "data": {}}
+{"ts": 1787795032.5091932, "time": "07:43:52", "agent": "Judge", "type": "decision", "message": "score 0.89 - PASS", "data": {"score": 0.89}}
+{"ts": 1787795032.5105608, "time": "07:43:52", "agent": "Judge", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 5.5}}
+{"ts": 1787795032.5105608, "time": "07:43:52", "agent": "TextureSmith", "type": "status", "message": "started", "data": {"state": "running", "icon": "🖌️"}}
+{"ts": 1787795032.5105608, "time": "07:43:52", "agent": "TextureSmith", "type": "progress", "message": "simplifying mesh for texturing: 823,956 -> ~40,000 faces", "data": {}}
+{"ts": 1787795044.6977694, "time": "07:44:04", "agent": "TextureSmith", "type": "log", "message": "simplified to 40,000 faces", "data": {}}
+{"ts": 1787795044.7017899, "time": "07:44:04", "agent": "TextureSmith", "type": "log", "message": "loading Hunyuan3D-Paint (first run downloads ~6GB)", "data": {}}
+{"ts": 1787795045.1005983, "time": "07:44:05", "agent": "vram", "type": "log", "message": "released models: hunyuan3d", "data": {}}
+{"ts": 1787795045.1016011, "time": "07:44:05", "agent": "vram", "type": "log", "message": "loading model: hunyuan-paint", "data": {}}
+{"ts": 1787795050.1098623, "time": "07:44:10", "agent": "TextureSmith", "type": "log", "message": "rasterizer: compiled extension unusable on this GPU - using the pure-PyTorch fallback", "data": {}}
+{"ts": 1787795091.2959425, "time": "07:44:51", "agent": "TextureSmith", "type": "log", "message": "cpu offload enabled - weights stream from RAM per step", "data": {}}
+{"ts": 1787795091.2989335, "time": "07:44:51", "agent": "vram", "type": "metric", "message": "VRAM 0.0/8.6 GB (after loading hunyuan-paint)", "data": {"used_gb": 0.01, "total_gb": 8.59}}
+{"ts": 1787795091.2999303, "time": "07:44:51", "agent": "TextureSmith", "type": "progress", "message": "painting hunyuan mesh (multiview diffusion + baking, takes minutes)", "data": {}}
+{"ts": 1787795143.1699417, "time": "07:45:43", "agent": "TextureSmith", "type": "artifact", "message": "textured GLB exported (hunyuan mesh)", "data": {"path": "G:\\codes\\mew3d\\results\\20260827_074243_dragon-textured\\output\\mesh_textured.glb"}}
+{"ts": 1787795143.7609117, "time": "07:45:43", "agent": "TextureSmith", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 111.3}}
+{"ts": 1787795143.7619548, "time": "07:45:43", "agent": "Exporter", "type": "status", "message": "started", "data": {"state": "running", "icon": "📦"}}
+{"ts": 1787795144.8844042, "time": "07:45:44", "agent": "Exporter", "type": "artifact", "message": "[hunyuan] OBJ + GLB exported", "data": {"path": "G:\\codes\\mew3d\\results\\20260827_074243_dragon-textured\\output\\mesh.glb"}}
+{"ts": 1787795144.8864613, "time": "07:45:44", "agent": "Exporter", "type": "artifact", "message": "run report written", "data": {"path": "G:\\codes\\mew3d\\results\\20260827_074243_dragon-textured\\report.md"}}
+{"ts": 1787795144.8864613, "time": "07:45:44", "agent": "Exporter", "type": "status", "message": "done", "data": {"state": "done", "elapsed": 1.1}}
+{"ts": 1787795145.0612955, "time": "07:45:45", "agent": "vram", "type": "log", "message": "released models: hunyuan-paint", "data": {}}
+{"ts": 1787795145.0612955, "time": "07:45:45", "agent": "Orchestrator", "type": "log", "message": "run complete - score 0.89 after 1 attempt(s); outputs in G:\\codes\\mew3d\\results\\20260827_074243_dragon-textured\\output", "data": {}}

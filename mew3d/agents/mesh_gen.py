@@ -103,16 +103,17 @@ class MeshGenAgent(Agent):
         def loader():
             from hy3dgen.shapegen import Hunyuan3DDiTFlowMatchingPipeline
 
-            pipe = Hunyuan3DDiTFlowMatchingPipeline.from_pretrained(
+            return Hunyuan3DDiTFlowMatchingPipeline.from_pretrained(
                 HUNYUAN_MODEL_ID, subfolder=HUNYUAN_SUBFOLDER, use_safetensors=True
             )
-            try:
-                pipe.enable_flashvdm(mc_algo="mc")
-            except Exception as e:
-                self.log(f"flashvdm unavailable, using default decoding: {e}")
-            return pipe
 
         return self.models.acquire("hunyuan3d", loader)
+
+    def _set_flashvdm(self, pipe, enabled: bool) -> None:
+        try:
+            pipe.enable_flashvdm(enabled=enabled, mc_algo="mc" if enabled else None)
+        except Exception as e:
+            self.log(f"flashvdm toggle ({enabled}) unavailable: {e}")
 
     def _run_hunyuan(self):
         import torch
@@ -122,16 +123,45 @@ class MeshGenAgent(Agent):
 
         self.log("loading Hunyuan3D-2mini (first run downloads the model)")
         pipe = self._load_hunyuan()
-        self.progress("hunyuan: flow-matching diffusion (this takes a minute)")
         seed = self.ctx.state.get("image_seed") or self.cfg.seed or 2025
-        result = pipe(
-            image=image,
-            num_inference_steps=self.cfg.hunyuan_steps,
-            guidance_scale=5.0,  # turbo-distilled models use low guidance
-            octree_resolution=self.cfg.hunyuan_octree,
-            generator=torch.Generator().manual_seed(seed),
-        )[0]
-        mesh = result[0] if isinstance(result, list) else result
+
+        # FlashVDM is fast but crashes on sparse/thin volumes (empty reduction dim);
+        # degrade to the plain decoder at lower resolution rather than failing the run.
+        ladder = [
+            (self.cfg.hunyuan_octree, True),
+            (self.cfg.hunyuan_octree, False),
+            (256, False),
+        ]
+        mesh, last_error = None, None
+        for octree, flash in ladder:
+            self._set_flashvdm(pipe, flash)
+            self.progress(
+                f"hunyuan: flow-matching diffusion (octree {octree}, "
+                f"flashvdm {'on' if flash else 'off'})"
+            )
+            try:
+                result = pipe(
+                    image=image,
+                    num_inference_steps=self.cfg.hunyuan_steps,
+                    guidance_scale=5.0,  # turbo-distilled models use low guidance
+                    octree_resolution=octree,
+                    generator=torch.Generator().manual_seed(seed),
+                )[0]
+            except Exception as e:
+                last_error = e
+                self.log(f"hunyuan decode failed ({type(e).__name__}: {e}) - degrading")
+                continue
+            candidate = result[0] if isinstance(result, list) else result
+            if candidate is not None and len(getattr(candidate, "faces", [])) > 0:
+                mesh = candidate
+                break
+            self.log("hunyuan returned an empty mesh - degrading")
+
+        if mesh is None:
+            raise RuntimeError(
+                f"Hunyuan3D produced no mesh after {len(ladder)} attempts"
+                + (f" (last error: {type(last_error).__name__}: {last_error})" if last_error else "")
+            )
 
         preview_paths = []
         if self.cfg.n_preview_views > 0:

@@ -1,0 +1,52 @@
+[07:42:44] Orchestrator log       run 20260827_074243_dragon-textured starting (mode: image23d, LLM: on)
+[07:42:44] Analyst      status    started
+[07:42:44] Analyst      log       input mode: image23d | image: candidate_02_seed272048446.png
+[07:42:47] Analyst      log       vision LLM responded
+[07:42:47] Analyst      decision  subject 'dragon' (creature, complexity medium) - Ensure to capture the intricate details of the scales and facial features for a realistic reconstruction.
+[07:42:47] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[07:42:47] Analyst      status    done
+[07:42:47] Preprocessor status    started
+[07:42:47] Preprocessor log       loading background-removal model (u2net)
+[07:42:49] Preprocessor artifact  user image copied to run folder
+[07:42:49] Preprocessor progress  removing background 1/1
+[07:42:50] Preprocessor log       candidate 1 scored 0.96 (coverage 0.34, blob 1.00, edge-cut 0.00)
+[07:42:51] Preprocessor log       vision LLM responded
+[07:42:51] Preprocessor log       vision critic: none (vlm 9/10 -> blended 0.93)
+[07:42:51] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[07:42:51] Preprocessor status    done
+[07:42:51] MeshGen      status    started
+[07:42:51] MeshGen      log       backend: hunyuan
+[07:42:53] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[07:42:53] vram         log       loading model: hunyuan3d
+[07:43:22] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[07:43:25] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm on)
+[07:43:31] MeshGen      progress  hunyuan: rendering clay preview views
+[07:43:47] MeshGen      artifact  hunyuan clay previews saved
+[07:43:47] MeshGen      log       hunyuan: 411,976 vertices, 823,956 faces
+[07:43:47] MeshGen      status    done
+[07:43:47] Judge        status    started
+[07:43:48] Judge        log       [hunyuan] 823,956 faces, 13 components, watertight=False, extent ratio 1.54
+[07:43:49] Judge        log       LLM responded
+[07:43:49] Judge        log       [hunyuan] LLM second opinion: The mesh of the dragon is generally well-constructed but has some issues with watertightness and degeneracy.
+[07:43:52] Judge        log       vision LLM responded
+[07:43:52] Judge        log       [hunyuan] vision check: looks like 'dragon', 8/10 (Minor inaccuracies in limb proportions)
+[07:43:52] Judge        decision  score 0.89 - PASS
+[07:43:52] Judge        status    done
+[07:43:52] TextureSmith status    started
+[07:43:52] TextureSmith progress  simplifying mesh for texturing: 823,956 -> ~40,000 faces
+[07:44:04] TextureSmith log       simplified to 40,000 faces
+[07:44:04] TextureSmith log       loading Hunyuan3D-Paint (first run downloads ~6GB)
+[07:44:05] vram         log       released models: hunyuan3d
+[07:44:05] vram         log       loading model: hunyuan-paint
+[07:44:10] TextureSmith log       rasterizer: compiled extension unusable on this GPU - using the pure-PyTorch fallback
+[07:44:51] TextureSmith log       cpu offload enabled - weights stream from RAM per step
+[07:44:51] vram         metric    VRAM 0.0/8.6 GB (after loading hunyuan-paint)
+[07:44:51] TextureSmith progress  painting hunyuan mesh (multiview diffusion + baking, takes minutes)
+[07:45:43] TextureSmith artifact  textured GLB exported (hunyuan mesh)
+[07:45:43] TextureSmith status    done
+[07:45:43] Exporter     status    started
+[07:45:44] Exporter     artifact  [hunyuan] OBJ + GLB exported
+[07:45:44] Exporter     artifact  run report written
+[07:45:44] Exporter     status    done
+[07:45:45] vram         log       released models: hunyuan-paint
+[07:45:45] Orchestrator log       run complete - score 0.89 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260827_074243_dragon-textured\output

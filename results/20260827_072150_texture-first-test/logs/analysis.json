@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "treasure chest",
+  "category": "prop",
+  "single_object": false,
+  "complexity": "medium",
+  "advice": "Ensure to capture the details of the chest and coins, as well as the texture of the surface they are on."
+}

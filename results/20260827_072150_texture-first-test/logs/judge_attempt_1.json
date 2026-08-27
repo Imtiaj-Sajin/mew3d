@@ -1,0 +1,64 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.017,
+  "passed": false,
+  "metrics": {
+    "vertices": 938,
+    "faces": 1856,
+    "watertight": true,
+    "components": 5,
+    "largest_component_fraction": 0.668,
+    "extents": [
+      0.038,
+      0.288,
+      0.104
+    ],
+    "extent_ratio": 7.6,
+    "degenerate_faces": 1
+  },
+  "issues": [
+    "very low face count (1856)",
+    "fragmented: 5 pieces, main piece only 67% of faces",
+    "sliver-shaped bounding box (ratio 7.6)"
+  ],
+  "llm_opinion": "The mesh quality is poor, requiring significant improvements.",
+  "vision_opinion": {
+    "looks_like_subject": false,
+    "is_flat_or_blob": true,
+    "score": 2,
+    "issue": "The model lacks the distinct shape and features of a treasure chest."
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.017,
+      "issues": [
+        "very low face count (1856)",
+        "fragmented: 5 pieces, main piece only 67% of faces",
+        "sliver-shaped bounding box (ratio 7.6)"
+      ],
+      "metrics": {
+        "vertices": 938,
+        "faces": 1856,
+        "watertight": true,
+        "components": 5,
+        "largest_component_fraction": 0.668,
+        "extents": [
+          0.038,
+          0.288,
+          0.104
+        ],
+        "extent_ratio": 7.6,
+        "degenerate_faces": 1
+      },
+      "vision_opinion": {
+        "looks_like_subject": false,
+        "is_flat_or_blob": true,
+        "score": 2,
+        "issue": "The model lacks the distinct shape and features of a treasure chest."
+      }
+    }
+  ]
+}

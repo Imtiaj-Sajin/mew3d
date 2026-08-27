@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "dragon",
+  "category": "creature",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure to capture the intricate details of the scales and facial features for a realistic reconstruction."
+}

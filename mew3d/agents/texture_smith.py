@@ -18,6 +18,11 @@ class TextureSmithAgent(Agent):
 
     def _load_pipeline(self):
         def loader():
+            # must happen before hy3dgen imports the (possibly unusable) CUDA extension
+            from ..core.soft_raster import ensure_rasterizer
+
+            ensure_rasterizer(self.log)
+
             from hy3dgen.texgen import Hunyuan3DPaintPipeline
 
             pipe = Hunyuan3DPaintPipeline.from_pretrained(PAINT_MODEL_ID)
@@ -71,12 +76,14 @@ class TextureSmithAgent(Agent):
         self.ctx.state["textured_glb"] = str(glb_path)
         self.ctx.state["textured_backend"] = backend
 
-        # clay turntable of the textured result for the report/logs
+        # turntable previews of the actual textured result
         try:
-            from ..core.meshview import render_clay_views
+            from ..core.meshview import render_textured_views
 
-            paths = [self.ctx.path("output", f"textured_preview_{i:02d}.png") for i in range(2)]
-            render_clay_views(mesh, paths, up="y")
+            paths = [self.ctx.path("output", f"textured_preview_{i:02d}.png") for i in range(4)]
+            shots = render_textured_views(glb_path, paths)
+            self.artifact("textured previews saved", shots[0])
+            self.ctx.state["textured_previews"] = shots
         except Exception as e:
             self.log(f"textured previews skipped: {e}")
         return str(glb_path)

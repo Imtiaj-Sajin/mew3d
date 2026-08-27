@@ -63,3 +63,54 @@ def render_clay_views(
         plt.close(fig)
         written.append(str(path))
     return written
+
+
+def render_textured_views(glb_path, out_paths: list, size: int = 384) -> list:
+    """Render turntable views of a textured GLB by UV-sampling its baseColor texture.
+
+    Uses the project's own soft rasterizer, so it needs no OpenGL/EGL context - handy on
+    headless Windows boxes where pyrender/moderngl are awkward.
+    """
+    import numpy as np
+    import torch
+    import trimesh
+    from PIL import Image
+
+    from .soft_raster import interpolate, rasterize
+
+    scene = trimesh.load(glb_path, force="scene")
+    geom = list(scene.geometry.values())[0]
+    texture = getattr(geom.visual.material, "baseColorTexture", None)
+    if texture is None or geom.visual.uv is None:
+        raise ValueError("GLB has no baseColor texture / UVs to render")
+
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    tex = torch.tensor(
+        np.asarray(texture.convert("RGB"), dtype=np.float32) / 255.0, device=device
+    )
+    uv = torch.tensor(np.asarray(geom.visual.uv, dtype=np.float32), device=device)[None]
+    faces = torch.tensor(np.asarray(geom.faces), dtype=torch.int32, device=device)
+
+    verts = np.asarray(geom.vertices, dtype=np.float32)
+    centre = (verts.max(0) + verts.min(0)) / 2
+    verts = (verts - centre) / np.abs(verts - centre).max() * 0.85
+
+    written = []
+    n = len(out_paths)
+    for i, path in enumerate(out_paths):
+        a = np.radians(360.0 * i / n)
+        rot = np.array([[np.cos(a), 0, np.sin(a)], [0, 1, 0], [-np.sin(a), 0, np.cos(a)]])
+        p = verts @ rot.T
+        # the rasterizer inherits the reference kernel's +Y-down screen convention
+        clip = np.concatenate([p[:, 0:1], -p[:, 1:2], -p[:, 2:3], np.ones((len(p), 1))], 1)
+        pos = torch.tensor(clip, dtype=torch.float32, device=device)[None]
+
+        findices, bary = rasterize(pos, faces, (size, size))
+        uvmap = interpolate(uv, findices, bary, faces)[0]
+        tx = (uvmap[..., 0].clamp(0, 1) * (tex.shape[1] - 1)).long()
+        ty = ((1 - uvmap[..., 1].clamp(0, 1)) * (tex.shape[0] - 1)).long()
+        img = tex[ty, tx]
+        img[findices == 0] = 1.0  # white background
+        Image.fromarray((img.cpu().numpy() * 255).astype(np.uint8)).save(path)
+        written.append(str(path))
+    return written
