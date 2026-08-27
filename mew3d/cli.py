@@ -80,7 +80,9 @@ def cmd_generate(args) -> int:
         plain_ui=args.plain,
     )
 
+    from .core.orchestrator import BadInputError as OrchestratorBadInput
     from .core.orchestrator import Orchestrator
+    from .core.orchestrator import RequestRejected as OrchestratorRejected
     from .core.run_context import RunContext
     from .ui.live import LiveUI
 
@@ -92,6 +94,10 @@ def cmd_generate(args) -> int:
     except KeyboardInterrupt:
         print("\ninterrupted - partial results in", ctx.dir)
         return 130
+    except (OrchestratorRejected, OrchestratorBadInput) as e:
+        print(f"\nstopped: {e}", file=sys.stderr)
+        print("no GPU time was spent on this request.", file=sys.stderr)
+        return 3
     except Exception as e:
         print(f"\nrun failed: {type(e).__name__}: {e}", file=sys.stderr)
         print("logs:", ctx.path("logs", "run.log"), file=sys.stderr)

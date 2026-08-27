@@ -2,6 +2,7 @@
 
 from ..agents.analyst import AnalystAgent
 from ..agents.exporter import ExporterAgent
+from ..agents.guardian import GatekeeperAgent, screen_request
 from ..agents.image_gen import ImageGenAgent
 from ..agents.judge import JudgeAgent
 from ..agents.mesh_gen import MeshGenAgent
@@ -10,6 +11,14 @@ from ..agents.prompt_smith import PromptSmithAgent
 from ..agents.texture_smith import TextureSmithAgent
 from ..llm.client import LLMClient
 from .model_manager import ModelManager
+
+
+class BadInputError(RuntimeError):
+    """The request cannot produce a useful model - stop instead of burning GPU time."""
+
+
+class RequestRejected(RuntimeError):
+    """The request was refused by the input guardrail."""
 
 
 class Orchestrator:
@@ -27,6 +36,7 @@ class Orchestrator:
         self.prompt_smith = PromptSmithAgent(*deps)
         self.image_gen = ImageGenAgent(*deps)
         self.preprocessor = PreprocessorAgent(*deps)
+        self.gatekeeper = GatekeeperAgent(*deps)
         self.mesh_gen = MeshGenAgent(*deps)
         self.judge = JudgeAgent(*deps)
         self.texture_smith = TextureSmithAgent(*deps)
@@ -39,6 +49,20 @@ class Orchestrator:
         cfg = self.cfg
         self.emit(f"run {self.ctx.run_id} starting (mode: {cfg.mode}, "
                   f"LLM: {'on' if self.llm.usable else 'heuristic fallback'})")
+
+        if cfg.text and cfg.screen_input:
+            self.bus.emit("Guardian", "status", "started", state="running", icon="🛡️")
+            screen = screen_request(cfg.text, self.llm)
+            self.ctx.save_json("logs/screening.json", screen)
+            if not screen["allowed"]:
+                self.bus.emit("Guardian", "decision",
+                              f"request refused ({screen['category']}): {screen['reason']}")
+                self.bus.emit("Guardian", "status", "done", state="done")
+                raise RequestRejected(screen["reason"])
+            self.bus.emit("Guardian", "log",
+                          "request screened - safe and buildable"
+                          + (" (screening degraded)" if screen.get("degraded") else ""))
+            self.bus.emit("Guardian", "status", "done", state="done")
 
         self.analyst.run()
 
@@ -65,6 +89,20 @@ class Orchestrator:
                 cfg.adjustments.pop("regenerate_images", None)
 
             self.preprocessor.run()
+
+            # last cheap checkpoint: never spend GPU minutes on input that cannot work
+            gate = self.gatekeeper.run(attempt=attempt,
+                                       attempts_left=max_attempts - attempt)
+            if not gate["proceed"]:
+                if gate.get("fatal"):
+                    raise BadInputError(
+                        f"{gate['problem']}: "
+                        + ((gate.get("vision") or {}).get("advice")
+                           or "the prepared image cannot produce a useful model")
+                    )
+                cfg.adjustments.update(gate["recovery"])
+                continue  # re-run preprocessing with a different strategy
+
             self.mesh_gen.run()
             verdict = self.judge.run(attempt=attempt, attempts_left=max_attempts - attempt)
 
@@ -72,6 +110,13 @@ class Orchestrator:
                 break
             if attempt < max_attempts:
                 cfg.adjustments.update(verdict["adjustments"])
+
+        if verdict is None:
+            # every attempt was stopped at the gate before reconstruction
+            raise BadInputError(
+                "the prepared image never reached a state worth reconstructing - "
+                "try a clearer prompt, or an image where the whole object is visible"
+            )
 
         if self.cfg.texture_enabled:
             try:

@@ -49,6 +49,9 @@ class GenerationConfig:
     # preprocessing
     foreground_ratio: float = 0.85
 
+    hosted_image_size: int = 1024  # hosted FLUX handles 1024 comfortably
+    screen_input: bool = True      # run the input guardrail before anything loads
+
     # 3D stage
     mesh_model: str = "triposr"  # triposr | hunyuan | both
     mc_resolution: int = 256

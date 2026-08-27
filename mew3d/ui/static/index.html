@@ -121,6 +121,19 @@
   }
   @keyframes fadein { from { opacity: 0; transform: translateY(5px); } }
   .bubble .who { font-size: 12px; font-weight: 700; color: var(--accent); }
+  /* the line an agent is working on right now: soft shimmer + a breathing dot */
+  .bubble.working { border-color: var(--accent); }
+  .bubble.working .txt {
+    background: linear-gradient(90deg, var(--dim) 20%, #fff 42%, var(--dim) 64%);
+    background-size: 220% 100%; -webkit-background-clip: text; background-clip: text;
+    color: transparent; animation: shimmer 2.2s linear infinite;
+  }
+  @keyframes shimmer { to { background-position: -220% 0; } }
+  .bubble.working .who::after {
+    content: "●"; margin-left: 6px; font-size: 9px; color: var(--accent);
+    animation: breathe 1.3s ease-in-out infinite;
+  }
+  @keyframes breathe { 0%,100% { opacity: .25 } 50% { opacity: 1 } }
   .bubble.narr { border-color: var(--accent2); background: #1d1930; align-self: flex-end; }
   .bubble.narr .who { color: var(--accent2); }
   .bubble.err { border-color: var(--bad); }
@@ -277,8 +290,9 @@
 </main>
 
 <script>
-const ICONS = {Orchestrator:"🧠", Analyst:"🔎", PromptSmith:"✍️", ImageGen:"🎨",
-  Preprocessor:"🪄", MeshGen:"🧊", Judge:"⚖️", TextureSmith:"🖌️", Exporter:"📦", Narrator:"🎙️"};
+const ICONS = {Orchestrator:"🧠", Guardian:"🛡️", Analyst:"🔎", PromptSmith:"✍️",
+  ImageGen:"🎨", Preprocessor:"🪄", Gatekeeper:"🛡️", MeshGen:"🧊", Judge:"⚖️",
+  TextureSmith:"🖌️", Exporter:"📦", Narrator:"🎙️", LightSmith:"💡"};
 let currentRun = null, nextIdx = 0, pollTimer = null, imageFile = null;
 
 const $ = id => document.getElementById(id);
@@ -361,13 +375,21 @@ function renderEvent(ev) {
   }
 }
 
+let workingBubble = null;
 function appendBubble(agent, msg, cls) {
+  // the previous line is finished the moment a new one arrives
+  if (workingBubble) { workingBubble.classList.remove("working"); workingBubble = null; }
   const d = document.createElement("div");
   d.className = "bubble" + (cls ? " " + cls : "");
+  const txt = document.createElement("span");
+  txt.className = "txt";
+  txt.textContent = msg;
   d.innerHTML = `<div class="who">${ICONS[agent] || "·"} ${agent}</div>`;
-  d.appendChild(document.createTextNode(msg));
+  d.appendChild(txt);
   $("feed").appendChild(d);
   $("feed").scrollTop = $("feed").scrollHeight;
+  // only live work shimmers; narration and errors are finished statements
+  if (!cls) { d.classList.add("working"); workingBubble = d; }
   return d;
 }
 function appendSys(msg) {
@@ -380,6 +402,7 @@ function appendSys(msg) {
 async function finishRun() {
   clearInterval(pollTimer); pollTimer = null;
   $("goBtn").disabled = false;
+  if (workingBubble) { workingBubble.classList.remove("working"); workingBubble = null; }
   appendSys("✨ run finished");
   $("theaterStatus").textContent = "finished - loading result…";
   const finished = currentRun; currentRun = null;

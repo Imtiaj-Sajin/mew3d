@@ -1,0 +1,12 @@
+{
+  "original": "a cute baby dragon",
+  "prompt": "full view of a whole cute baby dragon with large sparkling eyes and small wings, centered against a plain light background",
+  "variants": [
+    "full view of a whole cute baby dragon with large sparkling eyes and small wings, centered against a plain light background",
+    "full view of a whole adorable baby dragon with a rounded body and fluffy scales, showing a playful pose with a slight tilt of the head",
+    "full view of a whole baby dragon sitting on its hind legs, with oversized ears and a cheeky smile, against a soft pastel background",
+    "full view of a whole baby dragon curled up in a cozy position, with tiny claws and a soft, shiny texture, on a smooth white backdrop",
+    "full view of a whole baby dragon with bright colors and a joyful expression, perched playfully on a small mound, against a simple gradient background"
+  ],
+  "negative_prompt": "close-up, macro, cropped"
+}

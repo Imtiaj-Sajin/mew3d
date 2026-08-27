@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.89,
+  "passed": true,
+  "metrics": {
+    "vertices": 292140,
+    "faces": 584280,
+    "watertight": false,
+    "components": 3,
+    "largest_component_fraction": 1.0,
+    "extents": [
+      1.997,
+      1.357,
+      0.639
+    ],
+    "extent_ratio": 3.13,
+    "degenerate_faces": 157
+  },
+  "issues": [],
+  "llm_opinion": "The mesh is of high quality with a good heuristic score, but it is not watertight and has a few degenerate faces.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "Minor inaccuracies in button placement and contour details"
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.89,
+      "issues": [],
+      "metrics": {
+        "vertices": 292140,
+        "faces": 584280,
+        "watertight": false,
+        "components": 3,
+        "largest_component_fraction": 1.0,
+        "extents": [
+          1.997,
+          1.357,
+          0.639
+        ],
+        "extent_ratio": 3.13,
+        "degenerate_faces": 157
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Minor inaccuracies in button placement and contour details"
+      }
+    }
+  ]
+}

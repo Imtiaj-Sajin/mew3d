@@ -109,17 +109,11 @@ all fine. Reply ONLY with JSON: {"allowed": true/false, "reason": "<short>"}"""
 
 
 def guardrail_check(text: str) -> tuple[bool, str]:
-    """Fail-open: if the guardrail LLM is unreachable, allow and note it."""
-    reply = groq_chat(GUARD_SYSTEM, f"Prompt: {text!r}", max_tokens=100)
-    if not reply:
-        return True, "guardrail offline - allowed by default"
-    try:
-        import re
+    """Screen a request up front. Fails open so an outage never blocks real work."""
+    from .agents.guardian import screen_request
 
-        verdict = json.loads(re.search(r"\{.*\}", reply, re.DOTALL).group(0))
-        return bool(verdict.get("allowed", True)), verdict.get("reason", "")
-    except Exception:
-        return True, "guardrail reply unparseable - allowed by default"
+    verdict = screen_request(text)
+    return verdict["allowed"], verdict.get("reason", "")
 
 
 NARRATOR_SYSTEM = """You are the Narrator of Mew3D, a local AI studio where a crew of agents
@@ -177,9 +171,14 @@ class Narrator:
 def _pipeline_thread(ctx) -> None:
     from .core.orchestrator import Orchestrator
 
+    from .core.orchestrator import BadInputError, RequestRejected
+
     narrator = Narrator(ctx.bus)
     try:
         Orchestrator(ctx).run()
+    except (RequestRejected, BadInputError) as e:
+        # an intentional stop, not a crash - say so plainly
+        ctx.bus.emit("Orchestrator", "error", f"stopped before using the GPU: {e}")
     except Exception as e:
         ctx.bus.emit("Orchestrator", "error", f"run failed: {type(e).__name__}: {e}")
     finally:

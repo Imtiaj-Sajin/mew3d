@@ -116,22 +116,39 @@ class PreprocessorAgent(Agent):
             reviewed.append((src, rgba, scores))
         return reviewed
 
-    def _session(self):
-        def loader():
-            import rembg
+    def _session(self, model: str = "u2net"):
+        """Cache one rembg session per model - the Gatekeeper can ask for a different one."""
+        import rembg
 
-            return rembg.new_session("u2net")
+        cache = getattr(self, "_rembg_sessions", None)
+        if cache is None:
+            cache = self._rembg_sessions = {}
+        if model not in cache:
+            self.log(f"loading background-removal model ({model})")
+            cache[model] = rembg.new_session(model)
+        return cache[model]
 
-        # rembg runs on CPU (onnxruntime) - tiny, safe to keep resident
-        if not hasattr(self, "_rembg"):
-            self.log("loading background-removal model (u2net)")
-            self._rembg = loader()
-        return self._rembg
+    @staticmethod
+    def _keep_largest_component(rgba: Image.Image) -> Image.Image:
+        """Drop everything but the biggest blob - used when several objects survive."""
+        from scipy import ndimage
+
+        arr = np.array(rgba)
+        mask = arr[:, :, 3] > 128
+        labels, n = ndimage.label(mask)
+        if n <= 1:
+            return rgba
+        sizes = ndimage.sum(mask, labels, range(1, n + 1))
+        keep = int(np.argmax(sizes)) + 1
+        arr[:, :, 3] = np.where(labels == keep, arr[:, :, 3], 0)
+        return Image.fromarray(arr)
 
     def execute(self):
         cfg = self.cfg
         ratio = cfg.adjustments.get("foreground_ratio", cfg.foreground_ratio)
-        session = self._session()
+        rembg_model = cfg.adjustments.get("rembg_model", "u2net")
+        largest_only = cfg.adjustments.get("largest_component_only", False)
+        session = self._session(rembg_model)
 
         if cfg.mode == "text23d":
             sources = self.ctx.state["candidate_images"]
@@ -150,6 +167,8 @@ class PreprocessorAgent(Agent):
             self.progress(f"removing background {i + 1}/{len(sources)}",
                           current=i + 1, total=len(sources))
             rgba = remove_background(Image.open(src).convert("RGB"), session)
+            if largest_only:
+                rgba = self._keep_largest_component(rgba)
             scores = score_candidate(rgba)
             scored.append((src, rgba, scores))
             self.log(f"candidate {i + 1} scored {scores['total']:.2f} "

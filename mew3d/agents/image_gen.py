@@ -1,9 +1,17 @@
-"""ImageGen agent: text -> candidate images via SD-Turbo / SDXL-Turbo (fits 8GB VRAM)."""
+"""ImageGen agent: text -> candidate images.
 
-import random
+Prefers hosted FLUX (much cleaner single-object framing than the local turbo models) and
+falls back to the local pipeline when the network or quota is unavailable. Each candidate
+uses a distinct prompt variation and its own seed, so retries explore genuinely different
+interpretations instead of re-rolling the same picture.
+"""
 
 from .base import Agent
 from ..config import IMAGE_MODEL_IDS
+from ..core.imagegen import (
+    ImageProviderError, generate_hf, generate_local, hf_available,
+    load_local_pipeline, provider_order, random_seed,
+)
 
 
 class ImageGenAgent(Agent):
@@ -11,58 +19,55 @@ class ImageGenAgent(Agent):
     icon = "🎨"
     description = "generates candidate images from the enhanced prompt"
 
-    def _load_pipeline(self):
-        import torch
-        from diffusers import AutoPipelineForText2Image
-
+    def _local_pipeline(self):
         model_id = IMAGE_MODEL_IDS[self.cfg.image_model]
-
-        def loader():
-            try:
-                pipe = AutoPipelineForText2Image.from_pretrained(
-                    model_id, torch_dtype=torch.float16, variant="fp16",
-                    safety_checker=None,
-                )
-            except (OSError, ValueError):
-                pipe = AutoPipelineForText2Image.from_pretrained(
-                    model_id, torch_dtype=torch.float16, safety_checker=None,
-                )
-            pipe.set_progress_bar_config(disable=True)
-            if self.cfg.image_model == "sdxl-turbo":
-                pipe.enable_model_cpu_offload()  # sdxl is tight on 8GB
-            else:
-                pipe.to("cuda")
-            return pipe
-
-        return self.models.acquire(f"t2i:{model_id}", loader)
+        self.log(f"loading local {self.cfg.image_model}")
+        return self.models.acquire(
+            f"t2i:{model_id}",
+            lambda: load_local_pipeline(model_id, self.cfg.image_model == "sdxl-turbo"),
+        )
 
     def execute(self):
-        import torch
-
         enhanced = self.ctx.state["enhanced_prompt"]
+        variants = enhanced.get("variants") or [enhanced["prompt"]]
+        negative = enhanced["negative_prompt"]
         n = max(1, self.cfg.num_candidates)
+
         base_seed = self.cfg.adjustments.get("seed", self.cfg.seed)
         if base_seed is None:
-            base_seed = random.randint(0, 2**31 - 1)
+            base_seed = random_seed()
 
-        self.log(f"loading {self.cfg.image_model} (first run downloads the model)")
-        pipe = self._load_pipeline()
+        order = [p for p in provider_order() if p != "huggingface" or hf_available()]
+        if not order:
+            order = ["local"]
 
-        paths = []
+        paths, used, pipe = [], None, None
         for i in range(n):
-            seed = base_seed + i
+            seed = base_seed + i * 977  # spread seeds so candidates differ meaningfully
+            prompt = variants[i % len(variants)]
             self.progress(f"generating candidate {i + 1}/{n} (seed {seed})",
                           current=i + 1, total=n)
-            generator = torch.Generator("cuda").manual_seed(seed)
-            image = pipe(
-                prompt=enhanced["prompt"],
-                negative_prompt=enhanced["negative_prompt"],
-                num_inference_steps=self.cfg.image_steps,
-                guidance_scale=0.0,  # turbo models are distilled for CFG-free sampling
-                height=self.cfg.image_size,
-                width=self.cfg.image_size,
-                generator=generator,
-            ).images[0]
+
+            image, error = None, None
+            for provider in order:
+                try:
+                    if provider == "huggingface":
+                        image = generate_hf(prompt, seed, self.cfg.hosted_image_size, negative)
+                    else:
+                        pipe = pipe or self._local_pipeline()
+                        image = generate_local(pipe, prompt, negative, seed,
+                                               self.cfg.image_steps, self.cfg.image_size)
+                    if used != provider:
+                        used = provider
+                        self.log(f"image provider: {provider}")
+                    break
+                except (ImageProviderError, Exception) as e:  # noqa: B014 - want any failure
+                    error = e
+                    self.log(f"{provider} unavailable ({type(e).__name__}: "
+                             f"{str(e)[:90]}) - trying next provider")
+            if image is None:
+                raise RuntimeError(f"all image providers failed: {error}")
+
             path = self.ctx.path("intermediate", f"candidate_{i:02d}_seed{seed}.png")
             image.save(path)
             self.artifact(f"candidate {i + 1} saved", path)
@@ -70,4 +75,5 @@ class ImageGenAgent(Agent):
 
         self.ctx.state["candidate_images"] = paths
         self.ctx.state["image_seed"] = base_seed
+        self.ctx.state["image_provider"] = used
         return paths
