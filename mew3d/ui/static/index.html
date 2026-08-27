@@ -182,7 +182,13 @@
 
   /* ---- right: versions ---- */
   #right { background: var(--panel); padding: 12px; }
-  #right h2 { font-size: 12px; letter-spacing: .08em; color: var(--dim); text-transform: uppercase; padding: 4px 4px 10px; }
+  #right h2 { font-size: 12px; letter-spacing: .08em; color: var(--dim); text-transform: uppercase; padding: 4px 4px 8px; }
+  #runCount { color: #6b7480; }
+  #runFilter {
+    width: 100%; padding: 7px 9px; margin-bottom: 10px; border-radius: 8px; font: 12px inherit;
+    background: var(--panel2); color: var(--text); border: 1px solid var(--border);
+  }
+  #runFilter:focus { outline: none; border-color: var(--accent); }
   .run {
     background: var(--panel2); border: 1px solid var(--border); border-radius: 10px;
     padding: 10px; margin-bottom: 10px;
@@ -331,7 +337,8 @@
   </div>
 
   <div id="right" class="panel">
-    <h2>Versions</h2>
+    <h2>Versions <span id="runCount"></span></h2>
+    <input id="runFilter" placeholder="filter by name or prompt…" oninput="renderRuns()">
     <div id="runs"></div>
   </div>
 </main>
@@ -882,12 +889,21 @@ async function requestLighting(runId) {
 let lastRuns = [];
 async function loadRuns() {
   try {
-    const res = await fetch("/api/runs");
+    const res = await fetch("/api/runs");     // no limit: the whole history
     lastRuns = (await res.json()).runs;
   } catch (e) { return; }
+  renderRuns();
+}
+
+function renderRuns() {
+  const q = ($("runFilter").value || "").trim().toLowerCase();
+  const shown = q
+    ? lastRuns.filter(r => `${r.title} ${r.prompt || ""} ${r.run_id}`.toLowerCase().includes(q))
+    : lastRuns;
+  $("runCount").textContent = q ? `${shown.length}/${lastRuns.length}` : `(${lastRuns.length})`;
   const el = $("runs");
   el.innerHTML = "";
-  lastRuns.forEach(r => {
+  shown.forEach(r => {
     const d = document.createElement("div");
     d.className = "run";
     const when = new Date(r.mtime * 1000).toLocaleString([], {month:"short", day:"numeric", hour:"2-digit", minute:"2-digit"});

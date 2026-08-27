@@ -328,13 +328,33 @@ def _run_summary(run_dir: Path) -> dict:
     }
 
 
+# summarising a run reads several small JSON files, so cache by (run, mtime) - the
+# listing is polled after every run and the history only grows
+_summary_cache: dict = {}
+
+
+def _cached_summary(run_dir: Path) -> dict:
+    key = run_dir.name
+    mtime = run_dir.stat().st_mtime
+    hit = _summary_cache.get(key)
+    # never cache the running run - its outputs are still appearing
+    if hit and hit["mtime_key"] == mtime and _current_run["run_id"] != key:
+        return hit["summary"]
+    summary = _run_summary(run_dir)
+    _summary_cache[key] = {"mtime_key": mtime, "summary": summary}
+    return summary
+
+
 @app.get("/api/runs")
-def runs(limit: int = 30):
+def runs(limit: int = 0):
+    """All runs, newest first. limit=0 (the default) means no cap."""
     dirs = sorted(
         (d for d in RESULTS_DIR.iterdir() if d.is_dir()),
         key=lambda d: d.stat().st_mtime, reverse=True,
     )
-    return {"runs": [_run_summary(d) for d in dirs[:limit]]}
+    if limit > 0:
+        dirs = dirs[:limit]
+    return {"runs": [_cached_summary(d) for d in dirs], "total": len(dirs)}
 
 
 @app.get("/api/runs/{run_id}/events")
