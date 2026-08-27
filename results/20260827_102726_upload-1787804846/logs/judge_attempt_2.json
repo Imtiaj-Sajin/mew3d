@@ -1,0 +1,62 @@
+{
+  "attempt": 2,
+  "backend": "hunyuan",
+  "score": 0.193,
+  "passed": false,
+  "metrics": {
+    "vertices": 492377,
+    "faces": 984555,
+    "watertight": false,
+    "components": 56,
+    "largest_component_fraction": 0.292,
+    "extents": [
+      1.994,
+      1.828,
+      1.641
+    ],
+    "extent_ratio": 1.21,
+    "degenerate_faces": 482
+  },
+  "issues": [
+    "fragmented: 56 pieces, main piece only 29% of faces",
+    "source image foreground was fragmented"
+  ],
+  "llm_opinion": "The mesh quality is subpar due to multiple concerns, particularly the lack of watertightness and a high number of components.",
+  "vision_opinion": {
+    "looks_like_subject": false,
+    "is_flat_or_blob": true,
+    "score": 3,
+    "issue": "The model appears overly abstract and lacks defined shapes, making it look like a shapeless blob."
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.193,
+      "issues": [
+        "fragmented: 56 pieces, main piece only 29% of faces",
+        "source image foreground was fragmented"
+      ],
+      "metrics": {
+        "vertices": 492377,
+        "faces": 984555,
+        "watertight": false,
+        "components": 56,
+        "largest_component_fraction": 0.292,
+        "extents": [
+          1.994,
+          1.828,
+          1.641
+        ],
+        "extent_ratio": 1.21,
+        "degenerate_faces": 482
+      },
+      "vision_opinion": {
+        "looks_like_subject": false,
+        "is_flat_or_blob": true,
+        "score": 3,
+        "issue": "The model appears overly abstract and lacks defined shapes, making it look like a shapeless blob."
+      }
+    }
+  ]
+}

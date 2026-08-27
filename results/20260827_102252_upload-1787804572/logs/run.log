@@ -1,0 +1,58 @@
+[10:22:52] Orchestrator log       run 20260827_102252_upload-1787804572 starting (mode: image23d, LLM: on)
+[10:22:52] Analyst      status    started
+[10:22:52] Analyst      log       input mode: image23d | image: upload_1787804572.jpg
+[10:22:53] Analyst      log       vision LLM responded
+[10:22:53] Analyst      decision  subject 'warrior character' (character, complexity high) - Ensure to capture the intricate details of the armor and weaponry for a realistic reconstruction.
+[10:22:53] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[10:22:53] Analyst      status    done
+[10:22:53] Preprocessor status    started
+[10:22:53] Preprocessor log       loading background-removal model (u2net)
+[10:22:54] Preprocessor artifact  user image copied to run folder
+[10:22:54] Preprocessor progress  removing background 1/1
+[10:22:54] Preprocessor log       candidate 1 scored 0.53 (coverage 0.41, blob 1.00, edge-cut 0.15)
+[10:22:55] Narrator     narration The Analyst started the job by picking a high‑detail warrior character and laying out the workflow: Preprocessor, then MeshGen, Judge, and Exporter. By defining the armor and weaponry up front, the team can focus on realistic details that bring the model to life—did you know medieval armor often used overlapping plates called lamellae?
+[10:22:56] Preprocessor log       vision LLM responded
+[10:22:56] Preprocessor log       vision critic: none (vlm 9/10 -> blended 0.72)
+[10:22:57] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[10:22:57] Preprocessor status    done
+[10:22:57] MeshGen      status    started
+[10:22:57] MeshGen      log       backend: hunyuan
+[10:22:57] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[10:22:57] vram         log       loading model: hunyuan3d
+[10:22:57] Narrator     narration The Preprocessor grabbed the user‑supplied picture and placed a copy into the project’s run folder so the rest of the pipeline can read it. This step ensures every downstream tool works from the same exact source file, avoiding mismatches. Fun fact: copying the image into a dedicated workspace also lets the system keep the original untouched for future revisions.
+[10:23:00] Narrator     narration The Preprocessor wrapped up its analysis, noting that the image is 85 % foreground, so the character’s outline is clearly defined for the next stage. With that confidence, MeshGen has now started building the polygonal mesh that will become the 3‑D shape. A typical mesh is composed of thousands of tiny triangles that together capture the model’s surface details.
+[10:23:21] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[10:23:24] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm on)
+[10:23:29] MeshGen      progress  hunyuan: rendering clay preview views
+[10:23:50] MeshGen      artifact  hunyuan clay previews saved
+[10:23:50] MeshGen      log       hunyuan: 572,661 vertices, 1,145,732 faces
+[10:23:50] MeshGen      status    done
+[10:23:50] Judge        status    started
+[10:23:52] Judge        log       [hunyuan] 1,145,732 faces, 26 components, watertight=False, extent ratio 2.21
+[10:23:53] Narrator     narration MeshGen finished creating the full‑resolution mesh and saved quick clay‑preview files, which let the team see a lightweight version of the shape before polishing details. Now the Judge has kicked off to automatically check the mesh for errors like non‑manifold edges—did you know such flaws can cause holes or crashes when the model is rendered?
+[10:23:53] Judge        log       LLM responded
+[10:23:53] Judge        log       [hunyuan] LLM second opinion: The mesh is largely detailed but has significant issues with non-watertightness and multiple components.
+[10:23:56] Judge        log       vision LLM responded
+[10:23:56] Judge        log       [hunyuan] vision check: looks like 'warrior character', 7/10 (Some details, particularly in the hair and cloak, lack definition.)
+[10:23:56] Judge        decision  score 0.85 - PASS
+[10:23:56] Judge        status    done
+[10:23:56] TextureSmith status    started
+[10:23:56] TextureSmith progress  simplifying mesh for texturing: 1,145,732 -> ~40,000 faces
+[10:23:58] Narrator     narration The Judge gave the mesh an 0.85 score and marked it as a pass, confirming the geometry is clean enough to move forward. With the mesh cleared, TextureSmith has now started applying surface textures, which will give the model realistic colors and details. Fun fact: textures are wrapped onto a model using UV coordinates, essentially a 2‑D map that tells each pixel where it belongs on the 3‑D surface.
+[10:24:13] TextureSmith log       simplified to 40,000 faces
+[10:24:13] TextureSmith log       loading Hunyuan3D-Paint (first run downloads ~6GB)
+[10:24:14] vram         log       released models: hunyuan3d
+[10:24:14] vram         log       loading model: hunyuan-paint
+[10:24:14] TextureSmith log       rasterizer: compiled extension unusable on this GPU - using the pure-PyTorch fallback
+[10:24:46] TextureSmith log       cpu offload enabled - weights stream from RAM per step
+[10:24:46] vram         metric    VRAM 0.0/8.6 GB (after loading hunyuan-paint)
+[10:24:46] TextureSmith progress  painting hunyuan mesh (multiview diffusion + baking, takes minutes)
+[10:25:53] TextureSmith artifact  textured GLB exported (hunyuan mesh)
+[10:25:54] TextureSmith artifact  textured previews saved
+[10:25:54] TextureSmith status    done
+[10:25:54] Exporter     status    started
+[10:25:55] Exporter     artifact  [hunyuan] OBJ + GLB exported
+[10:25:55] Exporter     artifact  run report written
+[10:25:55] Exporter     status    done
+[10:25:55] vram         log       released models: hunyuan-paint
+[10:25:55] Orchestrator log       run complete - score 0.85 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260827_102252_upload-1787804572\output

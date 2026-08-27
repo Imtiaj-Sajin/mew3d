@@ -1,0 +1,81 @@
+{
+  "attempt": 1,
+  "backend": "triposr",
+  "score": 0.92,
+  "passed": true,
+  "metrics": {
+    "vertices": 65981,
+    "faces": 131926,
+    "watertight": true,
+    "components": 9,
+    "largest_component_fraction": 0.999,
+    "extents": [
+      0.664,
+      0.822,
+      1.002
+    ],
+    "extent_ratio": 1.51,
+    "degenerate_faces": 46
+  },
+  "issues": [],
+  "llm_opinion": "The mesh exhibits a good balance of complexity and quality, but the presence of degenerate faces is concerning.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "Minor discrepancies in proportions"
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "triposr",
+      "score": 0.92,
+      "issues": [],
+      "metrics": {
+        "vertices": 65981,
+        "faces": 131926,
+        "watertight": true,
+        "components": 9,
+        "largest_component_fraction": 0.999,
+        "extents": [
+          0.664,
+          0.822,
+          1.002
+        ],
+        "extent_ratio": 1.51,
+        "degenerate_faces": 46
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Minor discrepancies in proportions"
+      }
+    },
+    {
+      "backend": "hunyuan",
+      "score": 0.89,
+      "issues": [],
+      "metrics": {
+        "vertices": 384177,
+        "faces": 768356,
+        "watertight": false,
+        "components": 4,
+        "largest_component_fraction": 1.0,
+        "extents": [
+          1.655,
+          1.995,
+          1.052
+        ],
+        "extent_ratio": 1.9,
+        "degenerate_faces": 253
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Minor details missing"
+      }
+    }
+  ]
+}

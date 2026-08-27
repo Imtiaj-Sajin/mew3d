@@ -62,8 +62,27 @@
   /* ---- center: viewer + agent theater ---- */
   #center { position: relative; display: flex; flex-direction: column; min-width: 0; }
   model-viewer { width: 100%; flex: 1; background: radial-gradient(ellipse at 50% 40%, #1a2233 0%, var(--bg) 70%); }
-  #viewerHint { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+  #viewerHint { position: absolute; bottom: 74px; left: 50%; transform: translateX(-50%);
     color: var(--dim); font-size: 12px; pointer-events: none; }
+  /* ---- lighting bar ---- */
+  #lightBar {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 16px;
+    display: flex; align-items: center; gap: 14px;
+    background: linear-gradient(to top, rgba(13,17,23,.96), rgba(13,17,23,0));
+  }
+  #lightMsg { flex: 1; font-size: 13px; color: var(--dim); min-height: 34px; }
+  #lightMsg b { color: var(--accent2); }
+  #lightMsg .live::after { content: "▍"; animation: blink 1s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  #envToggle { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  #envToggle button {
+    background: var(--panel); color: var(--dim); border: 0; padding: 7px 13px;
+    font: 12px inherit; cursor: pointer;
+  }
+  #envToggle button.on { background: var(--accent2); color: #fff; font-weight: 600; }
+  #envToggle button:disabled { opacity: .4; cursor: wait; }
+  .chips { display: flex; gap: 5px; }
+  .chip { width: 15px; height: 15px; border-radius: 50%; border: 1px solid #ffffff30; }
   #theater {
     position: absolute; inset: 0; background: rgba(13,17,23,.96); display: none;
     flex-direction: column; padding: 18px 12% 12px;
@@ -151,6 +170,14 @@
     <model-viewer id="viewer" camera-controls auto-rotate shadow-intensity="1"
                   exposure="0.9" interaction-prompt="none"></model-viewer>
     <div id="viewerHint">drag to orbit · scroll to zoom</div>
+    <div id="lightBar">
+      <div id="lightMsg"></div>
+      <div class="chips" id="lightChips"></div>
+      <div id="envToggle">
+        <button id="envDefault" onclick="applyEnv('default')">Default</button>
+        <button id="envAi" class="on" onclick="applyEnv('ai')">✨ AI Lighting</button>
+      </div>
+    </div>
     <div id="theater">
       <h2>🎬 The crew is working on it…</h2>
       <div id="feed"></div>
@@ -278,7 +305,7 @@ async function finishRun() {
   const runs = lastRuns.filter(r => r.run_id === finished);
   if (runs.length && runs[0].models.length) {
     const best = pickBest(runs[0].models);
-    loadModel(best.file);
+    loadModel(best.file, finished);
     setTimeout(() => toggleTheater(false), 1600);
   }
 }
@@ -290,9 +317,110 @@ function pickBest(models) {
 }
 
 function toggleTheater(open) { $("theater").classList.toggle("open", open); }
-function loadModel(url) {
+function loadModel(url, runId) {
   $("viewer").src = url;
   document.querySelectorAll(".mbtn").forEach(b => b.classList.toggle("active", b.dataset.file === url));
+  const id = runId || (url.match(/\/files\/([^/]+)\//) || [])[1];
+  if (id) requestLighting(id);
+}
+
+/* ---------- environment: paint an equirectangular HDRI from a lighting rig ---------- */
+function buildEnvironment(rig) {
+  const W = 1024, H = 512;
+  const c = document.createElement("canvas");
+  c.width = W; c.height = H;
+  const g = c.getContext("2d");
+
+  const grad = g.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, rig.background.top);
+  grad.addColorStop(1, rig.background.bottom);
+  g.fillStyle = grad;
+  g.fillRect(0, 0, W, H);
+  // ambient floor: a rig may legitimately ask for a near-black set, but with image-based
+  // lighting that leaves whole faces of the model unlit. Keep a little base illumination.
+  g.fillStyle = "rgba(255,255,255,0.07)";
+  g.fillRect(0, 0, W, H);
+
+  // additive blobs: azimuth 0 = front of model, elevation 90 = straight above
+  g.globalCompositeOperation = "lighter";
+  for (const L of rig.lights) {
+    const x = ((L.azimuth / 360 + 0.5) % 1 + 1) % 1 * W;
+    const y = (0.5 - L.elevation / 180) * H;
+    const r = Math.max(24, L.size * W * 0.5);
+    for (const cx of [x - W, x, x + W]) {   // wrap horizontally at the seam
+      const blob = g.createRadialGradient(cx, y, 0, cx, y, r);
+      const [cr, cg, cb] = hexRgb(L.color);
+      blob.addColorStop(0, `rgba(${cr},${cg},${cb},${Math.min(1, L.intensity)})`);
+      blob.addColorStop(0.45, `rgba(${cr},${cg},${cb},${Math.min(1, L.intensity) * 0.35})`);
+      blob.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
+      g.fillStyle = blob;
+      g.beginPath(); g.arc(cx, y, r, 0, 6.284); g.fill();
+    }
+  }
+  g.globalCompositeOperation = "source-over";
+  return c.toDataURL("image/png");
+}
+function hexRgb(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+let lightingData = null, envMode = "ai";
+function applyEnv(mode) {
+  if (!lightingData) return;
+  envMode = mode;
+  const rig = lightingData[mode] || lightingData.default;
+  const v = $("viewer");
+  v.environmentImage = buildEnvironment(rig);
+  v.exposure = rig.exposure;
+  v.shadowIntensity = rig.shadow_intensity;
+  $("center").style.background =
+    `radial-gradient(ellipse at 50% 40%, ${rig.background.top} 0%, ${rig.background.bottom} 75%)`;
+  $("envAi").classList.toggle("on", mode === "ai");
+  $("envDefault").classList.toggle("on", mode === "default");
+  $("lightChips").innerHTML = rig.lights
+    .map(L => `<div class="chip" style="background:${L.color}" title="${L.role} @ ${L.azimuth}°"></div>`).join("");
+  showLighting(rig, mode);
+}
+
+function showLighting(rig, mode) {
+  if (mode === "default") {
+    $("lightMsg").innerHTML = "<b>Default</b> — neutral three-point studio, no analysis applied.";
+    return;
+  }
+  const lines = [`<b>💡 LightSmith → “${rig.preset_name}”</b> ${rig.rationale}`]
+    .concat((rig.commentary || []).map(c => "· " + c));
+  typeLines($("lightMsg"), lines);
+}
+
+let typeTimer = null;
+function typeLines(el, lines) {
+  clearTimeout(typeTimer);
+  let i = 0;
+  const step = () => {
+    el.innerHTML = lines.slice(0, i + 1).join("<br>");
+    if (++i < lines.length) typeTimer = setTimeout(step, 1400);
+  };
+  step();
+}
+
+async function requestLighting(runId) {
+  if (lightingData && lightingData.run === runId) { applyEnv(envMode); return; }
+  lightingData = null;
+  $("envAi").disabled = true;
+  $("lightMsg").innerHTML = '<span class="live">💡 LightSmith is studying the model to design its lighting</span>';
+  try {
+    const res = await fetch(`/api/runs/${runId}/lighting`);
+    if (!res.ok) throw new Error("lighting unavailable");
+    const data = await res.json();
+    data.run = runId;
+    lightingData = data;
+    applyEnv(envMode);
+  } catch (e) {
+    $("lightMsg").textContent = "lighting agent unavailable — using the viewer default";
+  } finally {
+    $("envAi").disabled = false;
+  }
 }
 
 /* ---------- runs list ---------- */
@@ -319,7 +447,7 @@ async function loadRuns() {
       b.className = "mbtn" + (m.label === "Textured" ? " tex" : "");
       b.textContent = m.label === "Textured" ? "✨ " + m.label : m.label;
       b.dataset.file = m.file;
-      b.onclick = () => { loadModel(m.file); toggleTheater(false); };
+      b.onclick = () => { loadModel(m.file, r.run_id); toggleTheater(false); };
       models.appendChild(b);
     });
     d.appendChild(models);
@@ -347,8 +475,8 @@ async function pollStatus() {
 setInterval(pollStatus, 2500);
 pollStatus();
 loadRuns().then(() => {
-  const all = lastRuns.flatMap(r => r.models);
-  if (all.length) loadModel(pickBest(all).file);
+  const withModels = lastRuns.find(r => r.models.length);
+  if (withModels) loadModel(pickBest(withModels.models).file, withModels.run_id);
 });
 </script>
 </body>

@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "game controller",
+  "category": "prop",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure to capture the details of the buttons and texture of the grips for accurate reconstruction."
+}

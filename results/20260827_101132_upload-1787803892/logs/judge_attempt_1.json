@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.92,
+  "passed": true,
+  "metrics": {
+    "vertices": 395510,
+    "faces": 791020,
+    "watertight": true,
+    "components": 1,
+    "largest_component_fraction": 1.0,
+    "extents": [
+      1.358,
+      1.996,
+      1.288
+    ],
+    "extent_ratio": 1.55,
+    "degenerate_faces": 345
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is satisfactory with a high heuristic score, but the presence of degenerate faces is a concern.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "none"
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.92,
+      "issues": [],
+      "metrics": {
+        "vertices": 395510,
+        "faces": 791020,
+        "watertight": true,
+        "components": 1,
+        "largest_component_fraction": 1.0,
+        "extents": [
+          1.358,
+          1.996,
+          1.288
+        ],
+        "extent_ratio": 1.55,
+        "degenerate_faces": 345
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "none"
+      }
+    }
+  ]
+}

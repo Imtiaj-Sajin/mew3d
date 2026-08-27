@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.89,
+  "passed": true,
+  "metrics": {
+    "vertices": 379162,
+    "faces": 758324,
+    "watertight": false,
+    "components": 5,
+    "largest_component_fraction": 1.0,
+    "extents": [
+      1.916,
+      1.994,
+      0.478
+    ],
+    "extent_ratio": 4.17,
+    "degenerate_faces": 293
+  },
+  "issues": [],
+  "llm_opinion": "The mesh is of high quality but not watertight, which may affect its usability.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "Minor inconsistencies in curvature"
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.89,
+      "issues": [],
+      "metrics": {
+        "vertices": 379162,
+        "faces": 758324,
+        "watertight": false,
+        "components": 5,
+        "largest_component_fraction": 1.0,
+        "extents": [
+          1.916,
+          1.994,
+          0.478
+        ],
+        "extent_ratio": 4.17,
+        "degenerate_faces": 293
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Minor inconsistencies in curvature"
+      }
+    }
+  ]
+}

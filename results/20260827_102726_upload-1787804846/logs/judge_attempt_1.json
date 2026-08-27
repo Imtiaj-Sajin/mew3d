@@ -1,0 +1,65 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.193,
+  "passed": false,
+  "metrics": {
+    "vertices": 519754,
+    "faces": 1039284,
+    "watertight": false,
+    "components": 79,
+    "largest_component_fraction": 0.286,
+    "extents": [
+      1.994,
+      1.82,
+      1.647
+    ],
+    "extent_ratio": 1.21,
+    "degenerate_faces": 434
+  },
+  "issues": [
+    "fragmented: 79 pieces, main piece only 29% of faces",
+    "source image foreground was fragmented"
+  ],
+  "llm_opinion": "The mesh quality is acceptable but requires improvements in watertightness and component reduction.",
+  "vision_opinion": {
+    "looks_like_subject": false,
+    "is_flat_or_blob": true,
+    "score": 3,
+    "issue": "The model lacks clear definition and structure, appearing more like a blob than a recognizable character."
+  },
+  "adjustments": {
+    "foreground_ratio": 0.75,
+    "mc_resolution": 320
+  },
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.193,
+      "issues": [
+        "fragmented: 79 pieces, main piece only 29% of faces",
+        "source image foreground was fragmented"
+      ],
+      "metrics": {
+        "vertices": 519754,
+        "faces": 1039284,
+        "watertight": false,
+        "components": 79,
+        "largest_component_fraction": 0.286,
+        "extents": [
+          1.994,
+          1.82,
+          1.647
+        ],
+        "extent_ratio": 1.21,
+        "degenerate_faces": 434
+      },
+      "vision_opinion": {
+        "looks_like_subject": false,
+        "is_flat_or_blob": true,
+        "score": 3,
+        "issue": "The model lacks clear definition and structure, appearing more like a blob than a recognizable character."
+      }
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.89,
+  "passed": true,
+  "metrics": {
+    "vertices": 474937,
+    "faces": 949894,
+    "watertight": false,
+    "components": 6,
+    "largest_component_fraction": 1.0,
+    "extents": [
+      1.751,
+      1.997,
+      1.501
+    ],
+    "extent_ratio": 1.33,
+    "degenerate_faces": 439
+  },
+  "issues": [],
+  "llm_opinion": "The mesh is complex and well-detailed, but it is not watertight and has a significant number of degenerate faces.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "Minor inaccuracies in the curvature of the ear cups"
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.89,
+      "issues": [],
+      "metrics": {
+        "vertices": 474937,
+        "faces": 949894,
+        "watertight": false,
+        "components": 6,
+        "largest_component_fraction": 1.0,
+        "extents": [
+          1.751,
+          1.997,
+          1.501
+        ],
+        "extent_ratio": 1.33,
+        "degenerate_faces": 439
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Minor inaccuracies in the curvature of the ear cups"
+      }
+    }
+  ]
+}

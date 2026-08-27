@@ -308,6 +308,46 @@ def run_events(run_id: str, after: int = 0):
     return {"events": events, "next": after + len(events), "done": done}
 
 
+_lighting_cache: dict = {}
+
+
+@app.get("/api/runs/{run_id}/lighting")
+def run_lighting(run_id: str, refresh: bool = False):
+    """LightSmith designs a lighting rig for this model (cached per run)."""
+    if "/" in run_id or "\\" in run_id or ".." in run_id:
+        raise HTTPException(400, "bad run id")
+    run_dir = RESULTS_DIR / run_id
+    if not run_dir.is_dir():
+        raise HTTPException(404, "run not found")
+    if not refresh and run_id in _lighting_cache:
+        return _lighting_cache[run_id]
+
+    from .agents.light_smith import DEFAULT_RIG, design_lighting
+
+    subject, category = run_id, None
+    analysis_file = run_dir / "logs" / "analysis.json"
+    if analysis_file.is_file():
+        try:
+            analysis = json.loads(analysis_file.read_text(encoding="utf-8"))
+            subject = analysis.get("subject") or subject
+            category = analysis.get("category")
+        except Exception:
+            pass
+
+    out = run_dir / "output"
+    preview = next((p for p in sorted(out.glob("textured_preview_*.png"))), None) \
+        or next((p for p in sorted(out.glob("*preview*.png"))), None)
+
+    from .core.events import EventBus
+    from .llm.client import LLMClient
+
+    rig = design_lighting(LLMClient(EventBus()), subject, category,
+                          str(preview) if preview else None)
+    payload = {"subject": subject, "category": category, "ai": rig, "default": DEFAULT_RIG}
+    _lighting_cache[run_id] = payload
+    return payload
+
+
 app.mount("/files", StaticFiles(directory=str(RESULTS_DIR)), name="files")
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 

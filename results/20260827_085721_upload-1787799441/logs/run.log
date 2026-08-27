@@ -1,0 +1,60 @@
+[08:57:21] Orchestrator log       run 20260827_085721_upload-1787799441 starting (mode: image23d, LLM: on)
+[08:57:21] Analyst      status    started
+[08:57:21] Analyst      log       input mode: image23d | image: upload_1787799441.jpg
+[08:57:23] Narrator     narration The Analyst has just started reviewing the input, kicking off the first step of turning your idea into a 3D model. A solid analysis helps the rest of the crew understand exactly what to build, keeping the whole pipeline on track. Fun fact: analysts often pull out key concepts with natural‑language techniques before any modeling begins.
+[08:57:24] Analyst      log       vision LLM responded
+[08:57:24] Analyst      decision  subject 'blue spinner' (prop, complexity low) - Ensure the spinner is well-lit and centered in the frame for accurate reconstruction.
+[08:57:24] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[08:57:24] Analyst      status    done
+[08:57:24] Preprocessor status    started
+[08:57:24] Preprocessor log       loading background-removal model (u2net)
+[08:57:26] Preprocessor artifact  user image copied to run folder
+[08:57:26] Preprocessor progress  removing background 1/1
+[08:57:27] Preprocessor log       candidate 1 scored 0.67 (coverage 0.08, blob 1.00, edge-cut 0.00)
+[08:57:27] Narrator     narration The Analyst confirmed the blue spinner as a simple, low‑complexity prop and set the workflow to run through Preprocessor, MeshGen, Judge, then Exporter. Now the Preprocessor is cleaning and aligning the image so the later stages receive a clear, well‑lit reference. Fun fact: a centered, evenly lit picture cuts down the guesswork for the mesh generator, speeding up the whole build.
+[08:57:30] Narrator     narration The Preprocessor has now placed your uploaded picture into the project’s working directory, making it the official reference file for the next steps. Keeping a clean, isolated copy ensures each stage works on a consistent version and prevents accidental overwrites. Fun fact: many 3D pipelines use a “run folder” to sandbox assets, which helps track changes and speeds up debugging.
+[08:57:35] Preprocessor log       vision LLM responded
+[08:57:35] Preprocessor log       vision critic: object is partially cut off (vlm 5/10 -> blended 0.17)
+[08:57:35] Preprocessor log       warning: even the best candidate scores poorly - the judge will likely order a retry
+[08:57:36] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[08:57:36] Preprocessor status    done
+[08:57:36] MeshGen      status    started
+[08:57:36] MeshGen      log       backend: hunyuan
+[08:57:36] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[08:57:36] vram         log       loading model: hunyuan3d
+[08:57:38] Narrator     narration The Preprocessor finished cleaning the picture, confirming that most of the image (85 % foreground) is usable, and handed the tidy reference off to the next stage. Now MeshGen is kicking off to turn that clear foreground into a polygon mesh, and a strong foreground‑to‑background ratio lets the generator capture more detail with fewer guess‑work errors.
+[08:57:50] vram         metric    VRAM 8.1/8.6 GB (after loading hunyuan3d)
+[08:57:52] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm on)
+[08:58:08] MeshGen      progress  hunyuan: rendering clay preview views
+[08:58:17] MeshGen      artifact  hunyuan clay previews saved
+[08:58:17] MeshGen      log       hunyuan: 238,292 vertices, 476,580 faces
+[08:58:17] MeshGen      status    done
+[08:58:17] Judge        status    started
+[08:58:18] Judge        log       [hunyuan] 476,580 faces, 1 components, watertight=True, extent ratio 2.51
+[08:58:19] Judge        log       LLM responded
+[08:58:19] Judge        log       [hunyuan] LLM second opinion: The mesh quality is satisfactory with a high heuristic score, but the presence of degenerate faces raises some concerns.
+[08:58:20] Narrator     narration The MeshGen engine has finished turning the cleaned reference into a low‑poly clay preview and saved the results, then marked its work complete. Now the Judge is kicking off to automatically scan the mesh for issues like holes or non‑manifold edges before it moves on to export. Fun fact: catching non‑manifold geometry early prevents costly errors when the model is later textured or 3D‑printed.
+[08:58:21] Judge        log       vision LLM responded
+[08:58:21] Judge        log       [hunyuan] vision check: looks like 'blue spinner', 8/10 (The side view lacks some depth detail compared to the source.)
+[08:58:21] Judge        decision  score 0.92 - PASS
+[08:58:21] Judge        status    done
+[08:58:21] TextureSmith status    started
+[08:58:21] TextureSmith progress  simplifying mesh for texturing: 476,580 -> ~40,000 faces
+[08:58:23] Narrator     narration The Judge gave the mesh a high pass score, confirming it’s watertight and ready for the next step. Now TextureSmith is starting to lay down surface details, which will make the model look realistic. Fun fact: UV unwrapping maps a 2‑D texture onto a 3‑D surface, like flattening a paper model before painting it.
+[08:58:28] TextureSmith log       simplified to 40,000 faces
+[08:58:28] TextureSmith log       loading Hunyuan3D-Paint (first run downloads ~6GB)
+[08:58:28] vram         log       released models: hunyuan3d
+[08:58:28] vram         log       loading model: hunyuan-paint
+[08:58:31] TextureSmith log       rasterizer: compiled extension unusable on this GPU - using the pure-PyTorch fallback
+[08:59:05] TextureSmith log       cpu offload enabled - weights stream from RAM per step
+[08:59:05] vram         metric    VRAM 0.0/8.6 GB (after loading hunyuan-paint)
+[08:59:05] TextureSmith progress  painting hunyuan mesh (multiview diffusion + baking, takes minutes)
+[09:00:05] TextureSmith artifact  textured GLB exported (hunyuan mesh)
+[09:00:06] TextureSmith artifact  textured previews saved
+[09:00:06] TextureSmith status    done
+[09:00:06] Exporter     status    started
+[09:00:06] Exporter     artifact  [hunyuan] OBJ + GLB exported
+[09:00:06] Exporter     artifact  run report written
+[09:00:06] Exporter     status    done
+[09:00:06] vram         log       released models: hunyuan-paint
+[09:00:06] Orchestrator log       run complete - score 0.92 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260827_085721_upload-1787799441\output

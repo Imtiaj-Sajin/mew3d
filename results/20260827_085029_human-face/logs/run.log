@@ -1,0 +1,58 @@
+[08:50:29] Orchestrator log       run 20260827_085029_human-face starting (mode: text23d, LLM: on)
+[08:50:29] Analyst      status    started
+[08:50:29] Analyst      log       input mode: text23d | text: 'Human face'
+[08:50:32] Analyst      log       LLM responded
+[08:50:32] Analyst      decision  subject 'Human face' (character, complexity high) - Ensure to capture detailed facial features for a realistic 3D reconstruction.
+[08:50:32] Analyst      decision  pipeline plan: PromptSmith -> ImageGen -> Preprocessor -> MeshGen -> Judge -> Exporter
+[08:50:32] Analyst      status    done
+[08:50:32] PromptSmith  status    started
+[08:50:32] Narrator     narration The Analyst has just kicked off the project by reviewing the brief and pulling out the key details. This early clarification helps the whole pipeline stay on track and avoid costly re‑work later.
+[08:50:33] PromptSmith  log       LLM responded
+[08:50:33] PromptSmith  decision  LLM-enhanced prompt: 'full view of a whole human face, centered, 3/4 view, on a plain uncluttered background with even studio lighting, clear empty margin around it, no text or watermarks'
+[08:50:33] PromptSmith  status    done
+[08:50:33] ImageGen     status    started
+[08:50:34] Narrator     narration The Analyst locked in “human face” as a high‑detail character and laid out the step‑by‑step pipeline, then handed it off to PromptSmith, who’s now drafting the precise description that will guide the rest of the workflow. Capturing a face well matters because it contains thousands of tiny muscles, making it one of the trickiest subjects for realistic 3D reconstruction.
+[08:50:36] ImageGen     log       loading sd-turbo (first run downloads the model)
+[08:50:36] Narrator     narration PromptSmith finished crafting a precise, LLM‑enhanced prompt that tells the system exactly how the face should be framed, lit, and isolated. With that clear direction, ImageGen has now begun producing the reference image, which will give the later stages the clean visual data they need. Consistent studio lighting reduces shadows, making it easier to capture subtle facial contours for a realistic model.
+[08:50:41] vram         log       loading model: t2i:stabilityai/sd-turbo
+[08:50:50] vram         metric    VRAM 2.6/8.6 GB (after loading t2i:stabilityai/sd-turbo)
+[08:50:50] ImageGen     progress  generating candidate 1/3 (seed 2000617396)
+[08:50:52] ImageGen     artifact  candidate 1 saved
+[08:50:52] ImageGen     progress  generating candidate 2/3 (seed 2000617397)
+[08:50:52] ImageGen     artifact  candidate 2 saved
+[08:50:52] ImageGen     progress  generating candidate 3/3 (seed 2000617398)
+[08:50:53] ImageGen     artifact  candidate 3 saved
+[08:50:53] ImageGen     status    done
+[08:50:53] Preprocessor status    started
+[08:50:53] Preprocessor log       loading background-removal model (u2net)
+[08:50:55] Preprocessor progress  removing background 1/3
+[08:50:55] Narrator     narration ImageGen wrapped up by generating and saving three candidate reference shots, giving the crew a few clear options to choose the best facial view. The Preprocessor has now kicked in to strip the background and even out lighting, a step that can shave roughly a
+[08:50:55] Preprocessor log       candidate 1 scored 0.29 (coverage 0.81, blob 1.00, edge-cut 0.33)
+[08:50:55] Preprocessor progress  removing background 2/3
+[08:50:56] Preprocessor log       candidate 2 scored 0.38 (coverage 0.65, blob 1.00, edge-cut 0.23)
+[08:50:56] Preprocessor progress  removing background 3/3
+[08:50:56] Preprocessor log       candidate 3 scored 0.40 (coverage 0.58, blob 1.00, edge-cut 0.17)
+[08:50:58] Preprocessor log       vision LLM responded
+[08:50:58] Preprocessor log       vision critic: Background is not plain and uncluttered (vlm 7/10 -> blended 0.49)
+[08:51:01] Preprocessor log       vision LLM responded
+[08:51:01] Preprocessor log       vision critic: The bottom part of the face is cut off. (vlm 7/10 -> blended 0.16)
+[08:51:03] Preprocessor log       vision LLM responded
+[08:51:03] Preprocessor log       vision critic: none (vlm 9/10 -> blended 0.65)
+[08:51:03] Preprocessor decision  selected best candidate (score 0.65): G:\codes\mew3d\results\20260827_085029_human-face\intermediate\candidate_02_seed2000617398.png
+[08:51:03] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[08:51:03] Preprocessor status    done
+[08:51:03] MeshGen      status    started
+[08:51:03] MeshGen      log       backend: hunyuan
+[08:51:03] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[08:51:03] vram         log       released models: t2i:stabilityai/sd-turbo
+[08:51:03] vram         log       loading model: hunyuan3d
+[08:51:05] Narrator     narration The Preprocessor chose the clearest candidate shot, stripped away the background and evened the lighting, leaving a foreground that fills most of the frame. With that clean, high‑contrast image ready, MeshGen has now started building the polygonal mesh that forms the model’s shape.
+[08:51:28] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[08:51:31] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm on)
+[08:51:33] MeshGen      log       hunyuan decode failed (IndexError: min(): Expected reduction dim 0 to have non-zero size.) - degrading
+[08:51:36] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm off)
+[08:52:32] MeshGen      log       hunyuan returned an empty mesh - degrading
+[08:52:33] MeshGen      progress  hunyuan: flow-matching diffusion (octree 256, flashvdm off)
+[08:52:52] MeshGen      log       hunyuan returned an empty mesh - degrading
+[08:52:52] MeshGen      status    failed: Hunyuan3D produced no mesh after 3 attempts (last error: IndexError: min(): Expected reduction dim 0 to have non-zero size.)
+[08:52:52] Orchestrator error     run failed: RuntimeError: Hunyuan3D produced no mesh after 3 attempts (last error: IndexError: min(): Expected reduction dim 0 to have non-zero size.)

@@ -1,0 +1,64 @@
+{
+  "attempt": 2,
+  "backend": "hunyuan",
+  "score": 0.14,
+  "passed": false,
+  "metrics": {
+    "vertices": 1198,
+    "faces": 2368,
+    "watertight": true,
+    "components": 7,
+    "largest_component_fraction": 0.554,
+    "extents": [
+      0.818,
+      0.398,
+      0.094
+    ],
+    "extent_ratio": 8.67,
+    "degenerate_faces": 2
+  },
+  "issues": [
+    "low face count (2368)",
+    "fragmented: 7 pieces, main piece only 55% of faces",
+    "sliver-shaped bounding box (ratio 8.67)"
+  ],
+  "llm_opinion": "The mesh shows significant issues with geometry quality and component integrity.",
+  "vision_opinion": {
+    "looks_like_subject": false,
+    "is_flat_or_blob": true,
+    "score": 2,
+    "issue": "The 3D model lacks distinct features and resembles a shapeless blob."
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.14,
+      "issues": [
+        "low face count (2368)",
+        "fragmented: 7 pieces, main piece only 55% of faces",
+        "sliver-shaped bounding box (ratio 8.67)"
+      ],
+      "metrics": {
+        "vertices": 1198,
+        "faces": 2368,
+        "watertight": true,
+        "components": 7,
+        "largest_component_fraction": 0.554,
+        "extents": [
+          0.818,
+          0.398,
+          0.094
+        ],
+        "extent_ratio": 8.67,
+        "degenerate_faces": 2
+      },
+      "vision_opinion": {
+        "looks_like_subject": false,
+        "is_flat_or_blob": true,
+        "score": 2,
+        "issue": "The 3D model lacks distinct features and resembles a shapeless blob."
+      }
+    }
+  ]
+}

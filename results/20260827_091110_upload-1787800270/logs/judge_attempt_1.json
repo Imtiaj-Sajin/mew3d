@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "backend": "triposr",
+  "score": 0.92,
+  "passed": true,
+  "metrics": {
+    "vertices": 43270,
+    "faces": 86532,
+    "watertight": true,
+    "components": 2,
+    "largest_component_fraction": 1.0,
+    "extents": [
+      0.272,
+      1.015,
+      0.652
+    ],
+    "extent_ratio": 3.74,
+    "degenerate_faces": 10
+  },
+  "issues": [],
+  "llm_opinion": "The mesh is generally well-constructed but has a minor issue with degenerate faces.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "Some details may be less defined than in the source image."
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "triposr",
+      "score": 0.92,
+      "issues": [],
+      "metrics": {
+        "vertices": 43270,
+        "faces": 86532,
+        "watertight": true,
+        "components": 2,
+        "largest_component_fraction": 1.0,
+        "extents": [
+          0.272,
+          1.015,
+          0.652
+        ],
+        "extent_ratio": 3.74,
+        "degenerate_faces": 10
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Some details may be less defined than in the source image."
+      }
+    }
+  ]
+}

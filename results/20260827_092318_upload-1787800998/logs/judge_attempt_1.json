@@ -1,0 +1,60 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.73,
+  "passed": true,
+  "metrics": {
+    "vertices": 243150,
+    "faces": 486288,
+    "watertight": false,
+    "components": 1,
+    "largest_component_fraction": 1.0,
+    "extents": [
+      1.995,
+      1.996,
+      0.056
+    ],
+    "extent_ratio": 35.81,
+    "degenerate_faces": 4
+  },
+  "issues": [
+    "sliver-shaped bounding box (ratio 35.81)"
+  ],
+  "llm_opinion": "The mesh has a good number of vertices and faces, but the non-watertight nature raises concerns for usability.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 7,
+    "issue": "The side view lacks depth and detail."
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.73,
+      "issues": [
+        "sliver-shaped bounding box (ratio 35.81)"
+      ],
+      "metrics": {
+        "vertices": 243150,
+        "faces": 486288,
+        "watertight": false,
+        "components": 1,
+        "largest_component_fraction": 1.0,
+        "extents": [
+          1.995,
+          1.996,
+          0.056
+        ],
+        "extent_ratio": 35.81,
+        "degenerate_faces": 4
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 7,
+        "issue": "The side view lacks depth and detail."
+      }
+    }
+  ]
+}

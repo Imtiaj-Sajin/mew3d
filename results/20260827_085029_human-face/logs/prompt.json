@@ -1,0 +1,5 @@
+{
+  "original": "Human face",
+  "prompt": "full view of a whole human face, centered, 3/4 view, on a plain uncluttered background with even studio lighting, clear empty margin around it, no text or watermarks",
+  "negative_prompt": "close-up, macro, cropped"
+}

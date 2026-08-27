@@ -1,0 +1,91 @@
+[09:18:46] Orchestrator log       run 20260827_091846_upload-1787800726 starting (mode: image23d, LLM: on)
+[09:18:46] Analyst      status    started
+[09:18:46] Analyst      log       input mode: image23d | image: upload_1787800726.jpg
+[09:18:47] Analyst      log       vision LLM responded
+[09:18:47] Analyst      decision  subject 'pixel character' (character, complexity low) - Ensure to capture the pixelated style and maintain the simplicity of the character.
+[09:18:47] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[09:18:47] Analyst      status    done
+[09:18:47] Preprocessor status    started
+[09:18:47] Preprocessor log       loading background-removal model (u2net)
+[09:18:48] Preprocessor artifact  user image copied to run folder
+[09:18:48] Preprocessor progress  removing background 1/1
+[09:18:48] Preprocessor log       candidate 1 scored 0.80 (coverage 0.23, blob 0.99, edge-cut 0.00)
+[09:18:49] Narrator     narration The Analyst identified the project as a simple, low‑complexity pixel character and mapped out the workflow—Preprocessor, MeshGen, Judge, then Exporter. Starting the Preprocessor begins turning the flat pixel art into data the later steps can shape into a 3‑D model; each pixel often becomes a tiny cube, which is why pixel art converts so cleanly into low‑poly meshes.
+[09:18:49] Preprocessor log       vision LLM responded
+[09:18:49] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.90)
+[09:18:49] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[09:18:49] Preprocessor status    done
+[09:18:49] MeshGen      status    started
+[09:18:49] MeshGen      log       backend: hunyuan
+[09:18:49] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[09:18:49] vram         log       loading model: hunyuan3d
+[09:18:51] Narrator     narration The Preprocessor copied your image into the work folder, analyzed it and produced a foreground mask that’s 85 % solid, then handed the ready data to the next stage. MeshGen has now started turning that voxel map into a polygonal
+[09:19:14] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[09:19:16] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm on)
+[09:19:19] MeshGen      log       hunyuan decode failed (IndexError: min(): Expected reduction dim 0 to have non-zero size.) - degrading
+[09:19:21] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm off)
+[09:20:18] MeshGen      progress  hunyuan: rendering clay preview views
+[09:20:18] MeshGen      artifact  hunyuan clay previews saved
+[09:20:18] MeshGen      log       hunyuan: 870 vertices, 1,720 faces
+[09:20:18] MeshGen      status    done
+[09:20:18] Judge        status    started
+[09:20:18] Judge        log       [hunyuan] 1,720 faces, 5 components, watertight=True, extent ratio 12.56
+[09:20:18] Judge        log       [hunyuan] concern: very low face count (1720)
+[09:20:18] Judge        log       [hunyuan] concern: fragmented: 5 pieces, main piece only 68% of faces
+[09:20:18] Judge        log       [hunyuan] concern: sliver-shaped bounding box (ratio 12.56)
+[09:20:20] Judge        log       LLM responded
+[09:20:20] Judge        log       [hunyuan] LLM second opinion: The mesh quality is poor and requires significant improvement.
+[09:20:21] Narrator     narration The MeshGen step wrapped up, turning the voxel data into a full polygon mesh and saving a quick “clay” preview so the team can spot any glaring shape issues at a glance. Now the Judge has kicked off, ready to run quality checks and confirm the model meets the project’s standards. Those clay previews act like a rough sculpture—fast to render but still showing the overall form.
+[09:20:22] Judge        log       vision LLM responded
+[09:20:22] Judge        log       [hunyuan] vision check FAILED: The 3D model lacks distinct features and does not capture the character's shape. - score slashed to 0.017
+[09:20:22] Judge        decision  score 0.02 < 0.55 - requesting retry with {'foreground_ratio': 0.75, 'mc_resolution': 320}
+[09:20:22] Judge        status    done
+[09:20:22] Orchestrator log       --- retry: attempt 2/2 with adjustments {'foreground_ratio': 0.75, 'mc_resolution': 320} ---
+[09:20:22] Preprocessor status    started
+[09:20:22] Preprocessor progress  removing background 1/1
+[09:20:22] Preprocessor log       candidate 1 scored 0.80 (coverage 0.23, blob 0.99, edge-cut 0.00)
+[09:20:23] Preprocessor log       vision LLM responded
+[09:20:23] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.90)
+[09:20:23] Preprocessor artifact  processed input ready (foreground ratio 0.75)
+[09:20:23] Preprocessor status    done
+[09:20:23] MeshGen      status    started
+[09:20:23] MeshGen      log       backend: hunyuan
+[09:20:23] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[09:20:24] Narrator     narration The Judge flagged the first mesh as too low‑quality and instructed the Preprocessor to redo the voxel extraction with a higher foreground ratio and a finer 320‑pixel resolution. The Preprocessor regenerated the data and passed it on, and MeshGen has now started rebuilding the polygon mesh from this richer voxel map. Using a higher voxel resolution lets the model capture finer shape nuances, reducing blocky artifacts.
+[09:20:24] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm on)
+[09:20:27] MeshGen      log       hunyuan decode failed (IndexError: min(): Expected reduction dim 0 to have non-zero size.) - degrading
+[09:20:28] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm off)
+[09:21:26] MeshGen      progress  hunyuan: rendering clay preview views
+[09:21:26] MeshGen      artifact  hunyuan clay previews saved
+[09:21:26] MeshGen      log       hunyuan: 1,198 vertices, 2,368 faces
+[09:21:26] MeshGen      status    done
+[09:21:26] Judge        status    started
+[09:21:26] Judge        log       [hunyuan] 2,368 faces, 7 components, watertight=True, extent ratio 8.67
+[09:21:26] Judge        log       [hunyuan] concern: low face count (2368)
+[09:21:26] Judge        log       [hunyuan] concern: fragmented: 7 pieces, main piece only 55% of faces
+[09:21:26] Judge        log       [hunyuan] concern: sliver-shaped bounding box (ratio 8.67)
+[09:21:27] Judge        log       LLM responded
+[09:21:27] Judge        log       [hunyuan] LLM second opinion: The mesh shows significant issues with geometry quality and component integrity.
+[09:21:29] Narrator     narration The refined polygon mesh is now complete and a fresh clay‑style preview has been saved for a quick visual sanity check. The Judge has kicked off its automated quality assessment to verify the new model meets the required standards. Clay previews act as low‑poly stand‑ins, letting the team spot major geometry problems before committing to heavier processing.
+[09:21:29] Judge        log       vision LLM responded
+[09:21:29] Judge        log       [hunyuan] vision check FAILED: The 3D model lacks distinct features and resembles a shapeless blob. - score slashed to 0.14
+[09:21:29] Judge        decision  score 0.14 - accepting best effort (no retries left)
+[09:21:29] Judge        status    done
+[09:21:29] TextureSmith status    started
+[09:21:29] TextureSmith log       loading Hunyuan3D-Paint (first run downloads ~6GB)
+[09:21:29] vram         log       released models: hunyuan3d
+[09:21:29] vram         log       loading model: hunyuan-paint
+[09:21:29] TextureSmith log       rasterizer: compiled extension unusable on this GPU - using the pure-PyTorch fallback
+[09:21:31] Narrator     narration The Judge finished its quality sweep, gave the model a modest score but approved it as the best effort since no more retries remain. Now TextureSmith is moving in to wrap the mesh with surface details, which will give the object realistic color, bump and reflectivity. A single texture map can store millions of color values, letting a low‑poly mesh look as rich as a high‑poly sculpture.
+[09:22:02] TextureSmith log       cpu offload enabled - weights stream from RAM per step
+[09:22:02] vram         metric    VRAM 0.0/8.6 GB (after loading hunyuan-paint)
+[09:22:02] TextureSmith progress  painting hunyuan mesh (multiview diffusion + baking, takes minutes)
+[09:22:44] TextureSmith artifact  textured GLB exported (hunyuan mesh)
+[09:22:45] TextureSmith artifact  textured previews saved
+[09:22:45] TextureSmith status    done
+[09:22:45] Exporter     status    started
+[09:22:45] Exporter     artifact  [hunyuan] OBJ + GLB exported
+[09:22:45] Exporter     artifact  run report written
+[09:22:45] Exporter     status    done
+[09:22:45] vram         log       released models: hunyuan-paint
+[09:22:45] Orchestrator log       run complete - score 0.14 after 2 attempt(s); outputs in G:\codes\mew3d\results\20260827_091846_upload-1787800726\output

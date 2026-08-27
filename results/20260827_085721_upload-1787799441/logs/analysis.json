@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "blue spinner",
+  "category": "prop",
+  "single_object": true,
+  "complexity": "low",
+  "advice": "Ensure the spinner is well-lit and centered in the frame for accurate reconstruction."
+}

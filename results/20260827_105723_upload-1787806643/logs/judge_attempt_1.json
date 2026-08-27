@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.92,
+  "passed": true,
+  "metrics": {
+    "vertices": 495200,
+    "faces": 990396,
+    "watertight": true,
+    "components": 1,
+    "largest_component_fraction": 1.0,
+    "extents": [
+      1.996,
+      1.755,
+      1.421
+    ],
+    "extent_ratio": 1.4,
+    "degenerate_faces": 354
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is high with a solid structure, but the presence of degenerate faces is a concern.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "Minor inaccuracies in button placement and proportions"
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.92,
+      "issues": [],
+      "metrics": {
+        "vertices": 495200,
+        "faces": 990396,
+        "watertight": true,
+        "components": 1,
+        "largest_component_fraction": 1.0,
+        "extents": [
+          1.996,
+          1.755,
+          1.421
+        ],
+        "extent_ratio": 1.4,
+        "degenerate_faces": 354
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Minor inaccuracies in button placement and proportions"
+      }
+    }
+  ]
+}

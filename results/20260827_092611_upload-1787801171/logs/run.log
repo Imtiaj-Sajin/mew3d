@@ -1,0 +1,75 @@
+[09:26:11] Orchestrator log       run 20260827_092611_upload-1787801171 starting (mode: image23d, LLM: on)
+[09:26:11] Analyst      status    started
+[09:26:11] Analyst      log       input mode: image23d | image: upload_1787801171.jpg
+[09:26:12] Analyst      log       vision LLM responded
+[09:26:12] Analyst      decision  subject 'dragon' (character, complexity medium) - Ensure to capture the details of the facial features and scales for a more dynamic reconstruction.
+[09:26:12] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[09:26:12] Analyst      status    done
+[09:26:12] Orchestrator log       compare mode: retries disabled (one clean pass per backend)
+[09:26:12] Preprocessor status    started
+[09:26:12] Preprocessor log       loading background-removal model (u2net)
+[09:26:13] Preprocessor artifact  user image copied to run folder
+[09:26:13] Preprocessor progress  removing background 1/1
+[09:26:14] Preprocessor log       candidate 1 scored 0.86 (coverage 0.42, blob 1.00, edge-cut 0.00)
+[09:26:14] Narrator     narration The Analyst scoped the project as a medium‑complexity dragon, flagging the need for expressive facial features and detailed scales, and set up the workflow from preprocessing through to export. Now the Preprocessor is beginning to clean and structure the input so the later stages can build a high‑quality model—did you know that using normal maps to mimic scale textures can add realistic depth without extra geometry?
+[09:26:15] Preprocessor log       vision LLM responded
+[09:26:15] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.93)
+[09:26:15] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[09:26:15] Preprocessor status    done
+[09:26:15] MeshGen      status    started
+[09:26:15] MeshGen      log       backend: triposr
+[09:26:15] vram         log       loading model: triposr
+[09:26:17] Narrator     narration The Preprocessor copied your reference image, cleaned it up and confirmed that 85 % of the frame is the subject, giving the next step a clear silhouette to work from. With that ready, MeshGen has now kicked off building the dragon’s 3D shape. A high foreground
+[09:26:22] vram         metric    VRAM 1.7/8.6 GB (after loading triposr)
+[09:26:22] MeshGen      progress  triposr: encoding image into scene codes
+[09:26:22] MeshGen      progress  triposr: rendering 4 preview views
+[09:26:26] MeshGen      artifact  triposr turntable gif saved
+[09:26:26] MeshGen      progress  triposr: extracting mesh (marching cubes @ 256^3)
+[09:26:28] MeshGen      log       triposr: 61,879 vertices, 123,746 faces
+[09:26:28] MeshGen      log       backend: hunyuan
+[09:26:28] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[09:26:28] vram         log       released models: triposr
+[09:26:28] vram         log       loading model: hunyuan3d
+[09:26:28] Narrator     narration MeshGen wrapped up the dragon’s shape and exported a quick turntable GIF so you can spin the model and spot any issues from every angle. Seeing the model rotate is a fast way to catch geometry problems before moving on to texturing. Fun fact: artists often use turntable animations to showcase 3D work in online portfolios.
+[09:26:52] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[09:26:54] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm on)
+[09:27:00] MeshGen      progress  hunyuan: rendering clay preview views
+[09:27:22] MeshGen      artifact  hunyuan clay previews saved
+[09:27:22] MeshGen      log       hunyuan: 584,398 vertices, 1,168,504 faces
+[09:27:22] MeshGen      status    done
+[09:27:22] Judge        status    started
+[09:27:22] Judge        log       [triposr] 123,746 faces, 5 components, watertight=True, extent ratio 1.29
+[09:27:24] Judge        log       LLM responded
+[09:27:24] Judge        log       [triposr] LLM second opinion: The mesh is generally well-constructed with a high heuristic score, but the presence of degenerate faces and multiple components raises concerns about overall quality.
+[09:27:25] Narrator     narration MeshGen has finished the sculpting phase, saving a set of quick “clay” previews that let us see the basic form before any detail is added. With the raw shape locked down, the Judge is now stepping in to spot any geometry issues early, which helps keep the later texturing and export stages on track. A handy tip: early‑stage silhouette checks can catch proportion errors that are much harder to fix later.
+[09:27:25] Judge        log       vision LLM responded
+[09:27:25] Judge        log       [triposr] vision check: looks like 'dragon', 7/10 (Some details are less defined in certain views.)
+[09:27:27] Judge        log       [hunyuan] 1,168,504 faces, 38 components, watertight=False, extent ratio 1.04
+[09:27:28] Judge        log       LLM responded
+[09:27:28] Judge        log       [hunyuan] LLM second opinion: The mesh quality is high overall, but significant concerns regarding watertightness and the presence of degenerate faces remain.
+[09:27:30] Judge        log       vision LLM responded
+[09:27:30] Judge        log       [hunyuan] vision check: looks like 'dragon', 8/10 (Some details are less defined in certain views.)
+[09:27:30] Judge        decision  backend comparison: hunyuan 0.89 | triposr 0.88 -> winner: hunyuan
+[09:27:30] Judge        decision  score 0.89 - PASS
+[09:27:30] Judge        status    done
+[09:27:30] TextureSmith status    started
+[09:27:30] TextureSmith progress  simplifying mesh for texturing: 1,168,504 -> ~40,000 faces
+[09:27:33] Narrator     narration The Judge compared the two geometry candidates, gave the hunyuan version a 0.89 score and marked it as a pass, so the model is cleared for the next stage. Now TextureSmith is beginning to paint surface details, which will bring realistic color and material properties to the dragon. Fun fact:
+[09:27:47] TextureSmith log       simplified to 40,000 faces
+[09:27:47] TextureSmith log       loading Hunyuan3D-Paint (first run downloads ~6GB)
+[09:27:47] vram         log       released models: hunyuan3d
+[09:27:47] vram         log       loading model: hunyuan-paint
+[09:27:47] TextureSmith log       rasterizer: compiled extension unusable on this GPU - using the pure-PyTorch fallback
+[09:28:20] TextureSmith log       cpu offload enabled - weights stream from RAM per step
+[09:28:20] vram         metric    VRAM 0.0/8.6 GB (after loading hunyuan-paint)
+[09:28:20] TextureSmith progress  painting hunyuan mesh (multiview diffusion + baking, takes minutes)
+[09:29:12] TextureSmith artifact  textured GLB exported (hunyuan mesh)
+[09:29:12] TextureSmith artifact  textured previews saved
+[09:29:12] TextureSmith status    done
+[09:29:12] Exporter     status    started
+[09:29:13] Exporter     artifact  [triposr] OBJ + GLB exported
+[09:29:14] Exporter     artifact  [hunyuan] OBJ + GLB exported <- WINNER
+[09:29:14] Exporter     artifact  run report written
+[09:29:14] Exporter     status    done
+[09:29:14] vram         log       released models: hunyuan-paint
+[09:29:14] Orchestrator log       run complete - score 0.89 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260827_092611_upload-1787801171\output

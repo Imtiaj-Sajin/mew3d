@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "jacket",
+  "category": "clothing",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure the jacket is well-lit and avoid cropping any parts to capture its full shape."
+}

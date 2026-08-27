@@ -1,0 +1,60 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.73,
+  "passed": true,
+  "metrics": {
+    "vertices": 258687,
+    "faces": 517384,
+    "watertight": false,
+    "components": 6,
+    "largest_component_fraction": 1.0,
+    "extents": [
+      1.679,
+      1.999,
+      0.277
+    ],
+    "extent_ratio": 7.22,
+    "degenerate_faces": 137
+  },
+  "issues": [
+    "sliver-shaped bounding box (ratio 7.22)"
+  ],
+  "llm_opinion": "The mesh shows good geometric complexity but is not watertight and has degenerate faces, which may affect its usability.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 7,
+    "issue": "Some areas lack detail, particularly in the sleeves and overall fabric texture."
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.73,
+      "issues": [
+        "sliver-shaped bounding box (ratio 7.22)"
+      ],
+      "metrics": {
+        "vertices": 258687,
+        "faces": 517384,
+        "watertight": false,
+        "components": 6,
+        "largest_component_fraction": 1.0,
+        "extents": [
+          1.679,
+          1.999,
+          0.277
+        ],
+        "extent_ratio": 7.22,
+        "degenerate_faces": 137
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 7,
+        "issue": "Some areas lack detail, particularly in the sleeves and overall fabric texture."
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "mode": "text23d",
+  "pipeline": [
+    "PromptSmith",
+    "ImageGen",
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "Human face",
+  "category": "character",
+  "single_object": true,
+  "complexity": "high",
+  "advice": "Ensure to capture detailed facial features for a realistic 3D reconstruction."
+}

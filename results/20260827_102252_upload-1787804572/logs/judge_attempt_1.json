@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.85,
+  "passed": true,
+  "metrics": {
+    "vertices": 572661,
+    "faces": 1145732,
+    "watertight": false,
+    "components": 26,
+    "largest_component_fraction": 0.986,
+    "extents": [
+      1.175,
+      2.0,
+      0.904
+    ],
+    "extent_ratio": 2.21,
+    "degenerate_faces": 446
+  },
+  "issues": [],
+  "llm_opinion": "The mesh is largely detailed but has significant issues with non-watertightness and multiple components.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 7,
+    "issue": "Some details, particularly in the hair and cloak, lack definition."
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.85,
+      "issues": [],
+      "metrics": {
+        "vertices": 572661,
+        "faces": 1145732,
+        "watertight": false,
+        "components": 26,
+        "largest_component_fraction": 0.986,
+        "extents": [
+          1.175,
+          2.0,
+          0.904
+        ],
+        "extent_ratio": 2.21,
+        "degenerate_faces": 446
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 7,
+        "issue": "Some details, particularly in the hair and cloak, lack definition."
+      }
+    }
+  ]
+}

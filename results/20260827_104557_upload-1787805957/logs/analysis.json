@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "headphones",
+  "category": "prop",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure to capture the texture of the ear cushions and the details of the headband for a realistic reconstruction."
+}

@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "letter G",
+  "category": "abstract",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure to capture the gradient and translucency of the material for a realistic effect."
+}

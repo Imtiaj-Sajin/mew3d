@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "pixelated cat",
+  "category": "character",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure to capture the pixelated texture and vibrant background for an authentic retro look."
+}

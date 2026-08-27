@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "donut",
+  "category": "food",
+  "single_object": true,
+  "complexity": "low",
+  "advice": "Ensure to capture the texture of the frosting and sprinkles for a realistic finish."
+}

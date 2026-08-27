@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.85,
+  "passed": true,
+  "metrics": {
+    "vertices": 425311,
+    "faces": 850628,
+    "watertight": false,
+    "components": 2,
+    "largest_component_fraction": 1.0,
+    "extents": [
+      1.143,
+      1.994,
+      1.92
+    ],
+    "extent_ratio": 1.74,
+    "degenerate_faces": 411
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is high but concerns about watertightness and degenerate faces need to be addressed.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 7,
+    "issue": "Some details are missing, particularly in the earcup shape."
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.85,
+      "issues": [],
+      "metrics": {
+        "vertices": 425311,
+        "faces": 850628,
+        "watertight": false,
+        "components": 2,
+        "largest_component_fraction": 1.0,
+        "extents": [
+          1.143,
+          1.994,
+          1.92
+        ],
+        "extent_ratio": 1.74,
+        "degenerate_faces": 411
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 7,
+        "issue": "Some details are missing, particularly in the earcup shape."
+      }
+    }
+  ]
+}

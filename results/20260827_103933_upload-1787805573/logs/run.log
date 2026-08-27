@@ -1,0 +1,58 @@
+[10:39:33] Orchestrator log       run 20260827_103933_upload-1787805573 starting (mode: image23d, LLM: on)
+[10:39:33] Analyst      status    started
+[10:39:33] Analyst      log       input mode: image23d | image: upload_1787805573.png
+[10:39:35] Analyst      log       vision LLM responded
+[10:39:35] Analyst      decision  subject 'car' (vehicle, complexity high) - Ensure to capture the sleek design and unique color accents for accurate reconstruction.
+[10:39:35] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[10:39:35] Analyst      status    done
+[10:39:35] Preprocessor status    started
+[10:39:35] Preprocessor log       loading background-removal model (u2net)
+[10:39:36] Narrator     narration The Analyst has just started reviewing the new request, gathering the details that will guide the whole 3D‑creation process. A solid analysis can cut production time by up to 30% because the team knows exactly what to build from the start.
+[10:39:36] Preprocessor artifact  user image copied to run folder
+[10:39:36] Preprocessor progress  removing background 1/1
+[10:39:36] Preprocessor log       candidate 1 scored 0.85 (coverage 0.27, blob 1.00, edge-cut 0.00)
+[10:39:37] Preprocessor log       vision LLM responded
+[10:39:37] Preprocessor log       vision critic: none (vlm 9/10 -> blended 0.88)
+[10:39:37] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[10:39:37] Preprocessor status    done
+[10:39:37] MeshGen      status    started
+[10:39:37] MeshGen      log       backend: hunyuan
+[10:39:37] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[10:39:37] vram         log       loading model: hunyuan3d
+[10:39:38] Narrator     narration The crew has confirmed the project is a high‑detail car, set the workflow to run from preprocessing the reference image through mesh generation, judging, and finally exporting the model. Starting the preprocessor now ensures the image data is clean and ready, which is crucial because capturing a car’s smooth curves often requires thousands of polygons for a realistic mesh.
+[10:39:41] Narrator     narration The preprocessor finished cleaning the reference, confirming that 85 % of the image is the car itself, which gives the mesh generator a strong, focused source to work from. MeshGen has now kicked off, turning that cleaned data into a polygonal shape; a detailed car model often starts with tens of thousands of polygons to capture its curves accurately. This early clean‑up step can shave hours off the modeling phase.
+[10:40:02] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[10:40:04] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm on)
+[10:40:09] MeshGen      progress  hunyuan: rendering clay preview views
+[10:40:19] MeshGen      artifact  hunyuan clay previews saved
+[10:40:19] MeshGen      log       hunyuan: 284,229 vertices, 568,456 faces
+[10:40:19] MeshGen      status    done
+[10:40:19] Judge        status    started
+[10:40:20] Judge        log       [hunyuan] 568,456 faces, 2 components, watertight=False, extent ratio 2.87
+[10:40:21] Judge        log       LLM responded
+[10:40:21] Judge        log       [hunyuan] LLM second opinion: The mesh quality is high, but it is not watertight and has some degenerate faces.
+[10:40:22] Narrator     narration The mesh generator wrapped up the car’s geometry and stored clay‑preview renders, giving the team an instant visual check of the model’s basic shape. Now the Judge has started evaluating the model for accuracy, and a quick clay preview can cut later revisions by up to 50 %.
+[10:40:23] Judge        log       vision LLM responded
+[10:40:23] Judge        log       [hunyuan] vision check: looks like 'car', 7/10 (Some details are simplified or missing.)
+[10:40:23] Judge        decision  score 0.85 - PASS
+[10:40:23] Judge        status    done
+[10:40:23] TextureSmith status    started
+[10:40:23] TextureSmith progress  simplifying mesh for texturing: 568,456 -> ~40,000 faces
+[10:40:25] Narrator     narration The Judge gave the car model a solid 0.85 score, confirming it meets the quality standards before moving on. Now TextureSmith is beginning to paint the surface, adding realistic colors and material details that make the model look lifelike without needing extra geometry. A well‑crafted texture map can convey fine surface features while keeping the polygon count low.
+[10:40:31] TextureSmith log       simplified to 40,000 faces
+[10:40:31] TextureSmith log       loading Hunyuan3D-Paint (first run downloads ~6GB)
+[10:40:31] vram         log       released models: hunyuan3d
+[10:40:31] vram         log       loading model: hunyuan-paint
+[10:40:31] TextureSmith log       rasterizer: compiled extension unusable on this GPU - using the pure-PyTorch fallback
+[10:41:04] TextureSmith log       cpu offload enabled - weights stream from RAM per step
+[10:41:04] vram         metric    VRAM 0.0/8.6 GB (after loading hunyuan-paint)
+[10:41:04] TextureSmith progress  painting hunyuan mesh (multiview diffusion + baking, takes minutes)
+[10:41:56] TextureSmith artifact  textured GLB exported (hunyuan mesh)
+[10:41:56] TextureSmith artifact  textured previews saved
+[10:41:56] TextureSmith status    done
+[10:41:56] Exporter     status    started
+[10:41:57] Exporter     artifact  [hunyuan] OBJ + GLB exported
+[10:41:57] Exporter     artifact  run report written
+[10:41:57] Exporter     status    done
+[10:41:57] vram         log       released models: hunyuan-paint
+[10:41:57] Orchestrator log       run complete - score 0.85 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260827_103933_upload-1787805573\output

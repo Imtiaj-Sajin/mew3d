@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "car",
+  "category": "vehicle",
+  "single_object": true,
+  "complexity": "high",
+  "advice": "Ensure to capture the sleek design and unique color accents for accurate reconstruction."
+}

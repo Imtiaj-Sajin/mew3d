@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "pixel character",
+  "category": "character",
+  "single_object": true,
+  "complexity": "low",
+  "advice": "Ensure to capture the pixelated style and maintain the simplicity of the character."
+}

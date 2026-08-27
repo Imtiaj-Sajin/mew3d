@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "cartoon monster",
+  "category": "character",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure to capture the texture details of the fur and the character's facial features for a more lifelike representation."
+}

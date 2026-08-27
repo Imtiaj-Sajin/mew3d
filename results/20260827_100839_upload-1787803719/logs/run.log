@@ -1,0 +1,58 @@
+[10:08:39] Orchestrator log       run 20260827_100839_upload-1787803719 starting (mode: image23d, LLM: on)
+[10:08:39] Analyst      status    started
+[10:08:39] Analyst      log       input mode: image23d | image: upload_1787803719.jpg
+[10:08:40] Analyst      log       vision LLM responded
+[10:08:40] Analyst      decision  subject 'stylized doll' (character, complexity medium) - Ensure to capture the smooth surfaces and simple shapes for accurate reconstruction.
+[10:08:40] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[10:08:40] Analyst      status    done
+[10:08:40] Preprocessor status    started
+[10:08:40] Preprocessor log       loading background-removal model (u2net)
+[10:08:41] Preprocessor artifact  user image copied to run folder
+[10:08:41] Preprocessor progress  removing background 1/1
+[10:08:41] Narrator     narration The Analyst has just kicked off, reviewing the input to understand what you want to create. This early analysis helps the whole pipeline stay on track, ensuring the final 3D model matches the original idea.
+[10:08:41] Preprocessor log       candidate 1 scored 0.89 (coverage 0.33, blob 1.00, edge-cut 0.00)
+[10:08:43] Preprocessor log       vision LLM responded
+[10:08:43] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.95)
+[10:08:43] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[10:08:43] Preprocessor status    done
+[10:08:43] MeshGen      status    started
+[10:08:43] MeshGen      log       backend: hunyuan
+[10:08:43] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[10:08:43] vram         log       loading model: hunyuan3d
+[10:08:44] Narrator     narration The Analyst locked in “stylized doll” as the subject and laid out the workflow, then the Preprocessor kicked off by copying your reference image into the run folder so the next stages have the right source material. This early organization keeps the pipeline efficient and helps preserve the doll’s smooth, simple geometry. (Stylized characters typically use fewer polygons to maintain clean, flowing shapes.)
+[10:08:47] Narrator     narration The Preprocessor finished scanning the reference and reported that about 85 % of the image is foreground, giving MeshGen a clear signal of where the doll’s shape resides. With that information, MeshGen has now begun turning the 2‑D silhouette into a low‑poly 3‑D mesh, which keeps the model lightweight and ready for stylized rendering. A high foreground ratio often lets the generator allocate polygons more efficiently,
+[10:09:08] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[10:09:10] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm on)
+[10:09:15] MeshGen      progress  hunyuan: rendering clay preview views
+[10:09:26] MeshGen      artifact  hunyuan clay previews saved
+[10:09:26] MeshGen      log       hunyuan: 288,386 vertices, 576,768 faces
+[10:09:26] MeshGen      status    done
+[10:09:26] Judge        status    started
+[10:09:26] Judge        log       [hunyuan] 576,768 faces, 1 components, watertight=True, extent ratio 2.12
+[10:09:28] Judge        log       LLM responded
+[10:09:28] Judge        log       [hunyuan] LLM second opinion: The mesh is well-constructed with a high heuristic score, but the presence of degenerate faces raises some concerns.
+[10:09:28] Narrator     narration MeshGen finished building the doll’s low‑poly shape and saved a quick “clay” preview so you can see the silhouette before any details are added. Now the Judge has started checking the mesh for errors like non‑manifold edges, which helps catch problems early and keep the model clean. A clay preview is like a rough sketch in 3‑D, letting artists spot proportion issues right away.
+[10:09:29] Judge        log       vision LLM responded
+[10:09:29] Judge        log       [hunyuan] vision check: looks like 'stylized doll', 9/10 (none)
+[10:09:29] Judge        decision  score 0.96 - PASS
+[10:09:29] Judge        status    done
+[10:09:29] TextureSmith status    started
+[10:09:29] TextureSmith progress  simplifying mesh for texturing: 576,768 -> ~40,000 faces
+[10:09:32] Narrator     narration The Judge gave the mesh a 0.96 pass, confirming the geometry meets our quality standards. Now TextureSmith is kicking off to paint the surface, adding color and material details that bring the doll to life. A single texture map can store both color and normal information, letting you simulate fine bumps without adding extra polygons.
+[10:09:37] TextureSmith log       simplified to 40,000 faces
+[10:09:37] TextureSmith log       loading Hunyuan3D-Paint (first run downloads ~6GB)
+[10:09:37] vram         log       released models: hunyuan3d
+[10:09:37] vram         log       loading model: hunyuan-paint
+[10:09:37] TextureSmith log       rasterizer: compiled extension unusable on this GPU - using the pure-PyTorch fallback
+[10:10:10] TextureSmith log       cpu offload enabled - weights stream from RAM per step
+[10:10:10] vram         metric    VRAM 0.0/8.6 GB (after loading hunyuan-paint)
+[10:10:10] TextureSmith progress  painting hunyuan mesh (multiview diffusion + baking, takes minutes)
+[10:10:57] TextureSmith artifact  textured GLB exported (hunyuan mesh)
+[10:10:57] TextureSmith artifact  textured previews saved
+[10:10:57] TextureSmith status    done
+[10:10:57] Exporter     status    started
+[10:10:58] Exporter     artifact  [hunyuan] OBJ + GLB exported
+[10:10:58] Exporter     artifact  run report written
+[10:10:58] Exporter     status    done
+[10:10:58] vram         log       released models: hunyuan-paint
+[10:10:58] Orchestrator log       run complete - score 0.96 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260827_100839_upload-1787803719\output
