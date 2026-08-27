@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "young man",
+  "category": "character",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure to capture facial details and hair texture for a realistic representation."
+}

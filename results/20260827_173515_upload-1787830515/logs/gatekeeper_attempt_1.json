@@ -1,0 +1,15 @@
+{
+  "proceed": false,
+  "problem": "cut_off",
+  "attempt": 1,
+  "vision": {
+    "proceed": true,
+    "matches_request": true,
+    "problem": "none",
+    "confidence": 9,
+    "advice": "The image clearly depicts a young man and is suitable for reconstruction."
+  },
+  "recovery": {
+    "foreground_ratio": 0.65
+  }
+}

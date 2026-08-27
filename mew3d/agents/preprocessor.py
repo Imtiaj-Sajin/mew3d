@@ -61,10 +61,18 @@ def score_candidate(rgba: Image.Image) -> dict:
         blob_score = float(sizes.max() / max(1.0, sizes.sum()))
     else:
         blob_score = 0.0
-    # frame-edge contact: an object touching the border is cut off -> unreconstructable
-    border = np.concatenate([alpha[0, :], alpha[-1, :], alpha[:, 0], alpha[:, -1]])
-    border_contact = float((border > 0.5).mean())
-    border_score = max(0.0, 1.0 - border_contact * 12.0)
+    # Frame-edge contact. Which edge matters: a bust, a standing figure or anything
+    # resting on the ground legitimately fills the bottom edge, so only contact at the
+    # top and sides really means the subject is clipped.
+    edges = {
+        "top": float((alpha[0, :] > 0.5).mean()),
+        "bottom": float((alpha[-1, :] > 0.5).mean()),
+        "left": float((alpha[:, 0] > 0.5).mean()),
+        "right": float((alpha[:, -1] > 0.5).mean()),
+    }
+    border_contact = float(np.mean(list(edges.values())))
+    clipping = max(edges["top"], edges["left"], edges["right"])
+    border_score = max(0.0, 1.0 - clipping * 3.0)
     total = (
         0.3 * coverage_score
         + 0.1 * sharpness_score
@@ -77,6 +85,10 @@ def score_candidate(rgba: Image.Image) -> dict:
         "sharpness_score": round(sharpness_score, 3),
         "blob_score": round(blob_score, 3),
         "border_contact": round(border_contact, 3),
+        "edge_top": round(edges["top"], 3),
+        "edge_bottom": round(edges["bottom"], 3),
+        "edge_sides": round(max(edges["left"], edges["right"]), 3),
+        "clipping": round(clipping, 3),
         "border_score": round(border_score, 3),
         "total": round(total, 3),
     }

@@ -1,0 +1,12 @@
+{
+  "original": "red apple",
+  "prompt": "full view of a whole red apple on a plain background",
+  "variants": [
+    "full view of a whole red apple on a plain background",
+    "full view of a whole red apple with a glossy finish, slightly tilted to show its curvature",
+    "full view of a whole red apple with a matte texture, centered and slightly elevated for depth",
+    "full view of a whole red apple with small water droplets on its surface, in a 3/4 angle",
+    "full view of a whole red apple with a rustic look and slight blemishes, placed on a neutral background"
+  ],
+  "negative_prompt": "close-up, macro, cropped"
+}

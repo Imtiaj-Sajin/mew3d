@@ -138,11 +138,12 @@ class GatekeeperAgent(Agent):
         path = self.ctx.state.get("processed_image_path")
         scores = self.ctx.state.get("candidate_scores", {})
 
-        # cheap geometric checks first - no LLM needed to spot an empty or clipped cutout
+        # Cheap geometric checks first. Only the top and side edges indicate real
+        # clipping - a bust or a standing figure fills the bottom edge by nature.
         hard_problem = None
-        if scores.get("border_contact", 0) > 0.06:
+        if scores.get("clipping", 0) > 0.35:
             hard_problem = "cut_off"
-        elif scores.get("coverage", 1) < 0.05:
+        elif scores.get("coverage", 1) < 0.03:
             hard_problem = "tiny_subject"
 
         view = None
@@ -164,10 +165,43 @@ class GatekeeperAgent(Agent):
             if not self.llm.usable:
                 self.log("vision check unavailable - using geometric checks only")
 
+        confidence = (view or {}).get("confidence")
         if hard_problem and proceed:
-            # trust the measurement over the model when the geometry is clearly bad
-            proceed, problem = False, hard_problem
-            self.log(f"geometry disagrees with the vision check: {hard_problem}")
+            # Measurement and vision disagree. Neither is authoritative: the metric knows
+            # nothing about what the subject is, and the model can miss a clipped edge.
+            # Rather than one silently overruling the other, put it to the operator -
+            # unless the vision check is confident, in which case defer to it.
+            confident = isinstance(confidence, (int, float)) and confidence >= 8
+            if confident:
+                self.log(f"geometry flagged '{hard_problem}' but the vision check is "
+                         f"confident ({confidence}/10) - trusting it and continuing")
+            else:
+                choice = self.ctx.ask(
+                    self.name,
+                    f"The measurements suggest the subject may be {hard_problem.replace('_', ' ')}, "
+                    f"but the vision check thinks it is fine"
+                    + (f" ({confidence}/10)" if confidence is not None else "")
+                    + ". Reconstruct it anyway?",
+                    options=[
+                        {"value": "continue", "label": "Reconstruct it", "primary": True},
+                        {"value": "retry", "label": "Re-prepare the image"},
+                        {"value": "stop", "label": "Stop the run"},
+                    ],
+                    default="continue",
+                    images=[path],
+                )
+                if choice == "stop":
+                    proceed, problem = False, hard_problem
+                    verdict = {"proceed": False, "problem": problem, "attempt": attempt,
+                               "vision": view, "recovery": {}, "fatal": True,
+                               "asked": True}
+                    self.ctx.state.setdefault("gate_verdicts", []).append(verdict)
+                    self.ctx.save_json(f"logs/gatekeeper_attempt_{attempt}.json", verdict)
+                    return verdict
+                if choice == "retry" and attempts_left > 0:
+                    proceed, problem = False, hard_problem
+                else:
+                    proceed, problem = True, "none"
 
         verdict = {"proceed": proceed, "problem": problem, "attempt": attempt,
                    "vision": view, "recovery": {}}
@@ -183,12 +217,32 @@ class GatekeeperAgent(Agent):
                 problem=problem, recovery=recovery,
             )
         else:
-            verdict["fatal"] = True
-            self.decision(
-                f"stopping the run: {problem}. Reconstructing this would waste GPU time "
-                "for a result that cannot match the request.",
-                problem=problem,
+            advice = (view or {}).get("advice") or ""
+            choice = self.ctx.ask(
+                self.name,
+                f"I would stop here: the prepared image looks {problem.replace('_', ' ')}"
+                + (f" - {advice}" if advice else "")
+                + ". Reconstruction takes a few minutes of GPU time and probably will not "
+                  "match your request. Build it anyway?",
+                options=[
+                    {"value": "stop", "label": "Stop (recommended)", "primary": True},
+                    {"value": "continue", "label": "Build it anyway"},
+                ],
+                default="stop",
+                images=[path],
             )
+            if choice == "continue":
+                verdict["proceed"] = True
+                verdict["problem"] = "none"
+                verdict["overridden"] = True
+                self.decision("you chose to build it anyway - continuing to MeshGen")
+            else:
+                verdict["fatal"] = True
+                self.decision(
+                    f"stopping the run: {problem}. Reconstructing this would waste GPU "
+                    "time for a result that cannot match the request.",
+                    problem=problem,
+                )
 
         self.ctx.state.setdefault("gate_verdicts", []).append(verdict)
         self.ctx.save_json(f"logs/gatekeeper_attempt_{attempt}.json", verdict)

@@ -2,7 +2,9 @@
 
 import json
 import re
+import threading
 import time
+import uuid
 from pathlib import Path
 
 from ..config import RESULTS_DIR, GenerationConfig
@@ -29,6 +31,11 @@ class RunContext:
         self.state: dict = {}  # blackboard: agents read/write intermediate results here
         self.events: list[Event] = []
 
+        # interactive question channel: agents can pause and ask the operator
+        self.pending_question: dict | None = None
+        self._answered = threading.Event()
+        self._answer: str | None = None
+
         self._events_file = open(self.dir / "logs" / "events.jsonl", "a", encoding="utf-8")
         self._log_file = open(self.dir / "logs" / "run.log", "a", encoding="utf-8")
         self.bus.subscribe(self._record)
@@ -52,6 +59,61 @@ class RunContext:
 
     def path(self, *parts: str) -> Path:
         return self.dir.joinpath(*parts)
+
+    # -- interactive questions -------------------------------------------------
+    def ask(self, agent: str, text: str, options: list[dict], default: str,
+            images: list | None = None, model: str | None = None,
+            timeout: float = 240.0) -> str:
+        """Pause and ask the operator a question; returns the chosen option value.
+
+        Non-interactive runs (CLI, cron) take `default` immediately, and an unanswered
+        question falls back to it after `timeout` so a run can never hang forever.
+        """
+        if not getattr(self.cfg, "interactive", False):
+            return default
+
+        question = {
+            "id": uuid.uuid4().hex[:12],
+            "agent": agent,
+            "text": text,
+            "options": options,
+            "default": default,
+            "images": [self.rel_url(p) for p in (images or []) if p],
+            "model": self.rel_url(model) if model else None,
+            "asked_at": time.time(),
+            "timeout": timeout,
+        }
+        self.pending_question = question
+        self._answer = None
+        self._answered.clear()
+        self.bus.emit(agent, "question", text, **question)
+
+        answered = self._answered.wait(timeout)
+        choice = self._answer if answered and self._answer else default
+        self.pending_question = None
+        self.bus.emit(
+            agent, "decision",
+            f"you chose: {choice}" if answered
+            else f"no answer within {int(timeout)}s - continuing with '{default}'",
+            choice=choice, answered=bool(answered),
+        )
+        return choice
+
+    def answer(self, question_id: str, choice: str) -> bool:
+        q = self.pending_question
+        if not q or q["id"] != question_id:
+            return False
+        self._answer = choice
+        self._answered.set()
+        return True
+
+    def rel_url(self, path) -> str:
+        """Path under this run's folder -> a /files/ URL the web UI can load."""
+        try:
+            return "/files/" + str(Path(path).resolve().relative_to(
+                self.dir.parent.resolve())).replace("\\", "/")
+        except (ValueError, OSError):
+            return str(path)
 
     def save_json(self, relpath: str, obj) -> Path:
         p = self.path(relpath)

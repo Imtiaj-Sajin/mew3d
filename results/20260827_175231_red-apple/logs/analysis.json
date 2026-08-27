@@ -1,0 +1,16 @@
+{
+  "mode": "text23d",
+  "pipeline": [
+    "PromptSmith",
+    "ImageGen",
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "apple",
+  "category": "food",
+  "single_object": true,
+  "complexity": "low",
+  "advice": "Ensure the apple's details are captured for realistic rendering."
+}

@@ -1,0 +1,12 @@
+{
+  "original": "generate a car model, good",
+  "prompt": "full view of a whole sleek sports car in a 3/4 angle with a glossy finish, showcasing aerodynamic features, centered on a plain white background",
+  "variants": [
+    "full view of a whole sleek sports car in a 3/4 angle with a glossy finish, showcasing aerodynamic features, centered on a plain white background",
+    "full view of a whole vintage classic car in a 3/4 angle with a matte finish, emphasizing chrome details, centered on a light gray background",
+    "full view of a whole electric SUV in a 3/4 angle with a modern design and vibrant color, centered on a soft blue background",
+    "full view of a whole rugged off-road vehicle in a 3/4 angle with a textured finish, highlighting its tires and stance, centered on a beige background",
+    "full view of a whole luxury sedan in a 3/4 angle with a polished exterior and elegant lines, centered on a pale cream background"
+  ],
+  "negative_prompt": "close-up, macro, cropped"
+}

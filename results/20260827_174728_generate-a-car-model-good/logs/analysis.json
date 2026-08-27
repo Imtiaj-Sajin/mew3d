@@ -1,0 +1,16 @@
+{
+  "mode": "text23d",
+  "pipeline": [
+    "PromptSmith",
+    "ImageGen",
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "car",
+  "category": "vehicle",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure the details of the car's design are clearly defined for accurate reconstruction."
+}

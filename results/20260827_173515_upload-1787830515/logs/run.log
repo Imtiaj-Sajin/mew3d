@@ -1,0 +1,41 @@
+[17:35:16] Orchestrator log       run 20260827_173515_upload-1787830515 starting (mode: image23d, LLM: on)
+[17:35:16] Analyst      status    started
+[17:35:16] Analyst      log       input mode: image23d | image: upload_1787830515.jpg
+[17:35:17] Analyst      log       vision LLM responded
+[17:35:17] Analyst      decision  subject 'young man' (character, complexity medium) - Ensure to capture facial details and hair texture for a realistic representation.
+[17:35:17] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[17:35:17] Analyst      status    done
+[17:35:17] Preprocessor status    started
+[17:35:18] Narrator     narration The Analyst has just kicked off, reviewing the incoming brief to pull out the key ideas and constraints. This early understanding steers the whole pipeline, ensuring each later step builds on a solid foundation. Fun fact: analysts often use semantic parsing to turn natural language into structured data.
+[17:35:20] Narrator     narration The Analyst locked in a medium‑complexity “young man” as the subject, specifying that facial features and hair texture need realistic detail, and laid out the next steps: Preprocessor, MeshGen, Judge, then Exporter. Now the Preprocessor has started cleaning and normalizing the input data, a crucial step that puts everything on a common scale before any geometry is built.
+[17:35:23] Preprocessor log       loading background-removal model (u2net)
+[17:35:24] Preprocessor artifact  user image copied to run folder
+[17:35:24] Preprocessor progress  removing background 1/1
+[17:35:24] Preprocessor log       candidate 1 scored 0.39 (coverage 0.55, blob 1.00, edge-cut 0.26)
+[17:35:26] Preprocessor log       vision LLM responded
+[17:35:26] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.69)
+[17:35:26] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[17:35:26] Preprocessor status    done
+[17:35:26] Gatekeeper   status    started
+[17:35:26] Narrator     narration The Preprocessor has taken the user’s image and placed a copy into the run folder, making it ready for the next cleaning and normalization steps. This ensures the original file stays untouched while the pipeline works on a dedicated version. Fun fact: keeping a separate working copy helps prevent accidental data loss during batch processing.
+[17:35:27] Gatekeeper   log       vision LLM responded
+[17:35:27] Gatekeeper   log       prepared image: none (confidence 9/10) - The image clearly depicts a young man and is suitable for reconstruction.
+[17:35:27] Gatekeeper   log       geometry disagrees with the vision check: cut_off
+[17:35:27] Gatekeeper   decision  stopping before the GPU: cut_off. Retrying preprocessing with {'foreground_ratio': 0.65} instead of reconstructing bad input
+[17:35:27] Gatekeeper   status    done
+[17:35:27] Orchestrator log       --- retry: attempt 2/2 with adjustments {'foreground_ratio': 0.65} ---
+[17:35:27] Preprocessor status    started
+[17:35:27] Preprocessor progress  removing background 1/1
+[17:35:28] Preprocessor log       candidate 1 scored 0.39 (coverage 0.55, blob 1.00, edge-cut 0.26)
+[17:35:29] Narrator     narration The Gatekeeper examined the preprocessed image, saw the foreground covering too much of the frame, and stopped the pipeline before any GPU work, prompting a re‑run of the Preprocessor with a lower foreground ratio
+[17:35:29] Preprocessor log       vision LLM responded
+[17:35:29] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.69)
+[17:35:29] Preprocessor artifact  processed input ready (foreground ratio 0.65)
+[17:35:29] Preprocessor status    done
+[17:35:29] Gatekeeper   status    started
+[17:35:31] Gatekeeper   log       vision LLM responded
+[17:35:31] Gatekeeper   log       prepared image: none (confidence 9/10) - The image clearly depicts a young man and is well-prepared for reconstruction.
+[17:35:31] Gatekeeper   log       geometry disagrees with the vision check: cut_off
+[17:35:31] Gatekeeper   decision  stopping the run: cut_off. Reconstructing this would waste GPU time for a result that cannot match the request.
+[17:35:31] Gatekeeper   status    done
+[17:35:31] Orchestrator error     stopped before using the GPU: cut_off: The image clearly depicts a young man and is well-prepared for reconstruction.

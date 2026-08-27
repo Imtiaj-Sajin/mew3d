@@ -185,6 +185,7 @@ def _pipeline_thread(ctx) -> None:
         narrator.stop()
         ctx.close()
         _current_run["run_id"] = None
+        _active_ctx["ctx"] = None
         _busy.release()
 
 
@@ -223,11 +224,13 @@ async def generate(
             texture=texture,
             num_candidates=max(1, min(4, candidates)),
             plain_ui=True,
+            interactive=True,   # the browser is watching, so agents may ask
         )
         from .core.run_context import RunContext
 
         ctx = RunContext(cfg)
         _current_run["run_id"] = ctx.run_id
+        _active_ctx["ctx"] = ctx
         threading.Thread(target=_pipeline_thread, args=(ctx,), daemon=True).start()
         return {"run_id": ctx.run_id}
     except HTTPException:
@@ -305,6 +308,25 @@ def run_events(run_id: str, after: int = 0):
                 pass
     done = _current_run["run_id"] != run_id
     return {"events": events, "next": after + len(events), "done": done}
+
+
+_active_ctx: dict = {"ctx": None}
+
+
+@app.get("/api/question")
+def get_question():
+    """The question an agent is currently waiting on, if any."""
+    ctx = _active_ctx["ctx"]
+    q = getattr(ctx, "pending_question", None) if ctx else None
+    return {"question": q, "run_id": ctx.run_id if ctx else None}
+
+
+@app.post("/api/answer")
+def post_answer(question_id: str = Form(...), choice: str = Form(...)):
+    ctx = _active_ctx["ctx"]
+    if ctx is None or not ctx.answer(question_id, choice):
+        raise HTTPException(409, "that question is no longer waiting for an answer")
+    return {"ok": True, "choice": choice}
 
 
 _lighting_cache: dict = {}

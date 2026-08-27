@@ -85,6 +85,40 @@ class JudgeAgent(Agent):
         self.ctx.state["winning_backend"] = best["backend"]
         passed = score >= self.cfg.judge_threshold
 
+        # A low score is a judgement call, not a fact - show the operator the actual mesh
+        # and let them look before we spend another few minutes redoing it.
+        if not passed and getattr(self.cfg, "interactive", False):
+            reasons = "; ".join(issues) or "it does not look like the requested subject"
+            vision_note = (vision_view or {}).get("issue")
+            # export the mesh now so it can be rotated in the viewer before deciding
+            glb = None
+            try:
+                glb_path = self.ctx.path("output", f"review_attempt{attempt}.glb")
+                best["mesh"].export(glb_path)
+                glb = str(glb_path)
+                self.artifact("mesh available for review", glb_path)
+            except Exception as e:
+                self.log(f"could not export a reviewable mesh: {e}")
+            choice = self.ctx.ask(
+                self.name,
+                f"I scored this {score:.2f} (pass mark {self.cfg.judge_threshold}). "
+                f"Concerns: {reasons}"
+                + (f". Vision check: {vision_note}" if vision_note else "")
+                + ". Rotate it and see what you think.",
+                options=(
+                    [{"value": "retry", "label": "Try again", "primary": True},
+                     {"value": "keep", "label": "Keep this one"}]
+                    if attempts_left > 0 else
+                    [{"value": "keep", "label": "Keep it", "primary": True}]
+                ),
+                default="retry" if attempts_left > 0 else "keep",
+                images=best.get("previews", [])[:3],
+                model=glb,
+            )
+            if choice == "keep":
+                passed = True
+                self.decision(f"you accepted the {score:.2f} result - keeping it")
+
         adjustments = {}
         if not passed and attempts_left > 0:
             adjustments = self._plan_retry(issues)
@@ -140,8 +174,9 @@ class JudgeAgent(Agent):
             self.log(f"[{backend}] LLM second opinion: {llm_view['verdict']}")
 
         vision_view, score = self._vision_check(score, previews, backend)
-        return {"backend": backend, "score": score, "issues": issues,
-                "metrics": metrics, "llm_view": llm_view, "vision_view": vision_view}
+        return {"backend": backend, "score": score, "issues": issues, "mesh": mesh,
+                "previews": previews, "metrics": metrics, "llm_view": llm_view,
+                "vision_view": vision_view}
 
     def _vision_check(self, score: float, previews: list, backend: str) -> tuple[dict | None, float]:
         """Show a preview render to the vision LLM; semantic failure slashes the score."""

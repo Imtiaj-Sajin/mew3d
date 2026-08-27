@@ -51,6 +51,7 @@ class GenerationConfig:
 
     hosted_image_size: int = 1024  # hosted FLUX handles 1024 comfortably
     screen_input: bool = True      # run the input guardrail before anything loads
+    interactive: bool = False      # agents may pause and ask the operator (web UI only)
 
     # 3D stage
     mesh_model: str = "triposr"  # triposr | hunyuan | both
