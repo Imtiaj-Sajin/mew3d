@@ -41,6 +41,10 @@ def build_parser() -> argparse.ArgumentParser:
     gen.add_argument("--plain", action="store_true", help="plain log output (no live UI)")
 
     sub.add_parser("doctor", help="check environment: GPU, models, LLM connectivity")
+
+    srv = sub.add_parser("serve", help="launch the Mew3D studio web UI")
+    srv.add_argument("--host", default="127.0.0.1")
+    srv.add_argument("--port", type=int, default=7860)
     return parser
 
 
@@ -163,4 +167,9 @@ def main(argv=None) -> int:
         return cmd_generate(args)
     if args.command == "doctor":
         return cmd_doctor()
+    if args.command == "serve":
+        from .server import main as serve_main
+
+        serve_main(host=args.host, port=args.port)
+        return 0
     return 2

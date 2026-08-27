@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mew3D Studio</title>
+<script type="module" src="/static/model-viewer.min.js"></script>
+<style>
+  :root {
+    --bg: #0d1117; --panel: #161b22; --panel2: #1c2330; --border: #2d333b;
+    --text: #e6edf3; --dim: #8b949e; --accent: #58a6ff; --accent2: #bc8cff;
+    --good: #3fb950; --warn: #d29922; --bad: #f85149;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: var(--bg); color: var(--text); height: 100vh; overflow: hidden;
+    font: 14px/1.5 "Segoe UI", system-ui, sans-serif;
+    display: grid; grid-template-rows: 52px 1fr;
+  }
+  header {
+    display: flex; align-items: center; gap: 12px; padding: 0 18px;
+    border-bottom: 1px solid var(--border); background: var(--panel);
+  }
+  header .logo { font-weight: 700; font-size: 17px; }
+  header .logo span { color: var(--accent); }
+  #statusDot { width: 9px; height: 9px; border-radius: 50%; background: var(--good); }
+  #statusDot.busy { background: var(--warn); animation: pulse 1.2s infinite; }
+  @keyframes pulse { 50% { opacity: .35; } }
+  #statusText { color: var(--dim); font-size: 12px; }
+
+  main { display: grid; grid-template-columns: 320px 1fr 300px; min-height: 0; }
+  .panel { border-right: 1px solid var(--border); overflow-y: auto; }
+  .panel:last-child { border-right: none; border-left: 1px solid var(--border); }
+
+  /* ---- left: inputs ---- */
+  #left { padding: 16px; display: flex; flex-direction: column; gap: 14px; background: var(--panel); }
+  label.head { font-size: 11px; letter-spacing: .08em; color: var(--dim); text-transform: uppercase; }
+  textarea {
+    width: 100%; height: 74px; resize: vertical; padding: 10px; border-radius: 8px;
+    background: var(--panel2); color: var(--text); border: 1px solid var(--border); font: inherit;
+  }
+  #drop {
+    border: 1.5px dashed var(--border); border-radius: 10px; padding: 18px 10px;
+    text-align: center; color: var(--dim); cursor: pointer; transition: .15s;
+  }
+  #drop.armed, #drop:hover { border-color: var(--accent); color: var(--text); }
+  #drop img { max-width: 100%; max-height: 130px; border-radius: 8px; }
+  select, .num {
+    width: 100%; padding: 8px 10px; border-radius: 8px; background: var(--panel2);
+    color: var(--text); border: 1px solid var(--border); font: inherit;
+  }
+  .row { display: flex; gap: 10px; align-items: center; }
+  .row > * { flex: 1; }
+  .toggle { display: flex; align-items: center; gap: 8px; color: var(--dim); cursor: pointer; }
+  #goBtn {
+    padding: 12px; border: none; border-radius: 10px; cursor: pointer; font: 600 15px/1 inherit;
+    background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff;
+  }
+  #goBtn:disabled { opacity: .45; cursor: not-allowed; }
+  #guardMsg { color: var(--bad); font-size: 12px; min-height: 16px; }
+
+  /* ---- center: viewer + agent theater ---- */
+  #center { position: relative; display: flex; flex-direction: column; min-width: 0; }
+  model-viewer { width: 100%; flex: 1; background: radial-gradient(ellipse at 50% 40%, #1a2233 0%, var(--bg) 70%); }
+  #viewerHint { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+    color: var(--dim); font-size: 12px; pointer-events: none; }
+  #theater {
+    position: absolute; inset: 0; background: rgba(13,17,23,.96); display: none;
+    flex-direction: column; padding: 18px 12% 12px;
+  }
+  #theater.open { display: flex; }
+  #theater h2 { font-size: 15px; color: var(--dim); font-weight: 600; margin-bottom: 10px; }
+  #feed { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 6px; }
+  .bubble {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 8px 12px; max-width: 92%; animation: fadein .25s;
+  }
+  @keyframes fadein { from { opacity: 0; transform: translateY(5px); } }
+  .bubble .who { font-size: 12px; font-weight: 700; color: var(--accent); }
+  .bubble.narr { border-color: var(--accent2); background: #1d1930; align-self: flex-end; }
+  .bubble.narr .who { color: var(--accent2); }
+  .bubble.err { border-color: var(--bad); }
+  .bubble.err .who { color: var(--bad); }
+  .bubble img { max-height: 110px; border-radius: 6px; margin-top: 6px; margin-right: 6px; }
+  .sys { color: var(--dim); font-size: 12px; text-align: center; }
+  #theaterBar { display: flex; justify-content: space-between; align-items: center; padding-top: 10px; }
+  .ghostBtn {
+    background: none; border: 1px solid var(--border); color: var(--dim); padding: 7px 14px;
+    border-radius: 8px; cursor: pointer; font: inherit;
+  }
+  .ghostBtn:hover { color: var(--text); border-color: var(--accent); }
+
+  /* ---- right: versions ---- */
+  #right { background: var(--panel); padding: 12px; }
+  #right h2 { font-size: 12px; letter-spacing: .08em; color: var(--dim); text-transform: uppercase; padding: 4px 4px 10px; }
+  .run {
+    background: var(--panel2); border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px; margin-bottom: 10px;
+  }
+  .run .title { font-weight: 600; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .run .meta { color: var(--dim); font-size: 11px; margin: 2px 0 8px; display: flex; gap: 8px; align-items: center; }
+  .score { padding: 1px 7px; border-radius: 20px; font-size: 11px; font-weight: 700; color: #06131f; }
+  .models { display: flex; flex-wrap: wrap; gap: 6px; }
+  .mbtn {
+    padding: 4px 10px; border-radius: 16px; font-size: 12px; cursor: pointer;
+    border: 1px solid var(--border); background: var(--panel); color: var(--text);
+  }
+  .mbtn:hover, .mbtn.active { border-color: var(--accent); color: var(--accent); }
+  .mbtn.tex { border-color: var(--accent2); color: var(--accent2); }
+  .thumbs { display: flex; gap: 4px; margin-top: 8px; overflow-x: auto; }
+  .thumbs img { height: 44px; border-radius: 5px; }
+  .running-tag { color: var(--warn); font-size: 11px; font-weight: 700; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Mew<span>3D</span> Studio</div>
+  <div id="statusDot"></div><div id="statusText">idle</div>
+</header>
+<main>
+  <div id="left" class="panel">
+    <div>
+      <label class="head">Describe your object</label>
+      <textarea id="prompt" placeholder="a cute baby dragon&#10;(text, image, or both)"></textarea>
+    </div>
+    <div>
+      <label class="head">Or drop an image</label>
+      <div id="drop">click / drop image here</div>
+      <input id="file" type="file" accept="image/*" hidden>
+    </div>
+    <div class="row">
+      <div>
+        <label class="head">3D model</label>
+        <select id="backend">
+          <option value="hunyuan" selected>Hunyuan (quality)</option>
+          <option value="triposr">TripoSR (fast)</option>
+          <option value="both">Both (compare)</option>
+        </select>
+      </div>
+      <div>
+        <label class="head">Candidates</label>
+        <select id="candidates"><option>1</option><option>2</option><option selected>3</option><option>4</option></select>
+      </div>
+    </div>
+    <label class="toggle"><input type="checkbox" id="texture" checked> paint texture (takes minutes)</label>
+    <button id="goBtn">✦ Generate 3D</button>
+    <div id="guardMsg"></div>
+  </div>
+
+  <div id="center">
+    <model-viewer id="viewer" camera-controls auto-rotate shadow-intensity="1"
+                  exposure="0.9" interaction-prompt="none"></model-viewer>
+    <div id="viewerHint">drag to orbit · scroll to zoom</div>
+    <div id="theater">
+      <h2>🎬 The crew is working on it…</h2>
+      <div id="feed"></div>
+      <div id="theaterBar">
+        <span id="theaterStatus" class="sys">starting…</span>
+        <button class="ghostBtn" onclick="toggleTheater(false)">show viewer</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="right" class="panel">
+    <h2>Versions</h2>
+    <div id="runs"></div>
+  </div>
+</main>
+
+<script>
+const ICONS = {Orchestrator:"🧠", Analyst:"🔎", PromptSmith:"✍️", ImageGen:"🎨",
+  Preprocessor:"🪄", MeshGen:"🧊", Judge:"⚖️", TextureSmith:"🖌️", Exporter:"📦", Narrator:"🎙️"};
+let currentRun = null, nextIdx = 0, pollTimer = null, imageFile = null;
+
+const $ = id => document.getElementById(id);
+
+/* ---------- input handling ---------- */
+$("drop").onclick = () => $("file").click();
+$("file").onchange = e => setImage(e.target.files[0]);
+$("drop").ondragover = e => { e.preventDefault(); $("drop").classList.add("armed"); };
+$("drop").ondragleave = () => $("drop").classList.remove("armed");
+$("drop").ondrop = e => { e.preventDefault(); $("drop").classList.remove("armed"); setImage(e.dataTransfer.files[0]); };
+function setImage(f) {
+  if (!f) return;
+  imageFile = f;
+  const r = new FileReader();
+  r.onload = e => $("drop").innerHTML = `<img src="${e.target.result}">`;
+  r.readAsDataURL(f);
+}
+
+/* ---------- generate ---------- */
+$("goBtn").onclick = async () => {
+  const text = $("prompt").value.trim();
+  if (!text && !imageFile) { $("guardMsg").textContent = "give me a prompt or an image first"; return; }
+  $("guardMsg").textContent = "";
+  const fd = new FormData();
+  if (text) fd.append("text", text);
+  if (imageFile) fd.append("image", imageFile);
+  fd.append("mesh_model", $("backend").value);
+  fd.append("texture", $("texture").checked);
+  fd.append("candidates", $("candidates").value);
+  $("goBtn").disabled = true;
+  try {
+    const res = await fetch("/api/generate", { method: "POST", body: fd });
+    const body = await res.json();
+    if (!res.ok) { $("guardMsg").textContent = body.detail || "failed to start"; $("goBtn").disabled = false; return; }
+    startWatching(body.run_id);
+  } catch (e) {
+    $("guardMsg").textContent = "server unreachable: " + e; $("goBtn").disabled = false;
+  }
+};
+
+function startWatching(runId) {
+  currentRun = runId; nextIdx = 0;
+  $("feed").innerHTML = "";
+  toggleTheater(true);
+  $("theaterStatus").textContent = runId;
+  pollTimer = setInterval(pollEvents, 1200);
+  loadRuns();
+}
+
+async function pollEvents() {
+  if (!currentRun) return;
+  try {
+    const res = await fetch(`/api/runs/${currentRun}/events?after=${nextIdx}`);
+    if (!res.ok) return;
+    const body = await res.json();
+    body.events.forEach(renderEvent);
+    nextIdx = body.next;
+    if (body.done) finishRun();
+  } catch (e) { /* transient */ }
+}
+
+function renderEvent(ev) {
+  const feed = $("feed");
+  if (ev.type === "progress") { $("theaterStatus").textContent = `${ICONS[ev.agent] || ""} ${ev.message}`; return; }
+  if (ev.type === "status") {
+    if (ev.message === "started") appendSys(`${ICONS[ev.agent] || ""} ${ev.agent} steps up`);
+    else if (ev.message === "done") appendSys(`${ICONS[ev.agent] || ""} ${ev.agent} finished ${ev.data.elapsed ? "in " + ev.data.elapsed + "s" : ""}`);
+    else appendBubble(ev.agent, ev.message, "err");
+    return;
+  }
+  if (ev.type === "narration") { appendBubble("Narrator", ev.message, "narr"); return; }
+  if (ev.type === "error") { appendBubble(ev.agent, ev.message, "err"); return; }
+  if (["log", "decision", "artifact"].includes(ev.type)) {
+    const b = appendBubble(ev.agent, ev.message);
+    const p = ev.data && ev.data.path;
+    if (p && /\.(png|gif|jpg)$/i.test(p)) {
+      const rel = p.split(/results[\\\/]/)[1];
+      if (rel) { const img = document.createElement("img"); img.src = "/files/" + rel.replace(/\\/g, "/"); b.appendChild(img); }
+    }
+  }
+}
+
+function appendBubble(agent, msg, cls) {
+  const d = document.createElement("div");
+  d.className = "bubble" + (cls ? " " + cls : "");
+  d.innerHTML = `<div class="who">${ICONS[agent] || "·"} ${agent}</div>`;
+  d.appendChild(document.createTextNode(msg));
+  $("feed").appendChild(d);
+  $("feed").scrollTop = $("feed").scrollHeight;
+  return d;
+}
+function appendSys(msg) {
+  const d = document.createElement("div");
+  d.className = "sys"; d.textContent = msg;
+  $("feed").appendChild(d);
+  $("feed").scrollTop = $("feed").scrollHeight;
+}
+
+async function finishRun() {
+  clearInterval(pollTimer); pollTimer = null;
+  $("goBtn").disabled = false;
+  appendSys("✨ run finished");
+  $("theaterStatus").textContent = "finished - loading result…";
+  const finished = currentRun; currentRun = null;
+  await loadRuns();
+  const runs = lastRuns.filter(r => r.run_id === finished);
+  if (runs.length && runs[0].models.length) {
+    const best = pickBest(runs[0].models);
+    loadModel(best.file);
+    setTimeout(() => toggleTheater(false), 1600);
+  }
+}
+
+function pickBest(models) {
+  const order = ["Textured", "Hunyuan", "Mesh", "TripoSR"];
+  for (const label of order) { const m = models.find(x => x.label === label); if (m) return m; }
+  return models[0];
+}
+
+function toggleTheater(open) { $("theater").classList.toggle("open", open); }
+function loadModel(url) {
+  $("viewer").src = url;
+  document.querySelectorAll(".mbtn").forEach(b => b.classList.toggle("active", b.dataset.file === url));
+}
+
+/* ---------- runs list ---------- */
+let lastRuns = [];
+async function loadRuns() {
+  try {
+    const res = await fetch("/api/runs");
+    lastRuns = (await res.json()).runs;
+  } catch (e) { return; }
+  const el = $("runs");
+  el.innerHTML = "";
+  lastRuns.forEach(r => {
+    const d = document.createElement("div");
+    d.className = "run";
+    const when = new Date(r.mtime * 1000).toLocaleString([], {month:"short", day:"numeric", hour:"2-digit", minute:"2-digit"});
+    const scoreHtml = r.score != null
+      ? `<span class="score" style="background:${r.score >= .55 ? "var(--good)" : "var(--warn)"}">${r.score.toFixed(2)}</span>` : "";
+    d.innerHTML = `<div class="title">${r.run_id.split("_").slice(2).join("_") || r.run_id}</div>
+      <div class="meta">${when} ${scoreHtml} ${r.status === "running" ? '<span class="running-tag">● running</span>' : ""}</div>`;
+    const models = document.createElement("div");
+    models.className = "models";
+    r.models.forEach(m => {
+      const b = document.createElement("button");
+      b.className = "mbtn" + (m.label === "Textured" ? " tex" : "");
+      b.textContent = m.label === "Textured" ? "✨ " + m.label : m.label;
+      b.dataset.file = m.file;
+      b.onclick = () => { loadModel(m.file); toggleTheater(false); };
+      models.appendChild(b);
+    });
+    d.appendChild(models);
+    if (r.previews.length) {
+      const t = document.createElement("div");
+      t.className = "thumbs";
+      r.previews.slice(0, 5).forEach(p => { const i = document.createElement("img"); i.src = p; t.appendChild(i); });
+      d.appendChild(t);
+    }
+    el.appendChild(d);
+  });
+}
+
+/* ---------- status poll + boot ---------- */
+async function pollStatus() {
+  try {
+    const s = await (await fetch("/api/status")).json();
+    $("statusDot").classList.toggle("busy", s.busy);
+    $("statusText").textContent = s.busy ? "generating " + (s.run_id || "") : "idle";
+    if (s.busy && s.run_id && !pollTimer && !currentRun) startWatching(s.run_id); // reattach after refresh
+    if (s.busy) $("goBtn").disabled = true;
+    else if (!currentRun) $("goBtn").disabled = false;
+  } catch (e) { $("statusText").textContent = "server offline"; }
+}
+setInterval(pollStatus, 2500);
+pollStatus();
+loadRuns().then(() => {
+  const all = lastRuns.flatMap(r => r.models);
+  if (all.length) loadModel(pickBest(all).file);
+});
+</script>
+</body>
+</html>
