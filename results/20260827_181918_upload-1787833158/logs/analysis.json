@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "motorcycle",
+  "category": "vehicle",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure to capture the unique design features and contours of the motorcycle for accurate reconstruction."
+}

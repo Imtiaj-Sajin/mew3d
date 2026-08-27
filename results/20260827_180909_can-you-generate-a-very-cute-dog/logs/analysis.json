@@ -1,0 +1,16 @@
+{
+  "mode": "text23d",
+  "pipeline": [
+    "PromptSmith",
+    "ImageGen",
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "dog",
+  "category": "creature",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Focus on capturing the dog's features to enhance its cuteness."
+}

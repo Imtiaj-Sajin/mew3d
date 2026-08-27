@@ -200,6 +200,20 @@
   .thumbs { display: flex; gap: 4px; margin-top: 8px; overflow-x: auto; }
   .thumbs img { height: 44px; border-radius: 5px; }
   .running-tag { color: var(--warn); font-size: 11px; font-weight: 700; }
+  .facts { color: var(--dim); font-size: 11px; margin: -4px 0 8px; }
+  .stopped { color: var(--warn); font-size: 11px; margin: -4px 0 8px; }
+  .moreBtn {
+    background: none; border: 0; color: var(--dim); font: 11px inherit; cursor: pointer;
+    padding: 6px 0 0; text-align: left;
+  }
+  .moreBtn:hover { color: var(--accent); }
+  .details { display: none; font-size: 11px; color: var(--dim); padding-top: 5px; }
+  .details.open { display: block; }
+  .details > div { margin-bottom: 5px; word-break: break-word; }
+  .details span {
+    display: block; color: #6b7480; text-transform: uppercase; letter-spacing: .06em;
+    font-size: 9px;
+  }
 </style>
 </head>
 <body>
@@ -879,8 +893,59 @@ async function loadRuns() {
     const when = new Date(r.mtime * 1000).toLocaleString([], {month:"short", day:"numeric", hour:"2-digit", minute:"2-digit"});
     const scoreHtml = r.score != null
       ? `<span class="score" style="background:${r.score >= .55 ? "var(--good)" : "var(--warn)"}">${r.score.toFixed(2)}</span>` : "";
-    d.innerHTML = `<div class="title">${r.run_id.split("_").slice(2).join("_") || r.run_id}</div>
-      <div class="meta">${when} ${scoreHtml} ${r.status === "running" ? '<span class="running-tag">● running</span>' : ""}</div>`;
+    const title = document.createElement("div");
+    title.className = "title";
+    title.textContent = r.title || r.run_id;          // subject, not the folder name
+    title.title = r.prompt || r.run_id;
+    d.appendChild(title);
+    const meta = document.createElement("div");
+    meta.className = "meta";
+    meta.innerHTML = `${when} ${scoreHtml} ${r.status === "running" ? '<span class="running-tag">● running</span>' : ""}`;
+    d.appendChild(meta);
+
+    // compact fact line, then everything else behind a toggle
+    const facts = [];
+    if (r.mode) facts.push(r.mode === "text23d" ? "text" : "image");
+    if (r.backend) facts.push(r.backend);
+    if (r.textured) facts.push("textured");
+    if (r.faces) facts.push(`${(r.faces / 1000).toFixed(0)}k faces`);
+    if (r.duration) facts.push(`${r.duration}s`);
+    if (facts.length) {
+      const f = document.createElement("div");
+      f.className = "facts";
+      f.textContent = facts.join(" · ");
+      d.appendChild(f);
+    }
+    if (r.stopped_by) {
+      const s = document.createElement("div");
+      s.className = "stopped";
+      s.textContent = "stopped: " + r.stopped_by.replace(/_/g, " ");
+      d.appendChild(s);
+    }
+
+    const more = [];
+    if (r.prompt) more.push(["prompt", r.prompt]);
+    if (r.enhanced && r.enhanced !== r.prompt) more.push(["enhanced", r.enhanced]);
+    if (r.category) more.push(["category", r.category + (r.complexity ? ` (${r.complexity})` : "")]);
+    if (r.attempts > 1) more.push(["attempts", String(r.attempts)]);
+    if (r.components != null) more.push(["mesh", `${r.components} part(s), watertight: ${r.watertight}`]);
+    (r.issues || []).forEach(i => more.push(["concern", i]));
+    more.push(["run id", r.run_id]);
+    if (more.length) {
+      const tog = document.createElement("button");
+      tog.className = "moreBtn";
+      tog.textContent = "details ▾";
+      const box = document.createElement("div");
+      box.className = "details";
+      box.innerHTML = more
+        .map(([k, v]) => `<div><span>${k}</span>${String(v).replace(/</g, "&lt;")}</div>`).join("");
+      tog.onclick = () => {
+        const open = box.classList.toggle("open");
+        tog.textContent = open ? "details ▴" : "details ▾";
+      };
+      d.appendChild(tog);
+      d.appendChild(box);
+    }
     const models = document.createElement("div");
     models.className = "models";
     r.models.forEach(m => {

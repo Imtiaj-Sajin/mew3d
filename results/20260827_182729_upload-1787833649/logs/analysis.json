@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "Stitch",
+  "category": "character",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure to capture the character's unique features and expressions for accurate reconstruction."
+}

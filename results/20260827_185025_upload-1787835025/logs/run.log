@@ -1,0 +1,63 @@
+[18:50:25] Orchestrator log       run 20260827_185025_upload-1787835025 starting (mode: image23d, LLM: on)
+[18:50:25] Analyst      status    started
+[18:50:25] Analyst      log       input mode: image23d | image: upload_1787835025.jpg
+[18:50:28] Narrator     narration The Analyst has begun reviewing the request, gathering key details and setting the direction for the project. This early step ensures the whole pipeline stays focused and efficient, because a clear brief reduces the need for costly revisions later. Did you know that well‑defined goals can cut development time by up to 30%?
+[18:50:29] Analyst      log       vision LLM responded
+[18:50:29] Analyst      decision  subject 'crab' (creature, complexity medium) - Ensure the limbs and facial features are well-defined for a playful appearance.
+[18:50:29] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[18:50:29] Analyst      status    done
+[18:50:29] Preprocessor status    started
+[18:50:29] Preprocessor log       loading background-removal model (u2net)
+[18:50:30] Preprocessor artifact  user image copied to run folder
+[18:50:30] Preprocessor progress  removing background 1/1
+[18:50:30] Preprocessor log       candidate 1 scored 0.91 (coverage 0.35, blob 1.00, edge-cut 0.00)
+[18:50:31] Preprocessor log       vision LLM responded
+[18:50:31] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.95)
+[18:50:31] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[18:50:31] Preprocessor status    done
+[18:50:31] Gatekeeper   status    started
+[18:50:32] Narrator     narration The Analyst locked in a medium‑complexity crab, specifying playful limbs and facial details, and laid out the workflow: Preprocessor → MeshGen → Judge → Exporter. At the same time the Preprocessor started by copying the reference image into the run folder, preserving the original file for safe handling. Fun fact: cleaning up background noise early can reduce mesh errors by about 20%.
+[18:50:33] Gatekeeper   log       vision LLM responded
+[18:50:33] Gatekeeper   log       prepared image: none (confidence 9/10) - The image is a clear representation of a crab.
+[18:50:33] Gatekeeper   decision  prepared image looks reconstructable - handing to MeshGen
+[18:50:33] Gatekeeper   status    done
+[18:50:33] MeshGen      status    started
+[18:50:33] MeshGen      log       backend: hunyuan
+[18:50:33] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[18:50:33] vram         log       loading model: hunyuan3d
+[18:50:35] Narrator     narration The Preprocessor confirmed that the image is 85 % foreground, giving the system a solid base, and the Gatekeeper verified the picture is suitable for reconstruction before handing it off to MeshGen, which is now generating the 3‑D geometry. An image with a foreground ratio above 0.8 usually produces cleaner meshes because the model has plenty of detail to work with.
+[18:50:59] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[18:51:01] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm on)
+[18:51:06] MeshGen      progress  hunyuan: rendering clay preview views
+[18:51:22] MeshGen      artifact  hunyuan clay previews saved
+[18:51:22] MeshGen      log       hunyuan: 384,219 vertices, 768,436 faces
+[18:51:22] MeshGen      status    done
+[18:51:22] Judge        status    started
+[18:51:23] Judge        log       [hunyuan] 768,436 faces, 2 components, watertight=False, extent ratio 2.01
+[18:51:25] Judge        log       LLM responded
+[18:51:25] Judge        log       [hunyuan] LLM second opinion: The mesh exhibits high detail but is not watertight, which is a significant issue.
+[18:51:25] Narrator     narration The MeshGen team finished creating the hunyuan‑clay style preview meshes and saved them for review. Now the Judge has started checking those previews for geometry issues, which helps catch problems before the model is finalized. A quick check for non‑manifold edges can
+[18:51:26] Judge        log       vision LLM responded
+[18:51:26] Judge        log       [hunyuan] vision check: looks like 'crab', 8/10 (Some details are simplified or missing)
+[18:51:26] Judge        decision  score 0.89 - PASS
+[18:51:26] Judge        status    done
+[18:51:26] TextureSmith status    started
+[18:51:26] TextureSmith progress  simplifying mesh for texturing: 768,436 -> ~40,000 faces
+[18:51:29] Narrator     narration The Judge gave the crab model a solid 0.89 score and marked it as passed, confirming the geometry is clean enough to move on. With that approval, TextureSmith has now begun applying surface details, which will bring the playful limbs and facial features to life. Fun fact: a well‑wrapped UV map can cut texture memory use by up to 30% while keeping visual quality high.
+[18:51:40] TextureSmith log       simplified to 40,000 faces
+[18:51:40] TextureSmith log       loading Hunyuan3D-Paint (first run downloads ~6GB)
+[18:51:41] vram         log       released models: hunyuan3d
+[18:51:41] vram         log       loading model: hunyuan-paint
+[18:51:41] TextureSmith log       rasterizer: compiled extension unusable on this GPU - using the pure-PyTorch fallback
+[18:52:17] TextureSmith log       cpu offload enabled - weights stream from RAM per step
+[18:52:17] vram         metric    VRAM 0.0/8.6 GB (after loading hunyuan-paint)
+[18:52:17] TextureSmith progress  painting hunyuan mesh (multiview diffusion + baking, takes minutes)
+[18:53:07] TextureSmith artifact  textured GLB exported (hunyuan mesh)
+[18:53:08] TextureSmith artifact  textured previews saved
+[18:53:08] TextureSmith status    done
+[18:53:08] Exporter     status    started
+[18:53:09] Exporter     artifact  [hunyuan] OBJ + GLB exported
+[18:53:09] Exporter     artifact  run report written
+[18:53:09] Exporter     status    done
+[18:53:09] vram         log       released models: hunyuan-paint
+[18:53:09] Orchestrator log       run complete - score 0.89 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260827_185025_upload-1787835025\output

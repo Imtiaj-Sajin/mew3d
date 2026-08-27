@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "Minion",
+  "category": "character",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure to capture the character's distinctive features and avoid a busy background."
+}

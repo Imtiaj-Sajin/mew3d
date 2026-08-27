@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.89,
+  "passed": true,
+  "metrics": {
+    "vertices": 453388,
+    "faces": 906788,
+    "watertight": false,
+    "components": 8,
+    "largest_component_fraction": 0.999,
+    "extents": [
+      1.222,
+      1.996,
+      1.78
+    ],
+    "extent_ratio": 1.63,
+    "degenerate_faces": 314
+  },
+  "issues": [],
+  "llm_opinion": "The mesh exhibits a high quality with minor geometric issues.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "Some details, like the facial features, could be more defined."
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.89,
+      "issues": [],
+      "metrics": {
+        "vertices": 453388,
+        "faces": 906788,
+        "watertight": false,
+        "components": 8,
+        "largest_component_fraction": 0.999,
+        "extents": [
+          1.222,
+          1.996,
+          1.78
+        ],
+        "extent_ratio": 1.63,
+        "degenerate_faces": 314
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Some details, like the facial features, could be more defined."
+      }
+    }
+  ]
+}

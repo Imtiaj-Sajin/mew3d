@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.92,
+  "passed": true,
+  "metrics": {
+    "vertices": 233874,
+    "faces": 467788,
+    "watertight": true,
+    "components": 4,
+    "largest_component_fraction": 0.988,
+    "extents": [
+      1.996,
+      0.994,
+      0.729
+    ],
+    "extent_ratio": 2.74,
+    "degenerate_faces": 136
+  },
+  "issues": [],
+  "llm_opinion": "The mesh is generally well-constructed but exhibits some concerns regarding component integrity and degenerate faces.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "Some minor details are missing or simplified."
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.92,
+      "issues": [],
+      "metrics": {
+        "vertices": 233874,
+        "faces": 467788,
+        "watertight": true,
+        "components": 4,
+        "largest_component_fraction": 0.988,
+        "extents": [
+          1.996,
+          0.994,
+          0.729
+        ],
+        "extent_ratio": 2.74,
+        "degenerate_faces": 136
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Some minor details are missing or simplified."
+      }
+    }
+  ]
+}

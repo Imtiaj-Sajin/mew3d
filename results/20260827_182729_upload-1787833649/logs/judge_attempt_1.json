@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.89,
+  "passed": true,
+  "metrics": {
+    "vertices": 529522,
+    "faces": 1058600,
+    "watertight": false,
+    "components": 25,
+    "largest_component_fraction": 0.959,
+    "extents": [
+      1.747,
+      2.005,
+      2.015
+    ],
+    "extent_ratio": 1.15,
+    "degenerate_faces": 508
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is generally high, but the presence of multiple components and non-watertight geometry raises concerns.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "Some details in the ears and facial features could be more defined."
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.89,
+      "issues": [],
+      "metrics": {
+        "vertices": 529522,
+        "faces": 1058600,
+        "watertight": false,
+        "components": 25,
+        "largest_component_fraction": 0.959,
+        "extents": [
+          1.747,
+          2.005,
+          2.015
+        ],
+        "extent_ratio": 1.15,
+        "degenerate_faces": 508
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Some details in the ears and facial features could be more defined."
+      }
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "attempt": 2,
+  "backend": "hunyuan",
+  "score": 0.89,
+  "passed": true,
+  "metrics": {
+    "vertices": 300687,
+    "faces": 601590,
+    "watertight": false,
+    "components": 7,
+    "largest_component_fraction": 1.0,
+    "extents": [
+      0.957,
+      1.55,
+      1.989
+    ],
+    "extent_ratio": 2.08,
+    "degenerate_faces": 193
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is generally high but concerns about watertightness and the presence of degenerate faces need to be addressed.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "Minor inaccuracies in the proportions of the seat and handlebars"
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.89,
+      "issues": [],
+      "metrics": {
+        "vertices": 300687,
+        "faces": 601590,
+        "watertight": false,
+        "components": 7,
+        "largest_component_fraction": 1.0,
+        "extents": [
+          0.957,
+          1.55,
+          1.989
+        ],
+        "extent_ratio": 2.08,
+        "degenerate_faces": 193
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Minor inaccuracies in the proportions of the seat and handlebars"
+      }
+    }
+  ]
+}

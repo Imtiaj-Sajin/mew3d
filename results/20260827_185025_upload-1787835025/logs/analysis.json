@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "crab",
+  "category": "creature",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure the limbs and facial features are well-defined for a playful appearance."
+}

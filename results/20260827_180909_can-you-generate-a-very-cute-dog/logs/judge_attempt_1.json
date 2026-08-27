@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.85,
+  "passed": true,
+  "metrics": {
+    "vertices": 385728,
+    "faces": 771398,
+    "watertight": false,
+    "components": 38,
+    "largest_component_fraction": 0.995,
+    "extents": [
+      1.279,
+      1.997,
+      1.739
+    ],
+    "extent_ratio": 1.56,
+    "degenerate_faces": 415
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is generally high but has several notable concerns.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 7,
+    "issue": "Some anatomical features are less defined, particularly in the face."
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.85,
+      "issues": [],
+      "metrics": {
+        "vertices": 385728,
+        "faces": 771398,
+        "watertight": false,
+        "components": 38,
+        "largest_component_fraction": 0.995,
+        "extents": [
+          1.279,
+          1.997,
+          1.739
+        ],
+        "extent_ratio": 1.56,
+        "degenerate_faces": 415
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 7,
+        "issue": "Some anatomical features are less defined, particularly in the face."
+      }
+    }
+  ]
+}

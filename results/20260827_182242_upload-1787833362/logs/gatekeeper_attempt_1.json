@@ -1,0 +1,15 @@
+{
+  "proceed": false,
+  "problem": "multiple_objects",
+  "attempt": 1,
+  "vision": {
+    "proceed": false,
+    "matches_request": false,
+    "problem": "multiple_objects",
+    "confidence": 3,
+    "advice": "Remove additional scooters to focus on a single subject."
+  },
+  "recovery": {
+    "largest_component_only": true
+  }
+}

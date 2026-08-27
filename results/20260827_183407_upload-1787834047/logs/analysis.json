@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "cartoon bee",
+  "category": "creature",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure to capture the fluffy texture and the transparent wings for a more realistic reconstruction."
+}

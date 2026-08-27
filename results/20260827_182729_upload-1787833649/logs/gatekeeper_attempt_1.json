@@ -1,0 +1,13 @@
+{
+  "proceed": true,
+  "problem": "none",
+  "attempt": 1,
+  "vision": {
+    "proceed": true,
+    "matches_request": true,
+    "problem": "none",
+    "confidence": 9,
+    "advice": "The image is clear and matches the request for Stitch."
+  },
+  "recovery": {}
+}

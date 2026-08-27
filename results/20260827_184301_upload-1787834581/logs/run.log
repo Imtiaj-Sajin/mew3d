@@ -1,0 +1,63 @@
+[18:43:01] Orchestrator log       run 20260827_184301_upload-1787834581 starting (mode: image23d, LLM: on)
+[18:43:01] Analyst      status    started
+[18:43:01] Analyst      log       input mode: image23d | image: upload_1787834581.jpg
+[18:43:03] Analyst      log       vision LLM responded
+[18:43:03] Analyst      decision  subject 'Minion' (character, complexity medium) - Ensure to capture the character's distinctive features and avoid a busy background.
+[18:43:03] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[18:43:03] Analyst      status    done
+[18:43:03] Preprocessor status    started
+[18:43:03] Preprocessor log       loading background-removal model (u2net)
+[18:43:03] Preprocessor artifact  user image copied to run folder
+[18:43:03] Preprocessor progress  removing background 1/1
+[18:43:04] Preprocessor log       candidate 1 scored 0.82 (coverage 0.46, blob 1.00, edge-cut 0.00)
+[18:43:04] Narrator     narration The Analyst kicked off the job by selecting a medium‑complexity Minion character and laying out a focused pipeline—Preprocessor, MeshGen, Judge, Exporter. Now the Preprocessor is running to clean and ready the input, a step that helps prevent errors downstream in the mesh creation. Fun fact: Minions are built from a few basic shapes, making them an ideal test case for medium‑complexity 3D modeling.
+[18:43:06] Preprocessor log       vision LLM responded
+[18:43:06] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.91)
+[18:43:06] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[18:43:06] Preprocessor status    done
+[18:43:06] Gatekeeper   status    started
+[18:43:07] Narrator     narration The Preprocessor copied your image into the workspace, stripped away background clutter and confirmed that the subject fills about 85 % of the frame, giving the next stages a clean, well‑focused input. Now the Gatekeeper is running its checks to make sure everything meets the pipeline’s standards before the mesh can be built. (Interesting note: a high foreground ratio helps the system generate more accurate geometry with fewer extra vertices.)
+[18:43:07] Gatekeeper   log       vision LLM responded
+[18:43:07] Gatekeeper   log       prepared image: none (confidence 9/10) - The image is clear and features a Minion as requested.
+[18:43:07] Gatekeeper   decision  prepared image looks reconstructable - handing to MeshGen
+[18:43:07] Gatekeeper   status    done
+[18:43:07] MeshGen      status    started
+[18:43:07] MeshGen      log       backend: hunyuan
+[18:43:07] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[18:43:07] vram         log       loading model: hunyuan3d
+[18:43:10] Narrator     narration The Gatekeeper gave
+[18:43:33] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[18:43:36] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm on)
+[18:43:42] MeshGen      progress  hunyuan: rendering clay preview views
+[18:43:57] MeshGen      artifact  hunyuan clay previews saved
+[18:43:57] MeshGen      log       hunyuan: 362,781 vertices, 725,564 faces
+[18:43:57] MeshGen      status    done
+[18:43:57] Judge        status    started
+[18:43:58] Judge        log       [hunyuan] 725,564 faces, 3 components, watertight=False, extent ratio 1.8
+[18:43:59] Narrator     narration The MeshGen agent finished creating the initial clay‑style preview of the Minion, giving the team a quick, low‑detail shape to spot any major geometry problems early. Now the Judge is kicking off to evaluate that mesh against quality criteria before any fine‑tuning. Fun fact: a clay preview uses far fewer polygons than the final model, letting the system run checks faster.
+[18:43:59] Judge        log       LLM responded
+[18:43:59] Judge        log       [hunyuan] LLM second opinion: The mesh quality is high but has concerns regarding watertightness and degeneracy.
+[18:44:01] Judge        log       vision LLM responded
+[18:44:01] Judge        log       [hunyuan] vision check: looks like 'Minion', 8/10 (Minor inaccuracies in limb proportions)
+[18:44:01] Judge        decision  score 0.89 - PASS
+[18:44:01] Judge        status    done
+[18:44:01] TextureSmith status    started
+[18:44:01] TextureSmith progress  simplifying mesh for texturing: 725,564 -> ~40,000 faces
+[18:44:04] Narrator     narration The Judge reviewed the low‑poly preview, scored it 0.89 and marked it a pass, confirming the geometry meets the studio’s quality thresholds. With that approval, TextureSmith is now kicking off to generate the surface details that will bring the model to life. Fun fact: high‑resolution textures can add perceived detail without increasing the model’s polygon count.
+[18:44:14] TextureSmith log       simplified to 40,000 faces
+[18:44:14] TextureSmith log       loading Hunyuan3D-Paint (first run downloads ~6GB)
+[18:44:14] vram         log       released models: hunyuan3d
+[18:44:14] vram         log       loading model: hunyuan-paint
+[18:44:14] TextureSmith log       rasterizer: compiled extension unusable on this GPU - using the pure-PyTorch fallback
+[18:44:50] TextureSmith log       cpu offload enabled - weights stream from RAM per step
+[18:44:50] vram         metric    VRAM 0.0/8.6 GB (after loading hunyuan-paint)
+[18:44:50] TextureSmith progress  painting hunyuan mesh (multiview diffusion + baking, takes minutes)
+[18:45:40] TextureSmith artifact  textured GLB exported (hunyuan mesh)
+[18:45:40] TextureSmith artifact  textured previews saved
+[18:45:40] TextureSmith status    done
+[18:45:40] Exporter     status    started
+[18:45:41] Exporter     artifact  [hunyuan] OBJ + GLB exported
+[18:45:41] Exporter     artifact  run report written
+[18:45:41] Exporter     status    done
+[18:45:41] vram         log       released models: hunyuan-paint
+[18:45:41] Orchestrator log       run complete - score 0.89 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260827_184301_upload-1787834581\output

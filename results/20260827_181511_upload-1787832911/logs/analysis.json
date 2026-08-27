@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "scooter",
+  "category": "vehicle",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure to capture the details of the scooter's design and features for accurate reconstruction."
+}

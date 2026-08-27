@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "timer",
+  "category": "prop",
+  "single_object": true,
+  "complexity": "medium",
+  "advice": "Ensure to capture the details of the display and the surrounding hand for better context."
+}

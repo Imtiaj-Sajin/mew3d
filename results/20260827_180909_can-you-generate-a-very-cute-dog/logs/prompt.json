@@ -1,0 +1,12 @@
+{
+  "original": "can you generate a very cute dog",
+  "prompt": "full view of a whole cute dog sitting happily, with a playful expression, centered against a plain white background",
+  "variants": [
+    "full view of a whole cute dog sitting happily, with a playful expression, centered against a plain white background",
+    "full view of a whole fluffy puppy standing on its hind legs, with a joyful demeanor, centered against a soft pastel background",
+    "full view of a whole small dog lying down with its tongue out, looking up adorably, centered against a light gray backdrop",
+    "full view of a whole beagle dog with big ears and a wagging tail, playfully posing, centered against a neutral beige background",
+    "full view of a whole golden retriever puppy fetching a toy, with a cheerful stance, centered against a simple blue background"
+  ],
+  "negative_prompt": "close-up, macro, cropped"
+}

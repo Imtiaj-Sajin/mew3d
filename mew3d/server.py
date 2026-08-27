@@ -254,24 +254,71 @@ OUTPUT_LABELS = {
 }
 
 
+def _read_json(path: Path):
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+
+
 def _run_summary(run_dir: Path) -> dict:
     out = run_dir / "output"
-    glbs = sorted(out.glob("*.glb")) if out.is_dir() else []
+    # review_*.glb are mid-run exports for the judge's question card, not results
+    glbs = sorted(p for p in out.glob("*.glb")
+                  if not p.name.startswith("review_")) if out.is_dir() else []
     previews = sorted(out.glob("*preview*.png"))[:6] if out.is_dir() else []
-    score, backend = None, None
+
+    score, backend, metrics, issues, attempts = None, None, {}, [], 0
     judge_files = sorted(run_dir.glob("logs/judge_attempt_*.json"))
     if judge_files:
+        verdict = _read_json(judge_files[-1]) or {}
+        score, backend = verdict.get("score"), verdict.get("backend")
+        metrics = verdict.get("metrics") or {}
+        issues = verdict.get("issues") or []
+        attempts = len(judge_files)
+
+    analysis = _read_json(run_dir / "logs" / "analysis.json") or {}
+    prompt = _read_json(run_dir / "logs" / "prompt.json") or {}
+    gate_files = sorted(run_dir.glob("logs/gatekeeper_attempt_*.json"))
+    stopped_by = None
+    if gate_files and not glbs:
+        gate = _read_json(gate_files[-1]) or {}
+        if gate.get("fatal"):
+            stopped_by = gate.get("problem")
+
+    started = None
+    events = run_dir / "logs" / "events.jsonl"
+    duration = None
+    if events.is_file():
         try:
-            verdict = json.loads(judge_files[-1].read_text(encoding="utf-8"))
-            score, backend = verdict.get("score"), verdict.get("backend")
+            with open(events, encoding="utf-8") as f:
+                first = json.loads(f.readline())
+            started = first.get("ts")
+            duration = round(run_dir.stat().st_mtime - started) if started else None
         except Exception:
             pass
+
     running = _current_run["run_id"] == run_dir.name
+    textured = any(p.name == "mesh_textured.glb" for p in glbs)
     return {
         "run_id": run_dir.name,
+        "title": analysis.get("subject") or prompt.get("original") or run_dir.name,
+        "prompt": prompt.get("original"),
+        "enhanced": prompt.get("prompt"),
+        "mode": analysis.get("mode"),
+        "category": analysis.get("category"),
+        "complexity": analysis.get("complexity"),
         "mtime": run_dir.stat().st_mtime,
+        "duration": duration,
+        "attempts": attempts,
         "score": score,
         "backend": backend,
+        "textured": textured,
+        "faces": metrics.get("faces"),
+        "components": metrics.get("components"),
+        "watertight": metrics.get("watertight"),
+        "issues": issues,
+        "stopped_by": stopped_by,
         "status": "running" if running else ("done" if glbs else "failed"),
         "models": [
             {"label": OUTPUT_LABELS.get(p.name, p.stem), "file": f"/files/{run_dir.name}/output/{p.name}"}

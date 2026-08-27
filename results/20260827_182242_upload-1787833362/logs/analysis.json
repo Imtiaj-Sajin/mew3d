@@ -1,0 +1,14 @@
+{
+  "mode": "image23d",
+  "pipeline": [
+    "Preprocessor",
+    "MeshGen",
+    "Judge",
+    "Exporter"
+  ],
+  "subject": "scooter",
+  "category": "vehicle",
+  "single_object": false,
+  "complexity": "medium",
+  "advice": "Ensure to capture different angles for a comprehensive reconstruction."
+}

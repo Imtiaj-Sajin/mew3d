@@ -1,0 +1,63 @@
+[18:27:29] Orchestrator log       run 20260827_182729_upload-1787833649 starting (mode: image23d, LLM: on)
+[18:27:29] Analyst      status    started
+[18:27:29] Analyst      log       input mode: image23d | image: upload_1787833649.jpg
+[18:27:30] Analyst      log       vision LLM responded
+[18:27:30] Analyst      decision  subject 'Stitch' (character, complexity medium) - Ensure to capture the character's unique features and expressions for accurate reconstruction.
+[18:27:30] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[18:27:30] Analyst      status    done
+[18:27:30] Preprocessor status    started
+[18:27:30] Preprocessor log       loading background-removal model (u2net)
+[18:27:31] Preprocessor artifact  user image copied to run folder
+[18:27:31] Preprocessor progress  removing background 1/1
+[18:27:31] Preprocessor log       candidate 1 scored 0.88 (coverage 0.30, blob 1.00, edge-cut 0.00)
+[18:27:32] Narrator     narration The Analyst has just started reviewing the incoming request, gathering the key details that will guide the whole 3D creation process. This early analysis step is crucial because a clear brief helps the team avoid costly revisions later on.
+[18:27:32] Preprocessor log       vision LLM responded
+[18:27:32] Preprocessor log       vision critic: none (vlm 10/10 -> blended 0.94)
+[18:27:32] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[18:27:32] Preprocessor status    done
+[18:27:32] Gatekeeper   status    started
+[18:27:33] Gatekeeper   log       vision LLM responded
+[18:27:33] Gatekeeper   log       prepared image: none (confidence 9/10) - The image is clear and matches the request for Stitch.
+[18:27:33] Gatekeeper   decision  prepared image looks reconstructable - handing to MeshGen
+[18:27:33] Gatekeeper   status    done
+[18:27:33] MeshGen      status    started
+[18:27:33] MeshGen      log       backend: hunyuan
+[18:27:33] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[18:27:33] vram         log       loading model: hunyuan3d
+[18:27:34] Narrator     narration The Analyst locked in Stitch as the medium‑complexity character and set the workflow from preprocessing through export. The Preprocessor then isolated Stitch from the background, achieving an 85 % foreground ratio, which gives the mesh generator a clear, detail‑rich source to work from. Now the Gatekeeper is reviewing the prepared data before the mesh creation begins.
+[18:27:37] Narrator     narration The Gatekeeper gave the go‑ahead, confirming the isolated image is clean enough for reconstruction and handed it off to MeshGen, which has now started building the polygonal mesh. A well‑prepared image—especially with a foreground ratio above 80 %—helps the mesh generator produce a higher‑fidelity shape with fewer holes.
+[18:28:00] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[18:28:03] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm on)
+[18:28:08] MeshGen      progress  hunyuan: rendering clay preview views
+[18:28:29] MeshGen      artifact  hunyuan clay previews saved
+[18:28:29] MeshGen      log       hunyuan: 529,522 vertices, 1,058,600 faces
+[18:28:29] MeshGen      status    done
+[18:28:29] Judge        status    started
+[18:28:30] Judge        log       [hunyuan] 1,058,600 faces, 25 components, watertight=False, extent ratio 1.15
+[18:28:32] Judge        log       LLM responded
+[18:28:32] Judge        log       [hunyuan] LLM second opinion: The mesh quality is generally high, but the presence of multiple components and non-watertight geometry raises concerns.
+[18:28:32] Narrator     narration MeshGen finished constructing the polygonal mesh and saved the clay‑preview files, giving the team a quick, low‑detail view that makes it easy to spot geometry problems before moving on. The Judge has now started its quality check, ensuring the mesh meets the required standards early in the pipeline. (A clay preview is a fast, simplified representation that helps catch topology errors without the overhead of full‑resolution data.)
+[18:28:33] Judge        log       vision LLM responded
+[18:28:33] Judge        log       [hunyuan] vision check: looks like 'Stitch', 8/10 (Some details in the ears and facial features could be more defined.)
+[18:28:33] Judge        decision  score 0.89 - PASS
+[18:28:33] Judge        status    done
+[18:28:33] TextureSmith status    started
+[18:28:33] TextureSmith progress  simplifying mesh for texturing: 1,058,600 -> ~40,000 faces
+[18:28:36] Narrator     narration The Judge examined the mesh, gave it a 0.89 score and marked it as passing, confirming the geometry meets quality thresholds before texturing. Now TextureSmith has begun applying surface details, turning the clean shape into a visually rich model. A good UV map lets the 2D texture wrap accurately around the 3D surface, preserving detail without stretching.
+[18:28:51] TextureSmith log       simplified to 40,000 faces
+[18:28:51] TextureSmith log       loading Hunyuan3D-Paint (first run downloads ~6GB)
+[18:28:52] vram         log       released models: hunyuan3d
+[18:28:52] vram         log       loading model: hunyuan-paint
+[18:28:52] TextureSmith log       rasterizer: compiled extension unusable on this GPU - using the pure-PyTorch fallback
+[18:29:29] TextureSmith log       cpu offload enabled - weights stream from RAM per step
+[18:29:29] vram         metric    VRAM 0.0/8.6 GB (after loading hunyuan-paint)
+[18:29:29] TextureSmith progress  painting hunyuan mesh (multiview diffusion + baking, takes minutes)
+[18:30:20] TextureSmith artifact  textured GLB exported (hunyuan mesh)
+[18:30:21] TextureSmith artifact  textured previews saved
+[18:30:21] TextureSmith status    done
+[18:30:21] Exporter     status    started
+[18:30:22] Exporter     artifact  [hunyuan] OBJ + GLB exported
+[18:30:22] Exporter     artifact  run report written
+[18:30:22] Exporter     status    done
+[18:30:22] vram         log       released models: hunyuan-paint
+[18:30:22] Orchestrator log       run complete - score 0.89 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260827_182729_upload-1787833649\output
