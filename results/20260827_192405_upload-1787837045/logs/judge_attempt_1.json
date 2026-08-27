@@ -1,0 +1,60 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.74,
+  "passed": true,
+  "metrics": {
+    "vertices": 429405,
+    "faces": 858946,
+    "watertight": false,
+    "components": 6,
+    "largest_component_fraction": 0.781,
+    "extents": [
+      1.994,
+      1.692,
+      1.154
+    ],
+    "extent_ratio": 1.73,
+    "degenerate_faces": 316
+  },
+  "issues": [
+    "fragmented: 6 pieces, main piece only 78% of faces"
+  ],
+  "llm_opinion": "The mesh quality is acceptable but has several significant issues that need addressing.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "Minor inaccuracies in the rear shape"
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.74,
+      "issues": [
+        "fragmented: 6 pieces, main piece only 78% of faces"
+      ],
+      "metrics": {
+        "vertices": 429405,
+        "faces": 858946,
+        "watertight": false,
+        "components": 6,
+        "largest_component_fraction": 0.781,
+        "extents": [
+          1.994,
+          1.692,
+          1.154
+        ],
+        "extent_ratio": 1.73,
+        "degenerate_faces": 316
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Minor inaccuracies in the rear shape"
+      }
+    }
+  ]
+}

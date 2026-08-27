@@ -1,0 +1,63 @@
+[19:33:07] Orchestrator log       run 20260827_193307_upload-1787837587 starting (mode: image23d, LLM: on)
+[19:33:07] Analyst      status    started
+[19:33:07] Analyst      log       input mode: image23d | image: upload_1787837587.jpg
+[19:33:08] Analyst      log       vision LLM responded
+[19:33:08] Analyst      decision  subject 'young man' (character, complexity medium) - Ensure to capture the facial features and hairstyle details for accurate reconstruction.
+[19:33:08] Analyst      decision  pipeline plan: Preprocessor -> MeshGen -> Judge -> Exporter
+[19:33:08] Analyst      status    done
+[19:33:08] Preprocessor status    started
+[19:33:08] Preprocessor log       loading background-removal model (u2net)
+[19:33:09] Narrator     narration The Analyst has just kicked off the project, reviewing the brief and gathering key details to guide the rest of the workflow. This early analysis helps the team focus on the most relevant features before any modeling begins. Did you know that a solid initial analysis can cut overall production time by up to 30%?
+[19:33:09] Preprocessor artifact  user image copied to run folder
+[19:33:09] Preprocessor progress  removing background 1/1
+[19:33:10] Preprocessor log       candidate 1 scored 0.58 (coverage 0.55, blob 1.00, edge-cut 0.30)
+[19:33:11] Preprocessor log       vision LLM responded
+[19:33:11] Preprocessor log       vision critic: none (vlm 9/10 -> blended 0.74)
+[19:33:11] Preprocessor artifact  processed input ready (foreground ratio 0.85)
+[19:33:11] Preprocessor status    done
+[19:33:11] Gatekeeper   status    started
+[19:33:12] Narrator     narration The Analyst locked in the target—a young man with medium detail—and set the workflow order so the team knows exactly which parts to focus on next. The Pre
+[19:33:14] Narrator     narration The Preprocessor cleaned up the source material, isolating the main subject which now makes up about 85 % of the image and is ready for the next steps. With that preparation complete, the Gatekeeper has started its review to ensure everything meets the project’s criteria before modeling proceeds. A clear foreground‑background split often speeds up later stages by giving the mesh tools a cleaner reference to work from.
+[19:33:14] Gatekeeper   log       vision LLM responded
+[19:33:14] Gatekeeper   log       prepared image: none (confidence 9/10) - The image clearly depicts a young man and is suitable for reconstruction.
+[19:33:14] Gatekeeper   decision  prepared image looks reconstructable - handing to MeshGen
+[19:33:14] Gatekeeper   status    done
+[19:33:14] MeshGen      status    started
+[19:33:14] MeshGen      log       backend: hunyuan
+[19:33:14] MeshGen      log       loading Hunyuan3D-2mini (first run downloads the model)
+[19:33:14] vram         log       loading model: hunyuan3d
+[19:33:40] vram         metric    VRAM 3.8/8.6 GB (after loading hunyuan3d)
+[19:33:42] MeshGen      progress  hunyuan: flow-matching diffusion (octree 380, flashvdm on)
+[19:33:51] MeshGen      progress  hunyuan: rendering clay preview views
+[19:34:08] MeshGen      artifact  hunyuan clay previews saved
+[19:34:08] MeshGen      log       hunyuan: 450,048 vertices, 899,332 faces
+[19:34:08] MeshGen      status    done
+[19:34:08] Judge        status    started
+[19:34:09] Judge        log       [hunyuan] 899,332 faces, 41 components, watertight=False, extent ratio 1.18
+[19:34:11] Judge        log       LLM responded
+[19:34:11] Judge        log       [hunyuan] LLM second opinion: The mesh exhibits good complexity but has significant concerns regarding watertightness and component fragmentation.
+[19:34:11] Narrator     narration MeshGen finished the core geometry and saved quick clay‑style previews, which let the team spot major shape issues before adding detail. With the mesh marked as done, the Judge has now started its quality check to confirm the model meets the project’s standards. A simple clay preview can cut revision time by up to 40 % because obvious errors are caught early.
+[19:34:13] Judge        log       vision LLM responded
+[19:34:13] Judge        log       [hunyuan] vision check: looks like 'young man', 8/10 (Minor inaccuracies in hair detail)
+[19:34:13] Judge        decision  score 0.89 - PASS
+[19:34:13] Judge        status    done
+[19:34:13] TextureSmith status    started
+[19:34:13] TextureSmith progress  simplifying mesh for texturing: 899,332 -> ~40,000 faces
+[19:34:15] Narrator     narration The Judge gave the model a solid 0.89 score, confirming it meets the studio’s quality standards. With that approval, TextureSmith has moved in to start applying surface details, turning the shape into a realistic-looking object. A well‑laid UV map helps keep textures from stretching, preserving crisp detail across the model.
+[19:34:27] TextureSmith log       simplified to 40,000 faces
+[19:34:27] TextureSmith log       loading Hunyuan3D-Paint (first run downloads ~6GB)
+[19:34:27] vram         log       released models: hunyuan3d
+[19:34:27] vram         log       loading model: hunyuan-paint
+[19:34:27] TextureSmith log       rasterizer: compiled extension unusable on this GPU - using the pure-PyTorch fallback
+[19:35:04] TextureSmith log       cpu offload enabled - weights stream from RAM per step
+[19:35:04] vram         metric    VRAM 0.0/8.6 GB (after loading hunyuan-paint)
+[19:35:04] TextureSmith progress  painting hunyuan mesh (multiview diffusion + baking, takes minutes)
+[19:35:55] TextureSmith artifact  textured GLB exported (hunyuan mesh)
+[19:35:55] TextureSmith artifact  textured previews saved
+[19:35:55] TextureSmith status    done
+[19:35:55] Exporter     status    started
+[19:35:57] Exporter     artifact  [hunyuan] OBJ + GLB exported
+[19:35:57] Exporter     artifact  run report written
+[19:35:57] Exporter     status    done
+[19:35:57] vram         log       released models: hunyuan-paint
+[19:35:57] Orchestrator log       run complete - score 0.89 after 1 attempt(s); outputs in G:\codes\mew3d\results\20260827_193307_upload-1787837587\output

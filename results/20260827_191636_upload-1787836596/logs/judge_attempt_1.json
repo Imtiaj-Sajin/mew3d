@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.89,
+  "passed": true,
+  "metrics": {
+    "vertices": 485797,
+    "faces": 971530,
+    "watertight": false,
+    "components": 28,
+    "largest_component_fraction": 0.97,
+    "extents": [
+      1.992,
+      1.904,
+      1.841
+    ],
+    "extent_ratio": 1.08,
+    "degenerate_faces": 494
+  },
+  "issues": [],
+  "llm_opinion": "The mesh quality is high but lacks watertightness, which is a significant concern.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "Minor details missing in the wings"
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.89,
+      "issues": [],
+      "metrics": {
+        "vertices": 485797,
+        "faces": 971530,
+        "watertight": false,
+        "components": 28,
+        "largest_component_fraction": 0.97,
+        "extents": [
+          1.992,
+          1.904,
+          1.841
+        ],
+        "extent_ratio": 1.08,
+        "degenerate_faces": 494
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Minor details missing in the wings"
+      }
+    }
+  ]
+}

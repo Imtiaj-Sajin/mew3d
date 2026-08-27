@@ -46,6 +46,44 @@ class TextureSmithAgent(Agent):
             return results[0]["backend"], results[0]["mesh"]
         return self.cfg.mesh_model, self.ctx.state["mesh"]
 
+    def _paint_remote(self, mesh, image, glb_path, backend) -> bool:
+        """Try a remote texture server. Returns True only if it produced the GLB.
+
+        Any failure - no URL, unreachable, timeout, bad response - returns False so the
+        caller paints locally instead. A remote outage must never cost the run.
+        """
+        from ..core.remote_texture import check, paint_remote, texture_url
+
+        url = texture_url()
+        if not url:
+            return False
+
+        self.progress("checking the remote texture server")
+        health = check(url)
+        if not health:
+            self.log(f"remote texture server unreachable ({url}) - painting locally")
+            return False
+        if health.get("busy"):
+            self.log("remote texture server is busy with another job - painting locally")
+            return False
+
+        self.log(f"remote texture server ready on {health.get('gpu', 'unknown GPU')}")
+        mesh_tmp = self.ctx.path("intermediate", "for_texturing.glb")
+        image_tmp = self.ctx.path("intermediate", "texture_source.png")
+        try:
+            mesh.export(mesh_tmp)
+            image.save(image_tmp)
+            self.progress(f"painting {backend} mesh remotely "
+                          f"({len(mesh.faces):,} faces uploaded)")
+            took = paint_remote(url, mesh_tmp, image_tmp, glb_path)
+            self.decision(f"textured remotely in {took:.0f}s "
+                          f"(no local GPU time spent on painting)")
+            return True
+        except Exception as e:
+            self.log(f"remote texturing failed ({type(e).__name__}: {str(e)[:100]}) "
+                     "- falling back to local")
+            return False
+
     def execute(self):
         backend, mesh = self._pick_mesh()
 
@@ -61,15 +99,21 @@ class TextureSmithAgent(Agent):
             self.log(f"simplified to {len(mesh.faces):,} faces")
 
         image = self.ctx.state["foreground_rgba"].convert("RGBA")
-
-        self.log("loading Hunyuan3D-Paint (first run downloads ~6GB)")
-        pipe = self._load_pipeline()
-
-        self.progress(f"painting {backend} mesh (multiview diffusion + baking, takes minutes)")
-        textured = pipe(mesh, image=image)
-
         glb_path = self.ctx.path("output", "mesh_textured.glb")
-        textured.export(glb_path)
+
+        if self._paint_remote(mesh, image, glb_path, backend):
+            self.ctx.state["texture_where"] = "remote"
+        else:
+            self.log("loading Hunyuan3D-Paint (first run downloads ~6GB)")
+            pipe = self._load_pipeline()
+            self.progress(
+                f"painting {backend} mesh locally (multiview diffusion + baking, "
+                "takes minutes)"
+            )
+            textured = pipe(mesh, image=image)
+            textured.export(glb_path)
+            self.ctx.state["texture_where"] = "local"
+
         self.artifact(f"textured GLB exported ({backend} mesh)", glb_path)
 
         self.ctx.state["textured_mesh"] = textured

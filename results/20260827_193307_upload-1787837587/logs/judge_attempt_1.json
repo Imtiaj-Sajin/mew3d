@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "backend": "hunyuan",
+  "score": 0.89,
+  "passed": true,
+  "metrics": {
+    "vertices": 450048,
+    "faces": 899332,
+    "watertight": false,
+    "components": 41,
+    "largest_component_fraction": 0.902,
+    "extents": [
+      2.015,
+      2.007,
+      1.711
+    ],
+    "extent_ratio": 1.18,
+    "degenerate_faces": 407
+  },
+  "issues": [],
+  "llm_opinion": "The mesh exhibits good complexity but has significant concerns regarding watertightness and component fragmentation.",
+  "vision_opinion": {
+    "looks_like_subject": true,
+    "is_flat_or_blob": false,
+    "score": 8,
+    "issue": "Minor inaccuracies in hair detail"
+  },
+  "adjustments": {},
+  "comparison": [
+    {
+      "backend": "hunyuan",
+      "score": 0.89,
+      "issues": [],
+      "metrics": {
+        "vertices": 450048,
+        "faces": 899332,
+        "watertight": false,
+        "components": 41,
+        "largest_component_fraction": 0.902,
+        "extents": [
+          2.015,
+          2.007,
+          1.711
+        ],
+        "extent_ratio": 1.18,
+        "degenerate_faces": 407
+      },
+      "vision_opinion": {
+        "looks_like_subject": true,
+        "is_flat_or_blob": false,
+        "score": 8,
+        "issue": "Minor inaccuracies in hair detail"
+      }
+    }
+  ]
+}
