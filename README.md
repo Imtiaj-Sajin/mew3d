@@ -25,6 +25,12 @@ stay local and are never pushed.
 .venv\Scripts\python.exe -m mew3d generate --image photo.jpg --text "a wooden chair"
 ```
 
+To run the frontend with auto backend start:
+```powershell
+ .venv\Scripts\python.exe -m mew3d serve
+
+```
+
 First run downloads models (~7GB total) into `models/` on this drive.
 
 ## The agent crew
