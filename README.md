@@ -3,6 +3,9 @@
 Turn **text**, an **image**, or **both** into a 3D model (OBJ + GLB), fully local on an
 RTX 3060 Ti (8GB), coordinated by a crew of AI agents with live progress and full run logs.
 
+<img width="1919" height="944" alt="image" src="https://github.com/user-attachments/assets/8dc9e1cb-45a0-4725-acdf-2a9fd833e400" />
+
+
 ## Setup on a new PC
 
 ```powershell
